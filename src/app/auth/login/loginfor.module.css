@@ -1,0 +1,115 @@
+
+
+.bgcolor {
+  background: #70e1f5; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #ffd194,
+    #70e1f5
+  ); 
+  background: linear-gradient(
+    to right,
+    #ffd194,
+    #70e1f5
+  );
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    
+  }
+  
+  .loginBox {
+    
+    padding: 40px;
+    width: 350px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    background-color: #322c2c;
+  }
+  
+  .heading {
+    font-size: 24px;
+    color: #ede4e4;
+    margin-bottom: 5px;
+  }
+   
+  .heading .highlight {
+    color: #4e7aff;
+  }
+  
+  .para {
+    color: #ffffff;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+  
+  .loginform {
+    display: grid;
+    flex-direction: column;
+  }
+   
+   .input {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #ffffff;
+  } 
+  
+  .input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .forgotPassword {
+    color: #ffffff;
+    font-size: 14px;
+    margin-bottom: 20px;
+    text-align: right;
+    text-decoration: none;
+  }
+  
+  .loginBtn {
+    background-color: #4e7aff;
+    border: none;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .signupPrompt {
+    color: #ffffff;
+    font-size: 14px;
+  }
+  
+  .signupPrompt a {
+    color: #0cecb4;
+  }
+  
+ 
+  .forgotpara{
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+  }
+  .inputdisbale{
+    background-color: rgba(157, 155, 155, 0.2);
+    border: none;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #ffffff;
+  }

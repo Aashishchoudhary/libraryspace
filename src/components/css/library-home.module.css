@@ -1,0 +1,58 @@
+.container {
+    flex: 1;
+  }
+  
+  .libraryItem {
+    border-width: 1px; 
+    border-color: #ccc; /* Border color */
+    border-radius: 8px; /* Add rounded corners */
+    padding: 16px; /* Add some padding to create space */
+    margin: 10px 0; /* Vertical margin between items */
+    background-color: #747575; /* Background color */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Shadow */
+  }
+  
+  .libraryName {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px; /* Add some margin between library name and seat number */
+  }
+  
+  .seatNumber {
+    font-size: 16px;
+  }
+  
+  .buttonContainer {
+    display: flex; /* Use flexbox */
+    justify-content: space-between; /* Space buttons evenly in a row */
+    align-items: center; /* Center vertically */
+    margin: 20px 0; /* Add vertical margin for spacing */
+  }
+  
+  .button {
+    flex: 1; /* Make each button take up equal space */
+    background-color: black;
+    padding: 12px;
+    width: 40%;
+    border-radius: 20px;
+    margin: 0 10px; /* Add horizontal margin between buttons */
+    color: white;
+    text-align: center;
+    cursor: pointer; /* Add pointer cursor */
+  }
+  
+  .addLibraryButton {
+    background-color: green;
+    padding: 16px;
+    margin: 16px;
+    border-radius: 8px;
+    color: white;
+    text-align: center;
+    cursor: pointer; /* Add pointer cursor */
+  }
+  
+  .addLibraryText {
+    color: white;
+    text-align: center;
+  }
+  

@@ -1,11 +1,20 @@
-import { url } from '@/store/url'
+'use client'
+import {  url } from '@/store/url'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import styles from './css/library-home.module.css'
+import Link from 'next/link'
+// import { cookies } from 'next/headers'
+
 
 function LibraryHome() {
-    const user = useSelector(state=>state.auth.authTokens)
+  // const cookieStore = cookies()
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+  }
+    const user = JSON.parse(getCookie('authToken'))
     const [data , setData]= useState([])
 
     const fetchData=async()=>{
@@ -25,36 +34,28 @@ function LibraryHome() {
         <div className={styles.container}>
           {data.map(item => (
             <div key={item.id}>
-              <div onClick={() => navigation.navigate('ViewSeat', { LibId: item.id })} className={styles.libraryItem}>
+              <div className={styles.libraryItem}>
+              <Link href={`/user/view-seat/${item.id}`} >
                 <h3 className={styles.libraryName}>{item.name.charAt(0).toUpperCase() + item.name.slice(1)}</h3>
                 <p className={styles.seatNumber}>Total Seats: {item.total_seat}</p>
+              </Link>
               </div>
-              
               <div className={styles.buttonContainer}>
-                <button className={styles.button} onClick={() => navigation.navigate('ViwAlRe', { LibId: item.id })}>
-                  View All Entries
-                </button>
-                <button className={styles.button} onClick={() => navigation.navigate('collection', { id: item.id })}>
-                  Total Collection
-                </button>
+                <Link className={styles.button} href={`/user/view-all-seat/${item.id}`}>View Data</Link>
+                <Link className={styles.button} href={`/user/half/${item.id}`}>Total Collection</Link>
               </div>
 
               <div className={styles.buttonContainer}>
-                <button className={styles.button} onClick={() => navigation.navigate('extra', { id: item.id })}>
-                  Extra Student
-                </button>
-                <button className={styles.button} onClick={() => navigation.navigate('half', { id: item.id })}>
-                  Half Day
-                </button>
+              <Link className={styles.button} href={`/user/half/${item.id}`}>Extra</Link>
+               <Link className={styles.button} href={`/user/half/${item.id}`}>Half Day</Link>
               </div>
 
               <div className={styles.buttonContainer}>
-                <button className={styles.button} onClick={() => navigation.navigate('previous', { id: item.id })}>
-                  Deleted Data
-                </button>
-                <button className={styles.button} onClick={() => navigation.navigate('EditLibrary', { id: item.id })}>
+                <Link className={styles.button} href={`/user/previous/${item.id}`}>Deleted Data</Link>
+                
+               <Link className={styles.button} href={`/user/edit/${item.id}/`}>
                   Edit Library
-                </button>
+                </Link> 
               </div>
             </div>
           ))}

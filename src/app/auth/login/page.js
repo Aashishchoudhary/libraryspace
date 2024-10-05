@@ -4,11 +4,13 @@ import styles from "./loginfor.module.css";
 import { useState } from "react";
 import axios from "axios";
 import { url } from "@/store/url";
-import { useDispatch } from "react-redux";
-import { setAuthToken } from "@/store/auth/authSlice";
-import { jwtDecode } from "jwt-decode";
+import { redirect } from 'next/navigation'
+
+
+import { useRouter } from 'next/navigation'
 function login() {
-  const dispatch = useDispatch();
+ const router = useRouter()
+
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const loginFunc = async () => {
@@ -27,13 +29,13 @@ function login() {
       );
       const data = await response.data;
       if (response.status == 200) {
-        localStorage.setItem("authTokens", JSON.stringify(data));
-        console.log(data);
-        dispatch(setAuthToken(data));
-        dispatch(setUser(jwtDecode(data.access)));
+        document.cookie=`authToken=${JSON.stringify(data)}`
+      router.push('/')
+
+
       }
     } catch (err) {
-      alert(err.response.data.details);
+      alert(err);
       console.log("err", err);
     }
   };

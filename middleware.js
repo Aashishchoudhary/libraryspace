@@ -10,6 +10,9 @@ export function middleware(request) {
 
      return   NextResponse.redirect(new URL('/', request.url))
    }
+   if(user=='null'){
+    return   NextResponse.redirect(new URL('/', request.url))
+   }
    
   
 }

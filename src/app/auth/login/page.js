@@ -4,12 +4,13 @@ import styles from "./loginfor.module.css";
 import { useState } from "react";
 import axios from "axios";
 import { url } from "@/store/url";
-import { redirect } from 'next/navigation'
+
 
 
 import { useRouter } from 'next/navigation'
 function login() {
  const router = useRouter()
+
 
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
@@ -29,7 +30,7 @@ function login() {
       );
       const data = await response.data;
       if (response.status == 200) {
-        document.cookie=`authToken=${JSON.stringify(data)}`
+        document.cookie=`authToken=${JSON.stringify(data)}`;
       router.push('/')
 
 

@@ -8,7 +8,7 @@ function LogedUser() {
   return (
    
       <>
-      <HeaderPage/>
+      
       <LibraryHome/>
       </>
     

@@ -1,11 +1,11 @@
 import React from 'react'
 
-function page() {
+function DataPage() {
   return (
     <div>
-      
+      dataPage
     </div>
   )
 }
 
-export default page
+export default DataPage

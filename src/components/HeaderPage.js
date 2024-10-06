@@ -2,7 +2,11 @@ import React from 'react'
 import Image from 'next/image'
 import styles from './header.module.css'
 import img from '../app/favicon.png'
+
+import Link from 'next/link'
+
 function HeaderPage() {
+ 
   return (
     <header  >
       <nav className={styles.header}>
@@ -13,7 +17,7 @@ function HeaderPage() {
             <li className={styles.listItem}><a href="">Conatct</a></li>
             <li className={styles.listItem}><a href="">Add Library</a></li>
             <li className={styles.listItem}><a href="">Subscription</a></li>
-            <li className={styles.listItem}><a href="">Logout</a></li>
+            <li className={styles.listItem}><Link href={'/logout/'}>Logout</Link></li>
        
         </ul>
       </nav>

@@ -1,4 +1,5 @@
 'use client'
+import HeaderPage from '@/components/HeaderPage';
 import HomePage from '@/components/HomePage';
 
 
@@ -14,7 +15,7 @@ const [check , setCheck]= useState(false)
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(";").shift();
   }
-  console.log(getCookie('authToken'))
+
 
   const cehckCookie=()=>{
     if(getCookie('authToken')!=null){
@@ -27,11 +28,11 @@ const [check , setCheck]= useState(false)
 useEffect(()=>{
   cehckCookie()
 },[])
-console.log(check)
+
   return (
    <>
  
- {check?<LogedUser/>:<HomePage/>}
+ {check?<><HeaderPage/><LogedUser/></>:<HomePage/>}
 
    </>
     

@@ -1,20 +1,16 @@
 'use client'
-import {  url } from '@/store/url'
+import {  url ,getCookie } from '@/store/url'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import styles from './css/library-home.module.css'
 import Link from 'next/link'
-// import { cookies } from 'next/headers'
+
 
 
 function LibraryHome() {
-  // const cookieStore = cookies()
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(";").shift();
-  }
-    const user = JSON.parse(getCookie('authToken'))
+ 
+  
+    const user = getCookie('authToken')
     const [data , setData]= useState([])
 
     const fetchData=async()=>{

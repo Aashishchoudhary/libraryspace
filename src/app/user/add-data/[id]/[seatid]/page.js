@@ -4,11 +4,14 @@ import { useScreenshot } from "use-react-screenshot";
 import styles from "./add-data.module.css";
 import { url ,handleImageUpload  ,getCookie ,yyyymmdd } from "@/store/url";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { useRouter } from "next/navigation";
 
 
 function AddData({ params: { id,seatid } }) {
-    
-  
+  const orig = 'http://localhost:8000'
+    const router = useRouter()
+  const user_Id= jwtDecode(getCookie('authToken').access).user_id
    
   const ref = useRef(null);
   const [image, takeScreenshot] = useScreenshot();
@@ -17,13 +20,13 @@ function AddData({ params: { id,seatid } }) {
   const [data, setData] = useState([]);
 
   const [name, setName] = useState("");
-  const [mobile, setmobile] = useState("");
+  const [mobile, setMobile] = useState("");
   const [startDate, setStartdate] = useState(yyyymmdd(new Date()));
   
   const [endDate, setEndDate] = useState(yyyymmdd(new Date()));
   const [amount, setAmount] = useState("");
   const [dob, setDob] = useState(yyyymmdd(new Date()));
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState();
   const [adress, setAdress] = useState("");
   const [adharcard, setAdharcard] = useState("");
   const [photo, setPhoto] = useState("");
@@ -43,10 +46,10 @@ function AddData({ params: { id,seatid } }) {
       const res = await response.data;
 
       // Construct the complete URL with all necessary parameters
-      const url = `${url}/chat-page/?libid=${id}&id=${seatid}&user_id=${userId["user_id"]}&sign=${res["sign"]}`;
+      const value = `${url}/chat-page/?libid=${id}&id=${seatid}&user_id=${user_Id}&sign=${res["sign"]}`;
 
       // Perform navigation using navigation.navigate
-      navigation.navigate("QR", { data: url });
+      router.push(`/user/QR/?data=${value}`)
     } catch (error) {
       // Handle errors gracefully, e.g., display an error message or retry logic
       console.error("Error creating room:", error);
@@ -69,19 +72,96 @@ function AddData({ params: { id,seatid } }) {
       const res = await response.data;
 
       setData(res);
-
-      setDob(
-        res.seat_data[0]["dob"] ?yyyymmdd(new Date(res.seat_data[0]["dob"])) : new Date()
-      );
-      setEndDate(
-        res.seat_data[0]["end_date"]
-          ? yyyymmdd(new Date(res.seat_data[0]["end_date"]))
-          : yyyymmdd(new Date())
-      );
-      // setstdate(res.data[0]['start_date']? new Date(res.data[0]['start_date']):new Date())
      
+
+      res.seat_data[0]["dob"]&&setDob(
+         yyyymmdd(new Date(res.seat_data[0]["dob"])) 
+      );
+      
+      res.seat_data[0]["end_date"]&&setEndDate(
+           yyyymmdd(new Date(res.seat_data[0]["end_date"]))
+         
+      );
+      res.seat_data[0]['start_date']&& setStartdate(yyyymmdd(new Date(res.seat_data[0]['start_date'])))
+      res.seat_data[0]['name']&&setName(res.seat_data[0]['name'])
+      res.seat_data[0]['adress']&& setAdress(res.seat_data[0]['adress'])
+      res.seat_data[0]['mobile_number']&&setMobile(res.seat_data[0]['mobile_number'])
+      res.seat_data[0]['amount']&&setAmount(res.seat_data[0]['amount'])
+      res.seat_data[0]['gender']&&setGender(res.seat_data[0]['gender'])
+     
+  
     } catch (e) {
       console.log("error ", e);
+    }
+  };
+  console.log(startDate ,endDate ,dob)
+  const updateData = new FormData();
+  if (name) updateData.append('name', name);
+  if (mobile) updateData.append('mobile_number', mobile);
+  if (startDate) updateData.append('start_date', startDate);
+  if (endDate) updateData.append('end_date',endDate);
+
+  if (amount) updateData.append('amount', amount);
+  if (adharcard) updateData.append('adharcard', adharcard);
+  if (photo) updateData.append('photo', photo);
+  if (dob) updateData.append('dob', dob);
+  if (adress) updateData.append('adress', adress);
+  if (gender) updateData.append('gender', gender);
+
+  const postData = async () => {
+    try {
+      const response = await axios.post(
+        `${url}/view-seat/${Libid}/${SeatNum}/`,
+        updateData,
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+
+            Authorization: 'Bearer ' + String(user.access),
+          },
+        },
+      );
+      const res = await response.data;
+
+      
+      alert('Data saved');
+      getData();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const deleteData = async () => {
+    try {
+      await axios.delete(`${url}/view-seat/${Libid}/${SeatNum}/`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+
+          Authorization: 'Bearer ' + String(user.access),
+        },
+      });
+      alert('Data Deleted');
+      getData();
+    } catch (err) {
+      console.log(err.response.data);
+    }
+  };
+  const patchData = async () => {
+    try {
+      await axios.patch(`${url}/view-seat/${Libid}/${SeatNum}/`, updateData, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+
+          Authorization: 'Bearer ' + String(user.access),
+        },
+      });
+
+      alert('Data Updated');
+      getData();
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -90,6 +170,80 @@ function AddData({ params: { id,seatid } }) {
     getData();
   }, []);
   return (
+    <>
+     <div>
+     {!data?.seat_data?.length && (
+          <div className={styles.btncontainer}>
+            <button
+              className={styles.btnbutton}
+              onClick={() => createRoom()}>
+              <p className={styles.btnbutton}>Show QR</p>
+            </button>
+          </div>
+        )}
+        {data?.seat_data?.map(item => (
+          <div key={item.id}>
+            <div
+              className={styles.container}
+              ref={ref}
+              options={{
+                fileName: `${item.name}`,
+                format: 'jpg',
+                quality: 1,
+              }}>
+       
+      {/* Header with Company Info */}
+      <div className={styles.header}>
+        <p className={styles.companyName}>{data.library_name.slice(0,1).toUpperCase()+data.library_name.slice(1)}</p>
+        <p className={styles.companyDetails}>{data.address}</p>
+        <p className={styles.companyDetails}>Phone: {data.mobile_number}</p>
+        <p className={styles.companyDetails}>Email: info@company.com</p>
+      </div>
+
+      {/* Invoice Details */}
+      <div className={styles.invoiceInfo}>
+        <div className={styles.invoiceHeader}>
+          <p className={styles.invoiceTitle}>INVOICE</p>
+        </div>
+        <div className={styles.detailsRow}>
+          <p className={styles.label}>Seat No. :</p>
+          <p className={styles.value}> {data.seat_num}</p>
+        </div>
+        <div className={styles.detailsRow}>
+          <p className={styles.label}>Date:</p>
+          <p className={styles.value}>{new Date().toDateString()}</p>
+        </div>
+        <div className={styles.detailsRow}>
+          <p className={styles.label}>Due Date:</p>
+          <p className={styles.value}>{item.end_date}</p>
+        </div>
+        <div className={styles.detailsRow}>
+          <p className={styles.label}>Amount :</p>
+          <p className={styles.value}>₹ {item.amount}</p>
+        </div>
+        
+      </div>
+
+      {/* Client Information */}
+      <div className={styles.clientInfo}>
+        <p className={styles.sectionTitle}>Bill To:</p>
+        <p className={styles.clientName}>{item.name.slice(0,1).toUpperCase()+item.name.slice(1)}</p>
+        <p className={styles.clientDetails}>{item.adress}</p>
+        <p className={styles.clientDetails}>Phone: {item.mobile_number}</p>
+        <p className={styles.clientDetails}>Preapring For: {item.field}</p>
+        <p className={styles.clientDetails}>Gender: {item.gender}</p>
+      </div>
+
+      
+       
+
+      {/* Footer */}
+      <div className={styles.footer}>
+        <p className={styles.footerP}>Product made by Labeo</p>
+      </div>
+     </div>
+        </div>))}</div>
+    
     <div className={styles.container}>
       {/* Form for empty seat data */}
       
@@ -144,6 +298,7 @@ function AddData({ params: { id,seatid } }) {
               id="female"
               name="gender"
               value="Female"
+              checked={gender=='Female'}
             />
               <label htmlFor="female">Female</label>
             <br />
@@ -154,6 +309,7 @@ function AddData({ params: { id,seatid } }) {
               id="male"
               name="gender"
               value="Male"
+              checked={gender=='Male'}
             />
               <label htmlFor="male">Male</label>
             <br />
@@ -200,16 +356,15 @@ function AddData({ params: { id,seatid } }) {
           </div>
 
           <div className="button-container">
-            <button className="button" onClick={()=>postData()}>
+            <button className="button" onClick={()=>createRoom()}>
               Save
             </button>
           </div>
         </div>
-      
-       
-        
-
     </div>
+    {data?.seat_data?.map((item)=> <img key={item.id} src={orig+item.photo} alt="imgae" />)}
+   
+    </>
   );
 }
 

@@ -1,3 +1,4 @@
+
 import style from '../components/page.module.css'
 
 export const metadata = {
@@ -6,11 +7,13 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  
+
+  console.log('running')
+   
   return (
     <html lang="en">
       <body  className={style.body}>
-    
+   
         {children}
      
       </body>

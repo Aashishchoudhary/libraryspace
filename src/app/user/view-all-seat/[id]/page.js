@@ -6,6 +6,7 @@ import styles from "./page.module.css";
 import Link from "next/link";
 
 function View_all_seat({ params: { id } }) {
+  
   const [display, setDisplay] = useState(false);
   const [search, setSearch] = useState("");
   const [filteredDataSource, setFilteredDataSource] = useState([]);
@@ -87,7 +88,9 @@ function View_all_seat({ params: { id } }) {
     setFilteredDataSource(res);
     setMasterDataSource(res);
   };
-  const filterFun = () => {};
+  const filterFun = () => {
+    setDisplay(!display )
+  };
 
   useEffect(() => {
     fetchData();
@@ -104,12 +107,12 @@ function View_all_seat({ params: { id } }) {
           placeholder="Search Here"
         />
         <button
-          onClick={() => setDisplay(true)}
+          onClick={() => filterFun()}
           className={styles.filterButton}
         >
-          <p className={styles.filterButtonText}>Filter</p>
+          <p className={styles.filterButtonText}>{!display?'Filter':"Hide"}</p>
         </button>
-        {display && filterFun()}
+        {display &&<div><button onClick={()=>shortedData()}>Expire</button><button onClick={()=>admissionData()}>Newer</button></div>}
       </div>
       {filteredDataSource?.map((item) => (
         <Link

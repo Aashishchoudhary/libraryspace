@@ -12,7 +12,6 @@ function AddData({ params: { id,seatid } }) {
   const orig = 'http://localhost:8000'
     const router = useRouter()
   const user_Id= jwtDecode(getCookie('authToken').access).user_id
-   
   const ref = useRef(null);
   const [image, takeScreenshot] = useScreenshot();
   const getImage = () => takeScreenshot(ref.current);
@@ -94,7 +93,7 @@ function AddData({ params: { id,seatid } }) {
       console.log("error ", e);
     }
   };
-  console.log(startDate ,endDate ,dob)
+  
   const updateData = new FormData();
   if (name) updateData.append('name', name);
   if (mobile) updateData.append('mobile_number', mobile);

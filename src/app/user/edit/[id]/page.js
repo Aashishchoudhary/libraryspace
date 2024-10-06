@@ -1,5 +1,5 @@
 'use client'
-import { url} from '@/store/url'
+import { url ,getCookie} from '@/store/url'
 import axios from 'axios'
 import { useState ,useEffect } from 'react'
 import styles from './edit.module.css'
@@ -8,12 +8,8 @@ import { redirect } from 'next/navigation'
 
 
 function page({params: {id}}) {
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(";").shift();
-  }
-  const user = JSON.parse(getCookie('authToken'))
+  
+  const user = getCookie('authToken')
   const [data , setData]= useState([])
  
  

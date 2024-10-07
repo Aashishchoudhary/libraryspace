@@ -30,7 +30,7 @@ export function getCookie(name) {
       const compressedFile = await imageCompression(imageFile, options);
       // console.log('ddddd',event , compressedFile)
       // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
-      // console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB` ,event ,compressedFile); // smaller than maxSizeMB
+      console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB` ,event ,compressedFile); // smaller than maxSizeMB
       return compressedFile;
       // write your own logic
     } catch (error) {

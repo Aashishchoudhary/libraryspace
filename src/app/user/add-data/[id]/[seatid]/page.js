@@ -9,9 +9,10 @@ import { useRouter } from "next/navigation";
 
 
 function AddData({ params: { id,seatid } }) {
+  const [token]=useState(getCookie("authToken").access)
   const orig = 'http://localhost:8000'
     const router = useRouter()
-  const user_Id= jwtDecode(getCookie('authToken').access).user_id
+  const user_Id= jwtDecode(token).user_id
   const ref = useRef(null);
   const [image, takeScreenshot] = useScreenshot();
   const getImage = () => takeScreenshot(ref.current);
@@ -39,7 +40,7 @@ function AddData({ params: { id,seatid } }) {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
 
-          Authorization: "Bearer " + getCookie('authToken').access,
+          Authorization: "Bearer " + token,
         },
       });
       const res = await response.data;
@@ -65,7 +66,7 @@ function AddData({ params: { id,seatid } }) {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
 
-          Authorization: "Bearer " + getCookie('authToken').access,
+          Authorization: "Bearer " + token,
         },
       });
       const res = await response.data;
@@ -108,6 +109,12 @@ function AddData({ params: { id,seatid } }) {
   if (gender) updateData.append('gender', gender);
 
   const postData = async () => {
+    const adha= await handleImageUpload(
+      adharcard || null
+    );
+    const pho = await handleImageUpload(photo || null);
+    if (adha) updateData.append("adharcard", adha, adha.name);
+    if (pho) updateData.append("photo", pho, pho.name);
     try {
       const response = await axios.post(
         `${url}/view-seat/${Libid}/${SeatNum}/`,
@@ -147,6 +154,12 @@ function AddData({ params: { id,seatid } }) {
     }
   };
   const patchData = async () => {
+    const adha= await handleImageUpload(
+      adharcard || null
+    );
+    const pho = await handleImageUpload(photo || null);
+    if (adha) updateData.append("adharcard", adha, adha.name);
+    if (pho) updateData.append("photo", pho, pho.name);
     try {
       await axios.patch(`${url}/view-seat/${Libid}/${SeatNum}/`, updateData, {
         headers: {
@@ -171,7 +184,7 @@ function AddData({ params: { id,seatid } }) {
   return (
     <>
      <div>
-     {!data?.seat_data?.length && (
+     {data?.seat_data?.length<1 && (
           <div className={styles.btncontainer}>
             <button
               className={styles.btnbutton}
@@ -330,38 +343,39 @@ function AddData({ params: { id,seatid } }) {
               
             />
           </div>
-
-          {/* Image selection */}
-          <div className={styles.imageupload}>
+ {/* Image selection */}
+ <div className={styles.imageupload}>
             <label>Upload Photo</label>
-            {/* <input
-              type="file"
-              onChange={(e) => handleFileChange(e, setPhoto)}
-              accept="image/*"
-            /> */}
-            {/* {photo && <img src={URL.createObjectURL(photo)} alt="Selected" />} */}
+            <input type="file" onChange={(e) => setPhoto(e.target.files[0])} />
+            {photo && <img src={URL.createObjectURL(photo)} alt="phtot" />}
           </div>
 
           <div className={styles.imageupload}>
             <label>Upload Aadharcard</label>
-            {/* <input
+            <input
               type="file"
-              onChange={(e) => handleFileChange(e, setAdharcard)}
-              accept="image/*"
+              onChange={(e) => setAdharcard(e.target.files[0])}
             />
             {adharcard && (
               <img src={URL.createObjectURL(adharcard)} alt="Aadharcard" />
-            )} */}
+            )}
+          </div>
+          <div className="button-container">
+            {data?.seat_data?.length < 1 ? (
+              <button className="button" onClick={() => postData()}>
+                Save
+              </button>
+            ) : (
+              <div>
+                <button onClick={() => patchData()}>Upadte</button>
+                <button onClick={() => deleteData()}>Delete</button>
+              </div>
+            )}
           </div>
 
-          <div className="button-container">
-            <button className="button" onClick={()=>createRoom()}>
-              Save
-            </button>
-          </div>
-        </div>
+                  </div>
     </div>
-    {data?.seat_data?.map((item)=> <img key={item.id} src={orig+item.photo} alt="imgae" />)}
+   
    
     </>
   );

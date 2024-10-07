@@ -2,8 +2,8 @@ import React from 'react'
 import style from "./page.module.css";
 import Link from 'next/link';
 
+
 function HomePage() {
-  
   return ( 
     <div className={style.bgcolor}>
       <div className={style.btnContainer}>

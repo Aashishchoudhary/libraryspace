@@ -7,11 +7,11 @@ import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import { useScreenshot } from "use-react-screenshot";
 
-function Editreservation({ params: { id } }) {
+function Editreservation({ params: { id ,seatid } }) {
   const [token] = useState(getCookie("authToken").access);
 
   const router = useRouter();
-  const user_Id = jwtDecode(`${token}`).user_id;
+  
 
   const ref = useRef(null);
   const [image, takeScreenshot] = useScreenshot();
@@ -57,10 +57,10 @@ function Editreservation({ params: { id } }) {
       const res = await response.data;
 
       // Construct the complete URL with all necessary parameters
-      const value = `${url}/chat-page/?libid=${id}&id=${seatid}&user_id=${user_Id}&sign=${res["sign"]}`;
+      const qr_value = `${url}/chat-page/?libid=${id}&id=${seatid}&user_id=${jwtDecode(`${token}`).user_id}&sign=${res["sign"]}`;
 
       // Perform navigation using navigation.navigate
-      router.push(`/user/QR/?data=${value}`);
+      router.push(`/user/QR/?data=${qr_value}`);
     } catch (error) {
       // Handle errors gracefully, e.g., display an error message or retry logic
       console.error("Error creating room:", error);
@@ -69,7 +69,7 @@ function Editreservation({ params: { id } }) {
   };
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${url}/edit-reservation-view/${id}/`, {
+      const response = await axios.get(`${url}/edit-reservation-view/${seatid}/`, {
         headers: {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
@@ -105,7 +105,7 @@ function Editreservation({ params: { id } }) {
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
-      await axios.patch(`${url}/edit-reservation-view/${id}/`, updateData, {
+      await axios.patch(`${url}/edit-reservation-view/${seatid}/`, updateData, {
         headers: {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
@@ -151,7 +151,7 @@ function Editreservation({ params: { id } }) {
   // delete data
   const deleteData = async () => {
     try {
-      await axios.delete(`${url}/edit-reservation-view/${id}/`, {
+      await axios.delete(`${url}/edit-reservation-view/${seatid}/`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,

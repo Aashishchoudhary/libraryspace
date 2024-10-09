@@ -38,11 +38,11 @@ function LibraryHome() {
               </div>
               <div className={styles.buttonContainer}>
                 <Link className={styles.button} href={`/user/view-all-seat/${item.id}`}>View Data</Link>
-                <Link className={styles.button} href={`/user/half/${item.id}`}>Total Collection</Link>
+                <Link className={styles.button} href={`/user/total/${item.id}`}>Total Collection</Link>
               </div>
 
               <div className={styles.buttonContainer}>
-              <Link className={styles.button} href={`/user/half/${item.id}`}>Extra</Link>
+              <Link className={styles.button} href={`/user/extra/${item.id}`}>Extra</Link>
                <Link className={styles.button} href={`/user/half/${item.id}`}>Half Day</Link>
               </div>
 

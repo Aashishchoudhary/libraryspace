@@ -56,7 +56,7 @@ function page({params: {id}}) {
       <div style={{ display: 'flex', flexWrap: 'wrap', margin: '10px' }}>
         {data?.data?.map((item) => (
           
-         <Link  key={item.id} style={!item.booked ? styles.chair : styles.chairBooked} href={`/user/add-data/${id}/${item.id}/`}> 
+         <Link  key={item.id} style={!item.booked ? styles.chair : styles.chairBooked} href={`/user/view-seat/${id}/${item.id}/`}> 
             {/* You can add an icon here if needed */}
             <p style={styles.chairNumber}>{item.seat_num}</p>
          

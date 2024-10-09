@@ -2,7 +2,7 @@
 import { url, getCookie } from "@/store/url";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import styles from "./page.module.css";
+import styles from './page.module.css';
 import Link from "next/link";
 
 function View_all_seat({ params: { id } }) {
@@ -114,10 +114,10 @@ function View_all_seat({ params: { id } }) {
         </button>
         {display &&<div><button onClick={()=>shortedData()}>Expire</button><button onClick={()=>admissionData()}>Newer</button></div>}
       </div>
-      {filteredDataSource?.map((item) => (
+     {filteredDataSource?.map((item) => ( 
         <Link
           key={item.seat_num}
-          href={`/user/view-all-seat-data/${item?.ser?.map(y => y.id)}/`}
+          href={`/user/view-all-seat/${id}/${item?.ser?.map(y => y.id)}/`}
           className={[
             styles.container,
             item.seat_num % 2 ? styles.evenStyle : styles.oddStyle,

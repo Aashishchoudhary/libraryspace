@@ -10,7 +10,7 @@ function HeaderPage() {
   return (
     <header  >
       <nav className={styles.header}>
-        <div className={styles.imgDiv}><Image className={styles.imageData} src={img}/></div>
+        <div className={styles.imgDiv}><Image className={styles.imageData} src={img} alt='logo'/></div>
         <ul className={styles.mainContainer}>
             <li className={styles.listItem}><a href="">Home</a></li>
             <li className={styles.listItem}><a href="">About Us</a></li>

@@ -1,7 +1,7 @@
 'use client'
 import { useRef, useState, useEffect } from "react";
 import { useScreenshot } from "use-react-screenshot";
-import styles from "./add-data.module.css";
+import styles from './add-seat.module.css'
 import { url ,handleImageUpload  ,getCookie ,yyyymmdd } from "@/store/url";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -12,7 +12,7 @@ function AddData({ params: { id,seatid } }) {
   const [token]=useState(getCookie("authToken").access)
   const orig = 'http://localhost:8000'
     const router = useRouter()
-  const user_Id= jwtDecode(token).user_id
+  
   const ref = useRef(null);
   const [image, takeScreenshot] = useScreenshot();
   const getImage = () => takeScreenshot(ref.current);
@@ -46,10 +46,10 @@ function AddData({ params: { id,seatid } }) {
       const res = await response.data;
 
       // Construct the complete URL with all necessary parameters
-      const value = `${url}/chat-page/?libid=${id}&id=${seatid}&user_id=${user_Id}&sign=${res["sign"]}`;
+      const qr_value = `${url}/chat-page/?libid=${id}&id=${seatid}&user_id=${jwtDecode(token).user_id}&sign=${res["sign"]}`;
 
       // Perform navigation using navigation.navigate
-      router.push(`/user/QR/?data=${value}`)
+      router.push(`/user/QR/?data=${qr_value}`)
     } catch (error) {
       // Handle errors gracefully, e.g., display an error message or retry logic
       console.error("Error creating room:", error);
@@ -117,14 +117,14 @@ function AddData({ params: { id,seatid } }) {
     if (pho) updateData.append("photo", pho, pho.name);
     try {
       const response = await axios.post(
-        `${url}/view-seat/${Libid}/${SeatNum}/`,
+        `${url}/view-seat/${Libid}/${seatid}/`,
         updateData,
         {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'multipart/form-data',
 
-            Authorization: 'Bearer ' + String(user.access),
+            Authorization: 'Bearer ' + token,
           },
         },
       );
@@ -139,12 +139,12 @@ function AddData({ params: { id,seatid } }) {
   };
   const deleteData = async () => {
     try {
-      await axios.delete(`${url}/view-seat/${Libid}/${SeatNum}/`, {
+      await axios.delete(`${url}/view-seat/${Libid}/${seatid}/`, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'multipart/form-data',
 
-          Authorization: 'Bearer ' + String(user.access),
+          Authorization: 'Bearer ' + token,
         },
       });
       alert('Data Deleted');
@@ -161,12 +161,12 @@ function AddData({ params: { id,seatid } }) {
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
-      await axios.patch(`${url}/view-seat/${Libid}/${SeatNum}/`, updateData, {
+      await axios.patch(`${url}/view-seat/${Libid}/${seatid}/`, updateData, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'multipart/form-data',
 
-          Authorization: 'Bearer ' + String(user.access),
+          Authorization: 'Bearer ' + token,
         },
       });
 

@@ -1,0 +1,54 @@
+.aboutContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .aboutContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 40px;
+  }
+  
+  .textSection {
+    flex: 1;
+    margin-right: 20px;
+  }
+  
+  .imageSection {
+    flex: 1;
+  }
+  
+  .aboutImage {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .missionSection {
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  @media (max-width: 768px) {
+    .aboutContent {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .textSection {
+      margin-right: 0;
+      margin-bottom: 20px;
+    }
+  
+    .imageSection {
+      margin-bottom: 20px;
+    }
+  }
+  

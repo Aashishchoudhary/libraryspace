@@ -21,7 +21,7 @@
 }
 .btnContainer {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto auto auto ;
   justify-content: flex-end;
   text-align: center;
   

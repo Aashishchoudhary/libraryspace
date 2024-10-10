@@ -31,7 +31,7 @@ function login() {
       const data = await response.data;
       if (response.status == 200) {
         document.cookie=`authToken=${JSON.stringify(data)}`;
-      router.push('/')
+      router.push('/user')
 
 
       }

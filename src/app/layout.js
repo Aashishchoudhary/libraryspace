@@ -1,4 +1,5 @@
 
+import Footer from '@/components/Footer';
 import style from '../components/page.module.css'
 
 export const metadata = {
@@ -14,7 +15,7 @@ export default function RootLayout({ children }) {
       <body  className={style.body}>
    
         {children}
-     
+     <Footer/>
       </body>
     </html>
   );

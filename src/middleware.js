@@ -7,12 +7,10 @@ export function middleware(request) {
     console.log("running  8888");
     const cookieStore = cookies();
     const user = cookieStore.get("authToken");
-    if (!user) {
+    if (!user ||user == "null") {
       return NextResponse.redirect(new URL("/", request.url));
     }
-    if (user == "null") {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
+   
   }
   if (request.nextUrl.pathname.startsWith("/auth")) {
     const cookieStore = cookies();
@@ -21,7 +19,7 @@ export function middleware(request) {
     const user = cookieStore.has("authToken")
     console.log(user , '===')
     if (user) {
-      return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL("/user", request.url));
     }
   }
 }

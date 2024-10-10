@@ -1,25 +1,21 @@
 'use client'
-import HeaderPage from '@/components/HeaderPage';
 import HomePage from '@/components/HomePage';
-
-
-
-import LogedUser from '@/components/LogedUser';
 import { getCookie } from '@/store/url';
+import { useRouter } from 'next/navigation';
 import { useState ,useEffect} from 'react';
 
 function page() {
-const [check , setCheck]= useState(false)
+const router = useRouter()
+
   
 
 
   const cehckCookie=()=>{
     if(getCookie('authToken')!=null){
-      setCheck(true)
+     
+      router.push('/user')
     }
-    else{
-      setCheck(false)
-    }
+    
   }
 useEffect(()=>{
   cehckCookie()
@@ -28,7 +24,7 @@ useEffect(()=>{
   return (
    <>
  
- {check?<><HeaderPage/><LogedUser/></>:<HomePage/>}
+ <HomePage/>
 
    </>
     

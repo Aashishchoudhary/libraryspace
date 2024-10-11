@@ -1,0 +1,78 @@
+.seatContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .seatItem {
+    margin-bottom: 10px;
+  }
+  
+  .seatLabelBooked {
+    font-weight: bold;
+  }
+  
+  .seatBalueBooked {
+    color: black;
+    font-size: 20px;
+  }
+  
+  .seatLabelVaccent {
+    font-weight: bold;
+    font-size: 20px;
+  }
+  
+  .seatValueVaccent {
+    color: green;
+  }
+  
+  .chair {
+    width: 50px;
+    height: 50px;
+    background-color: lightgreen;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 10px;
+  }
+  
+  .chairBooked {
+    width: 50px;
+    height: 50px;
+    background-color: gray;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 10px;
+  }
+  
+  .chairNumber {
+    font-size: 16px;
+  }
+  
+  .chartContainer {
+    display: grid;
+    grid-template-columns: auto auto;
+    width: 100%;
+    height: 400px;
+
+  }
+  .chart{
+    overflow: hidden;
+    width: 80%
+    
+  }
+  @media only screen and (max-width: 720px) {
+    .chartContainer {
+        display: grid;
+        grid-template-columns: auto;
+        width: 100%;
+        height: 100%;
+        /* height: 400px; */
+        justify-content: center;
+    
+      }
+  }

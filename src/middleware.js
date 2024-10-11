@@ -4,10 +4,9 @@ import { NextResponse } from "next/server";
 // This function can be marked `async` if using `await` inside
 export function middleware(request) {
   if (request.nextUrl.pathname.startsWith("/user")) {
-    console.log("running  8888");
     const cookieStore = cookies();
     const user = cookieStore.get("authToken");
-    if (!user ||user == "null") {
+    if (!user ) {
       return NextResponse.redirect(new URL("/", request.url));
     }
    
@@ -17,8 +16,9 @@ export function middleware(request) {
 
     console.log("path");
     const user = cookieStore.has("authToken")
-    console.log(user , '===')
+   
     if (user) {
+      console.log('dd')
       return NextResponse.redirect(new URL("/user", request.url));
     }
   }

@@ -11,10 +11,14 @@ import { useRouter } from 'next/navigation'
 function login() {
  const router = useRouter()
 
+ const [username, setUsername] = useState('');
+ const [password, setPassword] = useState('');
 
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
   const loginFunc = async () => {
+     if(username.length<10 || password.length<8){
+       alert("Please fill the fields")
+       return
+     }
     try {
       const response = await axios.post(
         `${url}/passlogin/`,
@@ -30,7 +34,7 @@ function login() {
       );
       const data = await response.data;
       if (response.status == 200) {
-        document.cookie=`authToken=${JSON.stringify(data)}`;
+        document.cookie=`authToken=${JSON.stringify(data)};path='/';`;
       router.push('/user')
 
 

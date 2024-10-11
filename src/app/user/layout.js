@@ -11,11 +11,14 @@ export default function UserLayout({ children }) {
    
   return (
     
-      <div >
+      < >
    <HeaderPage/>
+   <div style={{zIndex:0}}>
+
         {children}
+   </div>
      
-      </div>
+      </>
    
   );
 }

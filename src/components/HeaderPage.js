@@ -63,7 +63,7 @@ function HeaderPage() {
               <Link href="/data/contact-us/">Conatct</Link>
             </li>
             <li className={styles.listItem}>
-              <a href="">Add Library</a>
+              <a href="/user/add-library">Add Library</a>
             </li>
             <li className={styles.listItem}>
               <a href="">Subscription</a>

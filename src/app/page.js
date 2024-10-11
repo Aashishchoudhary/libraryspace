@@ -2,7 +2,7 @@
 import HomePage from '@/components/HomePage';
 import { getCookie } from '@/store/url';
 import { useRouter } from 'next/navigation';
-import { useState ,useEffect} from 'react';
+import {useEffect} from 'react';
 
 function page() {
 const router = useRouter()
@@ -11,8 +11,8 @@ const router = useRouter()
 
 
   const cehckCookie=()=>{
+    
     if(getCookie('authToken')!=null){
-     
       router.push('/user')
     }
     

@@ -3,7 +3,13 @@ import { url ,getCookie } from '@/store/url';
 import axios from 'axios';
 import Link from 'next/link';
 import {useState , useEffect} from 'react'
+import Chart from "chart.js/auto";
+  import { CategoryScale } from "chart.js";
+import { Pie ,Bar} from 'react-chartjs-2';
+import styles from './page.module.css'
 
+
+Chart.register(CategoryScale);
 function page({params: {id}}) {
 
     const [data, setData] = useState([]);
@@ -41,80 +47,74 @@ function page({params: {id}}) {
         fetchData()
         fetchSeatData()
     },[])
-  return (
-    <div style={styles.seatContainer}>
-      
-      <div style={styles.seatItem}>
-        <p style={styles.seatLabelBooked}>Booked:</p>
-        <p style={styles.seatValueBooked}>{seatData.booked}</p>
-      </div>
-      <div style={styles.seatItem}>
-        <p style={styles.seatLabelVaccent}>Vacant:</p>
-        <p style={styles.seatValueVaccent}>{seatData.vaccent}</p>
-      </div>
 
+    const chartData = {
+      labels: ['Booked','Vaccent'],
+  datasets: [
+    {
+      data: [seatData.booked, seatData.vaccent],
+      label: "Number of seats",
+      backgroundColor: [
+        'green',
+        'gray',
+        
+      ],
+      borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+       
+      ],
+      borderWidth: 1,
+    },
+  ],
+  };
+  const BarChatData={
+    labels: ['15 - 20 age','20-25 age' ,'25-30 age' , '30+ age'],
+    datasets: [
+      {
+        // data: [seatData.above15, seatData.above20,seatData.above25 , seatData.above30],
+        data:[10 , 23 , 40 , 15],
+        label: "Number of students",
+        backgroundColor: [
+          'orange',
+          
+          
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          
+         
+        ],
+        borderWidth: 1,
+      },
+    ],
+  }
+   
+  return (
+    <>
+    <div className={styles.seatContainer}>
+      
+      
+      <div className={styles.chartContainer}>
+
+<Pie className={styles.chart} data={chartData} />
+<Bar className={styles.chart} data={BarChatData} />
+      </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', margin: '10px' }}>
         {data?.data?.map((item) => (
           
-         <Link  key={item.id} style={!item.booked ? styles.chair : styles.chairBooked} href={`/user/view-seat/${id}/${item.id}/`}> 
+         <Link  key={item.id} className={!item.booked ? styles.chair : styles.chairBooked} href={`/user/view-seat/${id}/${item.id}/`}> 
             {/* You can add an icon here if needed */}
-            <p style={styles.chairNumber}>{item.seat_num}</p>
+            <p className={styles.chairNumber}>{item.seat_num}</p>
          
           </Link>
           
         ))}
       </div>
     </div>
+    </>
   )
 }
-const styles = {
-    seatContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    seatItem: {
-      marginBottom: '10px',
-    },
-    seatLabelBooked: {
-      fontWeight: 'bold',
-    },
-    seatValueBooked: {
-      color: 'black',
-      fontSize:'20px'
-    },
-    seatLabelVaccent: {
-      fontWeight: 'bold',
-      fontSize:'20px'
-    },
-    seatValueVaccent: {
-      color: 'green',
-    },
-    chair: {
-      width: '50px',
-      height: '50px',
-      backgroundColor: 'lightgreen',
-      margin: '5px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      cursor: 'pointer',
-      borderRadius:'10px'
-    },
-    chairBooked: {
-      width: '50px',
-      height: '50px',
-      backgroundColor: 'gray',
-      margin: '5px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      cursor:'pointer',
-      borderRadius:'10px'
-    
-    },
-    chairNumber: {
-      fontSize: '16px',
-    },
-  };
+
   
 export default page

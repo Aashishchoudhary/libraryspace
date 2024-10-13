@@ -14,8 +14,14 @@ function AddData({ params: { id, seatid } }) {
 
   const ref = useRef(null);
   const [image, takeScreenshot] = useScreenshot();
-  const getImage =async () => {
-     await takeScreenshot(ref.current);
+  const getImage = () => {
+      takeScreenshot(ref.current);
+      const a = document.createElement("a");
+      a.href = image
+     a.download = `${name}.jpg`;
+     document.body.appendChild(a);
+     a.click();
+     document.body.removeChild(a);
    
   };
   const [data, setData] = useState([]);

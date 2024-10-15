@@ -10,7 +10,7 @@ import { redirect } from 'next/navigation'
 function page({params: {id}}) {
   
   const user = getCookie('authToken')
-  const [data , setData]= useState([])
+ 
  
  
 
@@ -35,18 +35,6 @@ function page({params: {id}}) {
   const [latitude, setLatitude] = useState('');
   const [total_seat, setTotalSeat] = useState('');
     
-  const getLocation = () => {
-    Geolocation.getCurrentPosition(
-      position => {
-        const {latitude, longitude} = position.coords;
-        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-        setLatitude(latitude);
-        setLongitude(longitude);
-      },
-      error => console.error(error),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
-    );
-  };
 
   const uploadData = new FormData();
   if (name) uploadData.append('name', name);
@@ -88,6 +76,7 @@ function page({params: {id}}) {
         },
       );
       alert('Updated');
+      fetchData()
     } catch (err) {
       console.log(err)
       alert(err);
@@ -104,86 +93,138 @@ function page({params: {id}}) {
         },
       });
       const res = await response.data;
-      setData(res);
-      console.log(res)
+    
+   
+      {res.data[0].name&&setName(res.data[0].name)}
+      {res.data[0].facilty&&setFacilty(res.data[0].facilty)}
+      {res.data[0].locality&&setlocality(res.data[0].locality)}
+      {res.data[0].city&&setCity(res.data[0].city)}
+      {res.data[0].state&&setState(res.data[0].state)}
+      {res.data[0].pincode&&setPincode(res.data[0].pincode)}
+      {res.data[0].total_seat&&setTotalSeat(res.data[0].total_seat)}
+      {res.data[0].mobile_number&&setMobileNumber(res.data[0].mobile_number)}
+      {res.data[0].whatsapp_number&&setWhatsappNumber(res.data[0].whatsapp_number)}
+      {res.data[0].latitude&&setLatitude(res.data[0].latitude)}
+      {res.data[0].longitude&&setLongitude(res.data[0].longitude)}
     } catch (err) {
       console.log();
     }
   };
-  const handleSeat = text => {
-    if (text < 201) {
-      setTotalSeat(text);
-    } else {
-      alert('seat should be less than 201');
-    }
+  const getLocation = (position) => {
+    // if(position.coords){
+    // alert('coordinates of current location is' ,position.coords.latitude .position.coords.longitude)
+    // }
+    setLatitude(position.coords.latitude);
+    setLongitude(position.coords.longitude);
+    
   };
 
-
-  useEffect(()=>{
-
-      fetchData()
+  function getlocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(getLocation);
+      // console.log(navigator.geolocation.getCurrentPosition())
+    }
+  }
   
-  },[])
+  useEffect(() => {
+    fetchData();
+    getlocation()
+  }, []);
+
+  const handleSeat = (text) => {
+    if (text.target.value < 201) {
+      setTotalSeat(text.target.value);
+    } else {
+      alert("seat should be less than 201");
+    }
+  };
     
   return (
-    <div>
-      {data?.data?.map((x, index) => (
-        <div key={index}>
-          <input
-            type="text"
-            className={styles.input}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder={x.name ? x.name : 'Name....'}
-          />
-
-          <input
-            type="text"
-            className={styles.input}
-            value={mobile_number}
-            onChange={(e) => setMobileNumber(e.target.value)}
-            placeholder={x.mobile_number ? x.mobile_number.toString() : 'Mobile number....'}
-            style={{ color: mobile_number.length > 9 ? 'green' : 'red' }}
-          />
-
-          <input
-            type="number"
-            className={styles.input}
-            value={total_seat}
-            onChange={(e) => handleSeat(e.target.value)}
-            placeholder={x.total_seat ? x.total_seat.toString() : 'Number of Seats...'}
-          />
-
-          <input
-            type="text"
-            className={styles.input}
-            value={locality}
-            onChange={(e) => setLocality(e.target.value)}
-            placeholder={x.locality ? x.locality : 'Address..'}
-          />
-
-          <input
-            type="text"
-            className={styles.input}
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            placeholder={x.city ? x.city : 'City..'}
-          />
-
-          <input
-            type="text"
-            className={styles.input}
-            value={state}
-            onChange={(e) => setState(e.target.value)}
-            placeholder={x.state ? x.state : 'State....'}
-          />
-        </div>
-      ))}
-
-      <button className={styles.touchableOpacity} onClick={()=>handleSubmit()}>
-        Update
-      </button>
+    <div className={styles.container}>
+    <div className={styles.formcontainer_two}>
+      <div className={styles.form}>
+        <input
+          className={styles.input}
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder='Library Name....'
+        />
+        <input
+          className={styles.input}
+          type="text"
+          value={facilty}
+          onChange={(e) => setFacilty(e.target.value)}
+          placeholder='Facilities...'
+        />
+        <input
+          className={styles.input}
+          type="text"
+          value={locality}
+          onChange={(e) => setlocality(e.target.value)}
+          placeholder='Address'
+        />
+        <input
+          className={styles.input}
+          type="text"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          placeholder='City....'
+        />
+        <input
+          className={styles.input}
+          type="text"
+          value={state}
+          onChange={(e) => setState(e.target.value)}
+          placeholder='State....'
+        />
+        <input
+          className={styles.input}
+          type="text"
+          value={pincode}
+          onChange={(e) => setPincode(e.target.value)}
+          placeholder='Pincode...'
+        />
+        <input
+          className={styles.input}
+          type="text"
+          value={mobile_number}
+          onChange={(e) => setMobileNumber(e.target.value)}
+          placeholder='Mobile Number....'
+        />
+        <input
+          className={styles.input}
+          type="text"
+          value={whatsapp_number}
+          onChange={(e) => setWhatsappNumber(e.target.value)}
+          placeholder='WhatsApp Number...'
+        />
+        <input
+          className={styles.input}
+          type="number"
+          value={total_seat}
+          onChange={(e) => handleSeat(e)}
+          placeholder='Number Seat'
+        />
+        <input
+          className={styles.input}
+          type="number"
+          value={longitude}
+          onChange={() => getlocation()}
+          placeholder='Longitude'
+        />
+        <input
+          className={styles.input}
+          type="number"
+          value={latitude}
+          onChange={() => getlocation()}
+          placeholder='latitude'
+        />
+        <button className={styles.button} onClick={() => handleSubmit()}>Submit</button>
+       \
+      </div>
     </div>
+  </div>
   )
 }
 

@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import HeaderPage from "@/components/HeaderPage";
 
 
@@ -9,15 +10,11 @@ export const metadata = {
 export default function UserLayout({ children }) {
 
    
-  return (
-    
-      < >
+  return (  
+      <>
    <HeaderPage/>
-   <div style={{zIndex:0}}>
-
         {children}
-   </div>
-     
+        <Footer/> 
       </>
    
   );

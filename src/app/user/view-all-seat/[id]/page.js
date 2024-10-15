@@ -2,11 +2,10 @@
 import { url, getCookie } from "@/store/url";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import styles from './page.module.css';
+import styles from "./page.module.css";
 import Link from "next/link";
 
 function View_all_seat({ params: { id } }) {
-  
   const [display, setDisplay] = useState(false);
   const [search, setSearch] = useState("");
   const [filteredDataSource, setFilteredDataSource] = useState([]);
@@ -89,7 +88,7 @@ function View_all_seat({ params: { id } }) {
     setMasterDataSource(res);
   };
   const filterFun = () => {
-    setDisplay(!display )
+    setDisplay(!display);
   };
 
   useEffect(() => {
@@ -106,27 +105,35 @@ function View_all_seat({ params: { id } }) {
           type="text"
           placeholder="Search Here"
         />
-        <button
-          onClick={() => filterFun()}
-          className={styles.filterButton}
-        >
-          <p className={styles.filterButtonText}>{!display?'Filter':"Hide"}</p>
+        <button onClick={() => filterFun()} className={styles.filterButton}>
+          <p className={styles.filterButtonText}>
+            {!display ? "Filter" : "Hide"}
+          </p>
         </button>
-        {display &&<div><button onClick={()=>shortedData()}>Expire</button><button onClick={()=>admissionData()}>Newer</button></div>}
+        {display && (
+          <div className={styles.buttonContainer}>
+            <button className={styles.button} onClick={() => shortedData()}>
+              Expire
+            </button>
+            <button className={styles.button} onClick={() => admissionData()}>
+              Newer
+            </button>
+          </div>
+        )}
       </div>
-     {filteredDataSource?.map((item) => ( 
-        <Link
+      {filteredDataSource?.map((item) => (
+        <Link style={{textDecoration:"none"}}
           key={item.seat_num}
-          href={`/user/view-all-seat/${id}/${item?.ser?.map(y => y.id)}/`}
+          href={`/user/view-all-seat/${id}/${item?.ser?.map((y) => y.id)}/`}
           className={[
             styles.container,
             item.seat_num % 2 ? styles.evenStyle : styles.oddStyle,
           ]}
         >
-          <div key={item.id}>
+          <div key={item.id} className={styles.dataContainer}>
             <p className={styles.seatNumber}>{item.seat_num}</p>
             {item?.data?.map((x) => (
-              <div key={x.id}>
+              <div key={x.id} className={styles.nameContainer}>
                 <p className={styles.name}>
                   {x.name.slice(0, 1).toUpperCase() + x.name.slice(1)}
                 </p>

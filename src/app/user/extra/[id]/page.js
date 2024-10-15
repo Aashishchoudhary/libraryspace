@@ -6,13 +6,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 import Link from "next/link";
-function Half({ params: { id } }) {
+function Extra({ params: { id } }) {
   const router = useRouter();
   const [token] = useState(getCookie("authToken").access);
   const [data, setData] = useState([]);
   const [filterdData, setFilteredData] = useState([]);
 
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [startDate, setStartdate] = useState(new Date());
@@ -29,16 +29,16 @@ function Half({ params: { id } }) {
   const [display, setDisplay] = useState(false);
 
   const updateData = new FormData();
-  if (name) updateData.append('name', name);
-  if (mobile) updateData.append('mobile_number', mobile);
-  if (startDate) updateData.append('start_date', yyyymmdd(startDate));
-  if (endDate) updateData.append('end_date', yyyymmdd(endDate));
-  if (dob) updateData.append('dob', yyyymmdd(dob));
-  if (adress) updateData.append('adress', adress);
-  if (gender) updateData.append('gender', gender);
-  if (amount) updateData.append('amount', amount);
-  if (adharcard) updateData.append('adharcard', adharcard);
-  if (photo) updateData.append('photo', photo);
+  if (name) updateData.append("name", name);
+  if (mobile) updateData.append("mobile_number", mobile);
+  if (startDate) updateData.append("start_date", yyyymmdd(startDate));
+  if (endDate) updateData.append("end_date", yyyymmdd(endDate));
+  if (dob) updateData.append("dob", yyyymmdd(dob));
+  if (adress) updateData.append("adress", adress);
+  if (gender) updateData.append("gender", gender);
+  if (amount) updateData.append("amount", amount);
+  if (adharcard) updateData.append("adharcard", adharcard);
+  if (photo) updateData.append("photo", photo);
 
   const funCheck = () => {
     setCheck(true);
@@ -70,8 +70,6 @@ function Half({ params: { id } }) {
     }
   };
 
-
-
   const postData = async () => {
     try {
       await axios.post(`${url}/extra-student/${id}/`, updateData, {
@@ -93,7 +91,7 @@ function Half({ params: { id } }) {
     try {
       const response = await axios.get(`${url}/extra-student/${id}/`, {
         headers: {
-          Authorization: 'Bearer ' +token,
+          Authorization: "Bearer " + token,
         },
       });
 
@@ -101,7 +99,7 @@ function Half({ params: { id } }) {
       const newData = res.slice().sort((a, b) => {
         return new Date(b.updated_at) - new Date(a.updated_at);
       });
-      
+
       setFilteredData(newData);
       setData(res);
     } catch (err) {
@@ -110,14 +108,15 @@ function Half({ params: { id } }) {
     }
   };
   const filterFun = () => {
-    setDisplay(!display )
+    setDisplay(!display);
   };
+
   const expireDate = () => {
     setDisplay(false);
     const newData = data.slice().sort((a, b) => {
       return new Date(a.end_date) - new Date(b.end_date);
     });
-   
+
     setFilteredData(newData);
   };
   const admissionDate = () => {
@@ -125,77 +124,233 @@ function Half({ params: { id } }) {
     const newData = data.slice().sort((a, b) => {
       return new Date(b.updated_at) - new Date(a.updated_at);
     });
- 
+
     setFilteredData(newData);
   };
+  const searchFilterFunction = (text) => {
+    if (text) {
+      const newData = data.filter(function (item) {
+        const itemData = item?.name
+          ? item?.name.toUpperCase()
+          : "".toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredData(newData);
+      setSearch(text);
+    } else {
+      setFilteredData(data);
+      setSearch(text);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
   return (
     <>
-      <div>
-      {data?.length < 1 && (
-          <div className={styles.btncontainer}>
-            <button className={styles.btnbutton} onClick={() => createRoom()}>
-              <p className={styles.btnbutton}>Show QR</p>
-            </button>
-          </div>
-        )}
-      </div>
       <div className={styles.subCon}>
-        <input
-          className={styles.textInputStyle}
-          onChange={(e) => setSearch(e.target.value)}
-          value={search}
-          type="text"
-          placeholder="Search Here"
-        />
-        <button onClick={() => filterFun()} className={styles.filterButton}>
-          <p className={styles.filterButtonText}>
-            {!display ? "Filter" : "Hide"}
-          </p>
-        </button>
-        {display && (
-          <div>
-            <button onClick={() => expireDate()}>Expire</button>
-            <button onClick={() => admissionDate()}>Newer</button>
-          </div>
-        )}
-      </div>
-      {filterdData?.map((item) => ( 
-        <Link
-          key={item.id}
-          href={`/user/extra-data/${item.id}/`}
-          className={[
-            styles.container,
-            item.id % 2 ? styles.evenStyle : styles.oddStyle,
-          ]}
-        >
-          <div key={item.id}>
-            <p className={styles.seatNumber}>{item.name.slice(0, 1).toUpperCase() + item.name.slice(1)}</p>
-            <p>{item.mobile_number}</p>
-            <p>{item.amount}</p>
-            <p>{item.end_date}</p>
-            {new Date(item.end_date) < new Date() && (
-              <p className={styles.expired}>Expired</p>
-            )}
-            {new Date(item.end_date) > new Date() && (
-              <p style={styles.expiring}>
-                Days Left{" "}
-                {Math.floor(
-                  (new Date(item.end_date).getTime() - new Date().getTime()) /
-                    86400000,
-                )}
+        <div className={styles.mainContainer}>
+          <div className={styles.serachField}>
+            <input
+              className={styles.textInputStyle}
+              onChange={(e) => searchFilterFunction(e.target.value)}
+              value={search}
+              type="text"
+              placeholder="Search Here"
+            />
+            <button onClick={() => filterFun()} className={styles.filterButton}>
+              <p className={styles.filterButtonText}>
+                {!display ? "Filter" : "Hide"}
               </p>
+            </button>
+            <button
+              style={{ background: "#6e3b96" }}
+              className={styles.filterButton}
+              onClick={() => createRoom()}
+            >
+              <p style={{ color: "black" }} className={styles.filterButtonText}>
+                show Qr
+              </p>
+            </button>
+
+            {display && (
+              <div>
+                <button onClick={() => expireDate()}>Expire</button>
+                <button onClick={() => admissionDate()}>Newer</button>
+              </div>
             )}
-            
-           
           </div>
-        </Link>
-      ))}
-      
+          {filterdData?.map((item) => (
+            <Link
+              style={{ textDecoration: "none" }}
+              key={item.id}
+              href={`/user/extra-data/${item.id}/`}
+              className={styles.container}
+            >
+              <div key={item.id} className={styles.dataContainer}>
+                <p className={styles.seatNumber}>
+                  {item.name.slice(0, 1).toUpperCase() + item.name.slice(1)}
+                </p>
+                <p className={styles.name}>{item.mobile_number}</p>
+                <p className={styles.name}>{item.amount}</p>
+                <p className={styles.name}>{item.end_date}</p>
+                {new Date(item.end_date) < new Date() && (
+                  <p className={styles.expired}>Expired</p>
+                )}
+                {new Date(item.end_date) > new Date() && (
+                  <p className={styles.expiring}>
+                    Days Left{" "}
+                    {Math.floor(
+                      (new Date(item.end_date).getTime() -
+                        new Date().getTime()) /
+                        86400000
+                    )}
+                  </p>
+                )}
+              </div>
+            </Link>
+          ))}
+        </div>
+        <div className={styles.dataContainer_two}>
+          <div className={styles.formcontainer_two}>
+            <div className={styles.form}>
+              <input
+                type="text"
+                className={styles.input}
+                value={name}
+                placeholder="Name..."
+                onChange={(e) => setName(e.target.value)}
+              />
+
+              <input
+                type="text"
+                className={
+                  `input ${mobile.length > 9 ? "green" : "red"} ` + styles.input
+                }
+                value={mobile}
+                placeholder="Mobile number..."
+                onChange={(e) => setMobile(e.target.value)}
+              />
+
+              <input
+                type="text"
+                className={styles.input}
+                value={amount}
+                placeholder="Amount..."
+                onChange={(e) => setAmount(e.target.value)}
+              />
+
+              <input
+                type="text"
+                className={styles.input}
+                value={adress}
+                placeholder="Address..."
+                onChange={(e) => setAdress(e.target.value)}
+              />
+
+              <div className={styles.dateCon}>
+                <label className={styles.label}>Date of Birth</label>
+                <input
+                className={styles.input}
+                style={{width:"40%"}}
+                  type="date"
+                  value={dob}
+                  onChange={(e) => setDob(e.target.value)}
+                />
+              </div>
+
+              {/* Gender Radio buttons */}
+              <div className={styles.radiocontainer}>
+                <input
+                  type="radio"
+                  onChange={(e) => setGender(e.target.value)}
+                  id="female"
+                  name="gender"
+                  value="Female"
+                  checked={gender == "Female"}
+                />
+                 {" "}
+                <label className={styles.label} htmlFor="female">
+                  Female
+                </label>
+                <br />
+                <input
+                  type="radio"
+                  onChange={(e) => setGender(e.target.value)}
+                  id="male"
+                  name="gender"
+                  value="Male"
+                  checked={gender == "Male"}
+                />
+                 {" "}
+                <label className={styles.label} htmlFor="male">
+                  Male
+                </label>
+                <br />
+              </div>
+
+              <div className={styles.dateCon}>
+                <label className={styles.label}>From</label>
+                <input
+                className={styles.input}
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartdate(e.target.value)}
+                />
+                <label className={styles.label}>To</label>
+                <input
+                className={styles.input}
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </div>
+              {/* Image selection */}
+              <div className={styles.imageupload}>
+                <label className={styles.label}>Upload Photo</label>
+                <input
+                className={styles.input}
+                style={{width:"40%"}}
+                  type="file"
+                  onChange={(e) => setPhoto(e.target.files[0])}
+                />
+                {photo && (
+                  <img
+                    className={styles.img}
+                    src={URL.createObjectURL(photo)}
+                    alt="phtot"
+                  />
+                )}
+              </div>
+
+              <div className={styles.imageupload}>
+                <label className={styles.label}>Upload Aadharcard</label>
+                <input
+                className={styles.input}
+                style={{width:"40%"}}
+                  type="file"
+                  onChange={(e) => setAdharcard(e.target.files[0])}
+                />
+                {adharcard && (
+                  <img
+                    className={styles.img}
+                    src={URL.createObjectURL(adharcard)}
+                    alt="Aadharcard"
+                  />
+                )}
+              </div>
+              <div className={styles.buttonContainer}>
+                <button className={styles.button} onClick={() => sdd()}>
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
 
-export default Half;
+export default Extra;

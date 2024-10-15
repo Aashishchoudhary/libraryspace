@@ -16,10 +16,8 @@ function HeaderPage() {
   const handleMediaQueryChange = (mediaQuery) => {
     if (mediaQuery.matches) {
       setIsSmallScreen(true);
-      console.log("ture");
     } else {
-      setIsSmallScreen(false);
-      console.log("false");
+      setIsSmallScreen(false); 
     }
   };
   useEffect(() => {

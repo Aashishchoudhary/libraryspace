@@ -2,7 +2,7 @@
 import { url, getCookie, yyyymmdd, handleImageUpload } from "@/store/url";
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
-import styles from "./page.module.css";
+import styles from "./add-data.module.css";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import { useScreenshot } from "use-react-screenshot";
@@ -18,7 +18,7 @@ function Editreservation({ params: { id ,seatid } }) {
   const getImage = () => takeScreenshot(ref.current);
 
   const [data, setData] = useState([]);
-
+  const [checkData , setCheckData] = useState(false)
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [startDate, setStartdate] = useState(yyyymmdd(new Date()));
@@ -90,8 +90,10 @@ function Editreservation({ params: { id ,seatid } }) {
       res.data[0]["mobile_number"] && setMobile(res.data[0]["mobile_number"]);
       res.data[0]["amount"] && setAmount(res.data[0]["amount"]);
       res.data[0]["gender"] && setGender(res.data[0]["gender"]);
+      setCheckData(true)
     } catch (err) {
       console.log(err);
+      setCheckData(false)
     }
   };
   console.log(updateData);
@@ -165,15 +167,7 @@ function Editreservation({ params: { id ,seatid } }) {
   };
   // whatsapp url
   const initiateWhatsApp = (num) => {
-    let url = "whatsapp://send?&phone=91" + num;
-    Linking.openURL(url)
-      .then((data) => {
-        console.log("WhatsApp Opened");
-      })
-
-      .catch(() => {
-        alert("Make sure Whatsapp installed on your device");
-      });
+    router.push(`https://wa.me/${num.replace("+", "")}`);
   };
 
   useEffect(() => {
@@ -181,203 +175,380 @@ function Editreservation({ params: { id ,seatid } }) {
   }, []);
   return (
     <>
-      <div>
-        {data?.data?.length < 1 && (
-          <div className={styles.btncontainer}>
-            <button className={styles.btnbutton} onClick={() => createRoom()}>
-              <p className={styles.btnbutton}>Show QR</p>
-            </button>
+    <div>
+      {checkData && (
+        <div className={styles.dataContainer}>
+          <div>
+            {data?.data?.map((item) => (
+              <div key={item.id}>
+                <div className={styles.container} ref={ref}>
+                  {/* Header with Company Info */}
+                  <div className={styles.header}>
+                    <p className={styles.companyName}>
+                      {data.library_name.slice(0, 1).toUpperCase() +
+                        data.library_name.slice(1)}
+                    </p>
+                    <p className={styles.companyDetails}>{data.address}</p>
+                    <p className={styles.companyDetails}>
+                      Phone: {data.mobile_number}
+                    </p>
+                    <p className={styles.companyDetails}>
+                      Email: info@company.com
+                    </p>
+                  </div>
+
+                  {/* Invoice Details */}
+                  <div className={styles.invoiceInfo}>
+                    <div className={styles.invoiceHeader}>
+                      <p className={styles.invoiceTitle}>INVOICE</p>
+                    </div>
+                    <div className={styles.detailsRow}>
+                      <p className={styles.label}>Seat No. :</p>
+                      <p className={styles.value}> {data.seat_num}</p>
+                    </div>
+                    <div className={styles.detailsRow}>
+                      <p className={styles.label}>Date:</p>
+                      <p className={styles.value}>
+                        {new Date().toDateString()}
+                      </p>
+                    </div>
+                    <div className={styles.detailsRow}>
+                      <p className={styles.label}>Due Date:</p>
+                      <p className={styles.value}>{item.end_date}</p>
+                    </div>
+                    <div className={styles.detailsRow}>
+                      <p className={styles.label}>Amount :</p>
+                      <p className={styles.value}>₹ {item.amount}</p>
+                    </div>
+                  </div>
+
+                  {/* Client Information */}
+                  <div className={styles.clientInfo}>
+                    <p className={styles.sectionTitle}>Bill To:</p>
+                    <p className={styles.clientName}>
+                      {item.name.slice(0, 1).toUpperCase() +
+                        item.name.slice(1)}
+                    </p>
+                    <p className={styles.clientDetails}>{item.adress}</p>
+                    <p className={styles.clientDetails}>
+                      Phone: {item.mobile_number}
+                    </p>
+                    <p className={styles.clientDetails}>
+                      Preapring For: {item.field}
+                    </p>
+                    <p className={styles.clientDetails}>
+                      Gender: {item.gender}
+                    </p>
+                  </div>
+
+                  {/* Footer */}
+                  <div className={styles.footer}>
+                    <p className={styles.footerP}>Product made by Labeo</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+            <br />
+            {image && (
+              <img className={styles.img} src={image} alt={"Screenshot"} />
+            )}
+            {checkData && (
+              <div className={styles.buttonContainer}>
+                <button className={styles.button} onClick={() => getImage()}>
+                  Download Invoice
+                </button>
+                <button
+                  className={styles.button}
+                  onClick={() => initiateWhatsApp(mobile)}
+                >
+                  Open Whatsapp
+                </button>
+              </div>
+            )}
+            <br />
           </div>
-        )}
-        {data?.data?.map((item) => (
-          <div key={item.id}>
-            <div
-              className={styles.container}
-              ref={ref}
-              options={{
-                fileName: `${item.name}`,
-                format: "jpg",
-                quality: 1,
-              }}
-            >
-              {/* Header with Company Info */}
-              <div className={styles.header}>
-                <p className={styles.companyName}>
-                  {data.library_name.slice(0, 1).toUpperCase() +
-                    data.library_name.slice(1)}
-                </p>
-                <p className={styles.companyDetails}>{data.address}</p>
-                <p className={styles.companyDetails}>
-                  Phone: {data.mobile_number}
-                </p>
-                <p className={styles.companyDetails}>Email: info@company.com</p>
+          <div className={styles.formcontainer}>
+            <div className={styles.form}>
+              <input
+                type="text"
+                className={styles.input}
+                value={name}
+                placeholder="Name..."
+                onChange={(e) => setName(e.target.value)}
+              />
+
+              <input
+                type="text"
+                className={
+                  `input ${mobile.length > 9 ? "green" : "red"} ` +
+                  styles.input
+                }
+                value={mobile}
+                placeholder="Mobile number..."
+                onChange={(e) => setMobile(e.target.value)}
+              />
+
+              <input
+                type="text"
+                className={styles.input}
+                value={amount}
+                placeholder="Amount..."
+                onChange={(e) => setAmount(e.target.value)}
+              />
+
+              <input
+                type="text"
+                className={styles.input}
+                value={adress}
+                placeholder="Address..."
+                onChange={(e) => setAdress(e.target.value)}
+              />
+
+              <div className={styles.dateCon}>
+                <label className={styles.label}>Date of Birth</label>
+                <input
+                  type="date"
+                  value={dob}
+                  onChange={(e) => setDob(e.target.value)}
+                />
               </div>
 
-              {/* Invoice Details */}
-              <div className={styles.invoiceInfo}>
-                <div className={styles.invoiceHeader}>
-                  <p className={styles.invoiceTitle}>INVOICE</p>
-                </div>
-                <div className={styles.detailsRow}>
-                  <p className={styles.label}>Seat No. :</p>
-                  <p className={styles.value}> {data.seat_num}</p>
-                </div>
-                <div className={styles.detailsRow}>
-                  <p className={styles.label}>Date:</p>
-                  <p className={styles.value}>{new Date().toDateString()}</p>
-                </div>
-                <div className={styles.detailsRow}>
-                  <p className={styles.label}>Due Date:</p>
-                  <p className={styles.value}>{item.end_date}</p>
-                </div>
-                <div className={styles.detailsRow}>
-                  <p className={styles.label}>Amount :</p>
-                  <p className={styles.value}>₹ {item.amount}</p>
-                </div>
+              {/* Gender Radio buttons */}
+              <div className={styles.radiocontainer}>
+                <input
+                  type="radio"
+                  onChange={(e) => setGender(e.target.value)}
+                  id="female"
+                  name="gender"
+                  value="Female"
+                  checked={gender == "Female"}
+                />
+                 {" "}
+                <label className={styles.label} htmlFor="female">
+                  Female
+                </label>
+                <br />
+                <input
+                  type="radio"
+                  onChange={(e) => setGender(e.target.value)}
+                  id="male"
+                  name="gender"
+                  value="Male"
+                  checked={gender == "Male"}
+                />
+                 {" "}
+                <label className={styles.label} htmlFor="male">
+                  Male
+                </label>
+                <br />
               </div>
 
-              {/* Client Information */}
-              <div className={styles.clientInfo}>
-                <p className={styles.sectionTitle}>Bill To:</p>
-                <p className={styles.clientName}>
-                  {item.name.slice(0, 1).toUpperCase() + item.name.slice(1)}
-                </p>
-                <p className={styles.clientDetails}>{item.adress}</p>
-                <p className={styles.clientDetails}>
-                  Phone: {item.mobile_number}
-                </p>
-                <p className={styles.clientDetails}>
-                  Preapring For: {item.field}
-                </p>
-                <p className={styles.clientDetails}>Gender: {item.gender}</p>
+              <div className={styles.dateCon}>
+                <label className={styles.label}>From</label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartdate(e.target.value)}
+                />
+                <label className={styles.label}>To</label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </div>
+              {/* Image selection */}
+              <div className={styles.imageupload}>
+                <label className={styles.label}>Upload Photo</label>
+                <input
+                  type="file"
+                  onChange={(e) => setPhoto(e.target.files[0])}
+                />
+                {photo && (
+                  <img
+                    className={styles.img}
+                    src={URL.createObjectURL(photo)}
+                    alt="phtot"
+                  />
+                )}
               </div>
 
-              {/* Footer */}
-              <div className={styles.footer}>
-                <p className={styles.footerP}>Product made by Labeo</p>
+              <div className={styles.imageupload}>
+                <label className={styles.label}>Upload Aadharcard</label>
+                <input
+                  type="file"
+                  onChange={(e) => setAdharcard(e.target.files[0])}
+                />
+                {adharcard && (
+                  <img
+                    className={styles.img}
+                    src={URL.createObjectURL(adharcard)}
+                    alt="Aadharcard"
+                  />
+                )}
+              </div>
+              <div className={styles.buttonContainer}>
+                <button className={styles.button} onClick={() => patchData()}>
+                  Upadte
+                </button>
+                <button
+                  className={styles.button}
+                  onClick={() => deleteData()}
+                >
+                  Delete
+                </button>
               </div>
             </div>
           </div>
-        ))}
-      </div>
-
-      <div className={styles.container}>
-        {/* Form for empty seat data */}
-
-        <div className={styles.formcontainer}>
-          <input
-            type="text"
-            className={styles.input}
-            value={name}
-            placeholder="Name..."
-            onChange={(e) => setName(e.target.value)}
-          />
-
-          <input
-            type="text"
-            className={`input ${mobile.length > 9 ? "green" : "red"}`}
-            value={mobile}
-            placeholder="Mobile number..."
-            onChange={(e) => setMobile(e.target.value)}
-          />
-
-          <input
-            type="text"
-            className={styles.input}
-            value={amount}
-            placeholder="Amount..."
-            onChange={(e) => setAmount(e.target.value)}
-          />
-
-          <input
-            type="text"
-            className={styles.input}
-            value={adress}
-            placeholder="Address..."
-            onChange={(e) => setAdress(e.target.value)}
-          />
-
-          <div className={styles.dateCon}>
-            <label>Date of Birth</label>
-            <input
-              type="date"
-              value={dob}
-              onChange={(e) => setDob(e.target.value)}
-            />
+        </div>
+      )}
+      {!checkData && (
+        <div className={styles.dataContainer_two}>
+          <div className={styles.buttonContainer_two}>
+            <button
+              className={styles.button_two}
+              onClick={() => createRoom()}
+            >
+              Show QR
+            </button>
           </div>
+          <div className={styles.formcontainer_two}>
+            <div className={styles.form}>
+              <input
+                type="text"
+                className={styles.input}
+                value={name}
+                placeholder="Name..."
+                onChange={(e) => setName(e.target.value)}
+              />
 
-          {/* Gender Radio buttons */}
-          <div className={styles.radiocontainer}>
-            <input
-              type="radio"
-              onChange={(e) => setGender(e.target.value)}
-              id="female"
-              name="gender"
-              value="Female"
-              checked={gender == "Female"}
-            />
-              <label htmlFor="female">Female</label>
-            <br />
-            <input
-              type="radio"
-              onChange={(e) => setGender(e.target.value)}
-              id="male"
-              name="gender"
-              value="Male"
-              checked={gender == "Male"}
-            />
-              <label htmlFor="male">Male</label>
-            <br />
-          </div>
+              <input
+                type="text"
+                className={
+                  `input ${mobile.length > 9 ? "green" : "red"} ` +
+                  styles.input
+                }
+                value={mobile}
+                placeholder="Mobile number..."
+                onChange={(e) => setMobile(e.target.value)}
+              />
 
-          <div className={styles.dateCon}>
-            <label>From</label>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartdate(e.target.value)}
-            />
-            <label>To</label>
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-          </div>
+              <input
+                type="text"
+                className={styles.input}
+                value={amount}
+                placeholder="Amount..."
+                onChange={(e) => setAmount(e.target.value)}
+              />
 
-          {/* Image selection */}
-          <div className={styles.imageupload}>
-            <label>Upload Photo</label>
-            <input type="file" onChange={(e) => setPhoto(e.target.files[0])} />
-            {photo && <img src={URL.createObjectURL(photo)} alt="phtot" />}
-          </div>
+              <input
+                type="text"
+                className={styles.input}
+                value={adress}
+                placeholder="Address..."
+                onChange={(e) => setAdress(e.target.value)}
+              />
 
-          <div className={styles.imageupload}>
-            <label>Upload Aadharcard</label>
-            <input
-              type="file"
-              onChange={(e) => setAdharcard(e.target.files[0])}
-            />
-            {adharcard && (
-              <img src={URL.createObjectURL(adharcard)} alt="Aadharcard" />
-            )}
-          </div>
-
-          <div className="button-container">
-            {data?.data?.length < 1 ? (
-              <button className="button" onClick={() => postData()}>
-                Save
-              </button>
-            ) : (
-              <div>
-                <button onClick={() => patchData()}>Upadte</button>
-                <button onClick={() => deleteData()}>Delete</button>
+              <div className={styles.dateCon}>
+                <label className={styles.label}>Date of Birth</label>
+                <input
+                  type="date"
+                  value={dob}
+                  onChange={(e) => setDob(e.target.value)}
+                />
               </div>
-            )}
+
+              {/* Gender Radio buttons */}
+              <div className={styles.radiocontainer}>
+                <input
+                  type="radio"
+                  onChange={(e) => setGender(e.target.value)}
+                  id="female"
+                  name="gender"
+                  value="Female"
+                  checked={gender == "Female"}
+                />
+                 {" "}
+                <label className={styles.label} htmlFor="female">
+                  Female
+                </label>
+                <br />
+                <input
+                  type="radio"
+                  onChange={(e) => setGender(e.target.value)}
+                  id="male"
+                  name="gender"
+                  value="Male"
+                  checked={gender == "Male"}
+                />
+                 {" "}
+                <label className={styles.label} htmlFor="male">
+                  Male
+                </label>
+                <br />
+              </div>
+
+              <div className={styles.dateCon}>
+                <label className={styles.label}>From</label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartdate(e.target.value)}
+                />
+                <label className={styles.label}>To</label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </div>
+              {/* Image selection */}
+              <div className={styles.imageupload}>
+                <label className={styles.label}>Upload Photo</label>
+                <input
+                  type="file"
+                  onChange={(e) => setPhoto(e.target.files[0])}
+                />
+                {photo && (
+                  <img
+                    className={styles.img}
+                    src={URL.createObjectURL(photo)}
+                    alt="phtot"
+                  />
+                )}
+              </div>
+
+              <div className={styles.imageupload}>
+                <label className={styles.label}>Upload Aadharcard</label>
+                <input
+                  type="file"
+                  onChange={(e) => setAdharcard(e.target.files[0])}
+                />
+                {adharcard && (
+                  <img
+                    className={styles.img}
+                    src={URL.createObjectURL(adharcard)}
+                    alt="Aadharcard"
+                  />
+                )}
+              </div>
+              <div className={styles.buttonContainer}>
+                <button className={styles.button} onClick={() => patchData()}>
+                  Upadte
+                </button>
+                <button
+                  className={styles.button}
+                  onClick={() => deleteData()}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </>
+      )}
+    </div>
+  </>
   );
 }
 

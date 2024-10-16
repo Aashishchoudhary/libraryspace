@@ -13,8 +13,12 @@ function AddData({ params: { id, seatid } }) {
 
   const ref = useRef(null);
   const [image, takeScreenshot] = useScreenshot();
-  const getImage = () => {
-    takeScreenshot(ref.current);
+  const getImage = async () => {
+    const image = await takeScreenshot(ref.current);
+    if (!image) {
+      console.error("Error taking screenshot!");
+      return;
+    }
     const a = document.createElement("a");
     a.href = image;
     a.download = `${name}.jpg`;
@@ -22,6 +26,10 @@ function AddData({ params: { id, seatid } }) {
     a.click();
     document.body.removeChild(a);
   };
+
+  const [refresh , setRefresh] = useState(true)
+  const [changeSeat, setChangeSeat] = useState(false);
+  const [vaccentSeatData, setVaccentSeatData] = useState([]);
   const [checkData, setCheckData] = useState(false);
   const [data, setData] = useState([]);
 
@@ -81,19 +89,35 @@ function AddData({ params: { id, seatid } }) {
 
       setData(res);
 
-      {res.seat_data[0]["dob"] &&
-        setDob(yyyymmdd(new Date(res.seat_data[0]["dob"])));}
+      {
+        res.seat_data[0]["dob"] &&
+          setDob(yyyymmdd(new Date(res.seat_data[0]["dob"])));
+      }
 
-      {res.seat_data[0]["end_date"] &&
-        setEndDate(yyyymmdd(new Date(res.seat_data[0]["end_date"])));}
-      {res.seat_data[0]["start_date"] &&
-        setStartdate(yyyymmdd(new Date(res.seat_data[0]["start_date"])));}
-      {res.seat_data[0]["name"] && setName(res.seat_data[0]["name"]);}
-      {res.seat_data[0]["adress"] && setAdress(res.seat_data[0]["adress"]);}
-      {res.seat_data[0]["mobile_number"] &&
-        setMobile(res.seat_data[0]["mobile_number"]);}
-      {res.seat_data[0]["amount"] && setAmount(res.seat_data[0]["amount"]);}
-      {res.seat_data[0]["gender"] && setGender(res.seat_data[0]["gender"]);}
+      {
+        res.seat_data[0]["end_date"] &&
+          setEndDate(yyyymmdd(new Date(res.seat_data[0]["end_date"])));
+      }
+      {
+        res.seat_data[0]["start_date"] &&
+          setStartdate(yyyymmdd(new Date(res.seat_data[0]["start_date"])));
+      }
+      {
+        res.seat_data[0]["name"] && setName(res.seat_data[0]["name"]);
+      }
+      {
+        res.seat_data[0]["adress"] && setAdress(res.seat_data[0]["adress"]);
+      }
+      {
+        res.seat_data[0]["mobile_number"] &&
+          setMobile(res.seat_data[0]["mobile_number"]);
+      }
+      {
+        res.seat_data[0]["amount"] && setAmount(res.seat_data[0]["amount"]);
+      }
+      {
+        res.seat_data[0]["gender"] && setGender(res.seat_data[0]["gender"]);
+      }
       setCheckData(true);
     } catch (e) {
       console.log("error ", e);
@@ -120,7 +144,7 @@ function AddData({ params: { id, seatid } }) {
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
-      const response = await axios.post(
+      await axios.post(
         `${url}/view-seat/${id}/${seatid}/`,
         updateData,
         {
@@ -132,12 +156,17 @@ function AddData({ params: { id, seatid } }) {
           },
         }
       );
-      const res = await response.data;
+      setRefresh(true)
 
       alert("Data saved");
-      getData();
+      
     } catch (err) {
-      console.log(err);
+   if(err.status==400){
+    alert("please fill all the fields")
+   }
+   else{
+    alert("check all the data fileds or try again later")
+   }
     }
   };
   const deleteData = async () => {
@@ -150,8 +179,8 @@ function AddData({ params: { id, seatid } }) {
           Authorization: "Bearer " + token,
         },
       });
+      setRefresh(true)
       alert("Data Deleted");
-      getData();
     } catch (err) {
       console.log(err.response.data);
     }
@@ -171,20 +200,52 @@ function AddData({ params: { id, seatid } }) {
         },
       });
 
+      setRefresh(true)
       alert("Data Updated");
-      getData();
     } catch (err) {
       console.log(err);
     }
   };
   const initiateWhatsApp = (num) => {
     router.push(`https://wa.me/${num.replace("+", "")}`);
+  };
+  const fetch_vaccent_seat = async () => {
+    const response = await axios.get(`${url}/vaccent-seats/${id}/`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    const res = await response.data;
+    console.log(res);
+    setVaccentSeatData(res);
+  };
 
+  const change_seat_number = async (seat_id) => {
+    try {
+      await axios.patch(
+        `${url}/change-seat/${id}/${seatid}/`,
+        { change_id: seat_id },
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      setRefresh(true)
+      alert("Seat changed")
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const get_vaccent_seat = () => {
+    fetch_vaccent_seat();
+    setChangeSeat(!changeSeat);
   };
   useEffect(() => {
     getData();
-  }, []);
-  
+    setRefresh(false)
+  }, [refresh]);
+
   return (
     <>
       <div>
@@ -278,6 +339,24 @@ function AddData({ params: { id, seatid } }) {
               )}
             </div>
             <div className={styles.formcontainer}>
+              <div className={styles.buttonContainer}>
+                <button
+                  onClick={() => get_vaccent_seat()}
+                  className={styles.button}
+                >
+                  Chanage Seat
+                </button>
+              </div>
+              {changeSeat && (
+                <div className={styles.seat}>
+                  {" "}
+                  {vaccentSeatData?.map((item) => (
+                    <div key={item.id} onClick={()=>change_seat_number(item.id)} className={styles.chair}>
+                      <p className={styles.chairNumber}>{item.seat_num}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
               <div className={styles.form}>
                 <input
                   type="text"
@@ -288,18 +367,19 @@ function AddData({ params: { id, seatid } }) {
                 />
 
                 <input
-                  type="text"
+                  type="number"
                   className={
                     `input ${mobile.length > 9 ? "green" : "red"} ` +
                     styles.input
                   }
                   value={mobile}
                   placeholder="Mobile number..."
-                  onChange={(e) => setMobile(e.target.value)}
+                  onChange={(e) => setMobile(e.target.value) }
+                 
                 />
 
                 <input
-                  type="text"
+                  type="number"
                   className={styles.input}
                   value={amount}
                   placeholder="Amount..."
@@ -462,8 +542,8 @@ function AddData({ params: { id, seatid } }) {
                 <div className={styles.dateCon}>
                   <label className={styles.label}>Date of Birth</label>
                   <input
-                  style={{width:"40%"}}
-                  className={styles.input}
+                    style={{ width: "40%" }}
+                    className={styles.input}
                     type="date"
                     value={dob}
                     onChange={(e) => setDob(e.target.value)}
@@ -502,15 +582,15 @@ function AddData({ params: { id, seatid } }) {
 
                 <div className={styles.dateCon}>
                   <label className={styles.label}>From</label>
-                  <input                  
-                  className={styles.input}
+                  <input
+                    className={styles.input}
                     type="date"
                     value={startDate}
                     onChange={(e) => setStartdate(e.target.value)}
                   />
                   <label className={styles.label}>To</label>
                   <input
-                  className={styles.input}
+                    className={styles.input}
                     type="date"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
@@ -520,8 +600,8 @@ function AddData({ params: { id, seatid } }) {
                 <div className={styles.imageupload}>
                   <label className={styles.label}>Upload Photo</label>
                   <input
-                  style={{width:"40%"}}
-                  className={styles.input}
+                    style={{ width: "40%" }}
+                    className={styles.input}
                     type="file"
                     onChange={(e) => setPhoto(e.target.files[0])}
                   />
@@ -537,8 +617,8 @@ function AddData({ params: { id, seatid } }) {
                 <div className={styles.imageupload}>
                   <label className={styles.label}>Upload Aadharcard</label>
                   <input
-                  style={{width:"40%"}}
-                  className={styles.input}
+                    style={{ width: "40%" }}
+                    className={styles.input}
                     type="file"
                     onChange={(e) => setAdharcard(e.target.files[0])}
                   />
@@ -554,7 +634,6 @@ function AddData({ params: { id, seatid } }) {
                   <button className={styles.button} onClick={() => postData()}>
                     Save
                   </button>
-                 
                 </div>
               </div>
             </div>

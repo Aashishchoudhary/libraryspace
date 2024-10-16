@@ -14,9 +14,33 @@
   width: 90%;
   margin-left: 10px;
   object-fit: cover;
+  
+ 
 }
+.chair {
+  width: 50px;
+  height: 50px;
+  background-color: lightgreen;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 10px;
+  text-decoration: none;
 
+}
+.chairNumber {
+  font-size: 16px;
+}
+.seat{
+  display: flex;
+  width: 100%;
+  
+  flex-flow: wrap;
 
+  justify-content: space-evenly;
+}
   
 
 /* invoice style */

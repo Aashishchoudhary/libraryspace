@@ -15,7 +15,21 @@ function ViewHalf({ params: { id } }) {
   
   const ref = useRef(null);
   const [image, takeScreenshot] = useScreenshot();
-  const getImage = () => takeScreenshot(ref.current);
+  const getImage = async () => {
+    const image = await takeScreenshot(ref.current);
+    if (!image) {
+      console.error("Error taking screenshot!");
+      return;
+    }
+    const a = document.createElement("a");
+    a.href = image;
+    a.download = `${name}.jpg`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  
 
   const [data, setData] = useState([]);
 
@@ -85,35 +99,7 @@ function ViewHalf({ params: { id } }) {
   if (adress) updateData.append('adress', adress);
   if (gender) updateData.append('gender', gender);
 
-  const postData = async () => {
-    const adha= await handleImageUpload(
-      adharcard || null
-    );
-    const pho = await handleImageUpload(photo || null);
-    if (adha) updateData.append("adharcard", adha, adha.name);
-    if (pho) updateData.append("photo", pho, pho.name);
-    try {
-      const response = await axios.post(
-        `${url}/half-day-student-view/${id}/`,
-        updateData,
-        {
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'multipart/form-data',
-
-            Authorization: 'Bearer ' + token,
-          },
-        },
-      );
-      const res = await response.data;
-
-      
-      alert('Data saved');
-      getData();
-    } catch (err) {
-      console.log(err);
-    }
-  };
+ 
   const deleteData = async () => {
     try {
       await axios.delete(`${url}/half-day-student-view/${id}/`, {
@@ -125,7 +111,8 @@ function ViewHalf({ params: { id } }) {
         },
       });
       alert('Data Deleted');
-      getData();
+      router.back()
+      
     } catch (err) {
       console.log(err.response.data);
     }

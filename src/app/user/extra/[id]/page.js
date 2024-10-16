@@ -15,11 +15,12 @@ function Extra({ params: { id } }) {
   const [search, setSearch] = useState("");
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
-  const [startDate, setStartdate] = useState(new Date());
+  const date_today=yyyymmdd(new Date()) 
+  const [startDate, setStartdate] = useState(date_today);
 
-  const [endDate, setEndDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(date_today);
   const [amount, setAmount] = useState("");
-  const [dob, setDob] = useState(new Date());
+  const [dob, setDob] = useState(date_today);
   const [gender, setGender] = useState();
   const [adress, setAdress] = useState("");
   const [adharcard, setAdharcard] = useState("");
@@ -31,9 +32,9 @@ function Extra({ params: { id } }) {
   const updateData = new FormData();
   if (name) updateData.append("name", name);
   if (mobile) updateData.append("mobile_number", mobile);
-  if (startDate) updateData.append("start_date", yyyymmdd(startDate));
-  if (endDate) updateData.append("end_date", yyyymmdd(endDate));
-  if (dob) updateData.append("dob", yyyymmdd(dob));
+  if (startDate) updateData.append("start_date",startDate);
+  if (endDate) updateData.append("end_date", endDate);
+  if (dob) updateData.append("dob",dob);
   if (adress) updateData.append("adress", adress);
   if (gender) updateData.append("gender", gender);
   if (amount) updateData.append("amount", amount);
@@ -83,7 +84,14 @@ function Extra({ params: { id } }) {
       setCheck(false);
       fetchData();
     } catch (err) {
-      console.log(err.response);
+      console.log(err)
+      if(err.status==400){
+        alert("please fill all the fields")
+       }
+       else{
+        alert("check all the data fileds or try again later")
+       
+        }
       // alert('Something went wrong please try again later');
     }
   };
@@ -341,7 +349,7 @@ function Extra({ params: { id } }) {
                 )}
               </div>
               <div className={styles.buttonContainer}>
-                <button className={styles.button} onClick={() => sdd()}>
+                <button className={styles.button} onClick={() => postData()}>
                   Save
                 </button>
               </div>

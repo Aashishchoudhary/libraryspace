@@ -26,7 +26,6 @@ function Half({ params: { id } }) {
   const [adharcard, setAdharcard] = useState("");
   const [photo, setPhoto] = useState("");
 
-  const [check, setCheck] = useState(false);
   const [display, setDisplay] = useState(false);
 
   const updateData = new FormData();
@@ -41,9 +40,6 @@ function Half({ params: { id } }) {
   if (adharcard) updateData.append('adharcard', adharcard);
   if (photo) updateData.append('photo', photo);
 
-  const funCheck = () => {
-    setCheck(true);
-  };
 
   const createRoom = async () => {
     try {
@@ -74,6 +70,10 @@ function Half({ params: { id } }) {
 
 
   const postData = async () => {
+    const adha = await handleImageUpload(adharcard || null);
+    const pho = await handleImageUpload(photo || null);
+    if (adha) updateData.append("adharcard", adha, adha.name);
+    if (pho) updateData.append("photo", pho, pho.name);
     try {
       await axios.post(`${url}/half-day-student/${id}/`, updateData, {
         headers: {
@@ -83,7 +83,7 @@ function Half({ params: { id } }) {
         },
       });
       console.warn("Data Saved");
-      setCheck(false);
+
       fetchData();
     } catch (err) {
       console.log(err.response);

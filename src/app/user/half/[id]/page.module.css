@@ -233,3 +233,14 @@
     height: 150px;
   }
 }
+
+.expired{
+  font-size:18px;
+  font-weight: medium;
+  color: rgb(255, 0, 0);
+}
+.expiring{
+  font-size:18px;
+  font-weight: bold;
+  color:green;
+}

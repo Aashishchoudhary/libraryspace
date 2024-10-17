@@ -4,7 +4,6 @@ import { useScreenshot } from "use-react-screenshot";
 import styles from "./page.module.css";
 import { url, handleImageUpload, getCookie, yyyymmdd } from "@/store/url";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 
 function ExtraStudent({ params: { id } }) {
@@ -109,7 +108,6 @@ function ExtraStudent({ params: { id } }) {
             Authorization: "Bearer " + token,
           },
         });
-
         router.push(`/user/extra/${pushBackId}/`);
       }
     } catch (err) {

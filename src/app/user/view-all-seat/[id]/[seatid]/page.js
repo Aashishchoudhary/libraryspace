@@ -133,7 +133,9 @@ function Editreservation({ params: { id, seatid } }) {
         },
       });
 
-      fetchData();
+      
+      alert("Data updated")
+      setRefresh(true)
     } catch (err) {
       console.log(err.response.data);
       alert("something went wrong please try agian later");
@@ -145,17 +147,17 @@ function Editreservation({ params: { id, seatid } }) {
     const pho = await handleImageUpload(photo || null);
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
+    console.log(updateData ,token)
     try {
       await axios.post(
-        `${url}/edit-reservation-view/${id}/`,
+        `${url}/edit-reservation-view/${seatid}/`,updateData,
 
         {
           headers: {
             Accept: "application/json",
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + token,
-          },
-          body: updateData,
+          }
         }
       );
 
@@ -166,9 +168,9 @@ function Editreservation({ params: { id, seatid } }) {
         alert("please fill all the fields")
        }
        else{
-        alert("check all the data fileds or try again later")
+        alert("Try agian later")
        }
-        
+        setRefresh(true)
     }
   };
   // delete data
@@ -182,8 +184,8 @@ function Editreservation({ params: { id, seatid } }) {
             Authorization: "Bearer " + token,
           },
         });
-         setRefresh(true);
         
+        router.push(`/user/view-all-seat/${id}`)
       }
     
     } catch (err) {
@@ -216,8 +218,9 @@ function Editreservation({ params: { id, seatid } }) {
           },
         }
       );
-      setRefresh(true);
+      
       alert("Seat changed");
+      router.push(`/user/view-all-seat/${id}/${seat_id}/`)
     } catch (err) {
       console.log(err);
     }
@@ -236,6 +239,29 @@ function Editreservation({ params: { id, seatid } }) {
         {checkData && (
           <div className={styles.dataContainer}>
             <div>
+            <div  className={styles.buttonContainer}>
+                <button
+                style={{marginTop:"5px" ,marginLeft:'10px'}}
+                  onClick={() => get_vaccent_seat()}
+                  className={styles.button}
+                >
+                  Chanage Seat
+                </button>
+              </div>
+              {changeSeat && (
+                <div className={styles.seat}>
+                  {" "}
+                  {vaccentSeatData?.map((item) => (
+                    <div
+                      key={item.id}
+                      onClick={() => change_seat_number(item.id)}
+                      className={styles.chair}
+                    >
+                      <p className={styles.chairNumber}>{item.seat_num}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
               {data?.data?.map((item) => (
                 <div key={item.id}>
                   <div className={styles.container} ref={ref}>
@@ -325,28 +351,7 @@ function Editreservation({ params: { id, seatid } }) {
               <br />
             </div>
             <div className={styles.formcontainer}>
-              <div className={styles.buttonContainer}>
-                <button
-                  onClick={() => get_vaccent_seat()}
-                  className={styles.button}
-                >
-                  Chanage Seat
-                </button>
-              </div>
-              {changeSeat && (
-                <div className={styles.seat}>
-                  {" "}
-                  {vaccentSeatData?.map((item) => (
-                    <div
-                      key={item.id}
-                      onClick={() => change_seat_number(item.id)}
-                      className={styles.chair}
-                    >
-                      <p className={styles.chairNumber}>{item.seat_num}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
+             
               <div className={styles.form}>
                 <input
                   type="text"

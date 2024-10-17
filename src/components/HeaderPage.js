@@ -28,7 +28,7 @@ function HeaderPage() {
 
     // Trigger the handler initially
     handleMediaQueryChange(mediaQuery);
-
+    
     // Clean up the event listener on component unmount
     return () => {
       mediaQuery.removeEventListener("change", handleMediaQueryChange);

@@ -180,7 +180,8 @@ function AddData({ params: { id, seatid } }) {
           Authorization: "Bearer " + token,
         },
       });
-      setRefresh(true)
+     
+      router.push(`/user/view-seat/${id}`)
     }
     } catch (err) {
       console.log(err.response.data);
@@ -232,8 +233,9 @@ function AddData({ params: { id, seatid } }) {
           },
         }
       );
-      setRefresh(true)
+     
       alert("Seat changed")
+      router.push(`/user/view-seat/${id}/${seat_id}/`)
     } catch (err) {
       console.log(err);
     }
@@ -253,6 +255,25 @@ function AddData({ params: { id, seatid } }) {
         {checkData && (
           <div className={styles.dataContainer}>
             <div>
+            <div className={styles.buttonContainer}>
+                <button
+                style={{marginTop:"5px" ,marginLeft:'10px'}}
+                  onClick={() => get_vaccent_seat()}
+                  className={styles.button}
+                >
+                  Chanage Seat
+                </button>
+              </div>
+              {changeSeat && (
+                <div className={styles.seat}>
+                  
+                  {vaccentSeatData?.map((item) => (
+                    <div key={item.id} onClick={()=>change_seat_number(item.id)} className={styles.chair}>
+                      <p className={styles.chairNumber}>{item.seat_num}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
               {data?.seat_data?.map((item) => (
                 <div key={item.id}>
                   <div className={styles.container} ref={ref}>
@@ -340,24 +361,7 @@ function AddData({ params: { id, seatid } }) {
               )}
             </div>
             <div className={styles.formcontainer}>
-              <div className={styles.buttonContainer}>
-                <button
-                  onClick={() => get_vaccent_seat()}
-                  className={styles.button}
-                >
-                  Chanage Seat
-                </button>
-              </div>
-              {changeSeat && (
-                <div className={styles.seat}>
-                  {" "}
-                  {vaccentSeatData?.map((item) => (
-                    <div key={item.id} onClick={()=>change_seat_number(item.id)} className={styles.chair}>
-                      <p className={styles.chairNumber}>{item.seat_num}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
+              
               <div className={styles.form}>
                 <input
                   type="text"

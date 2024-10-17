@@ -171,6 +171,7 @@ function AddData({ params: { id, seatid } }) {
   };
   const deleteData = async () => {
     try {
+      if (window.confirm("Do you really want to Delete?")) {
       await axios.delete(`${url}/view-seat/${id}/${seatid}/`, {
         headers: {
           Accept: "application/json",
@@ -180,7 +181,7 @@ function AddData({ params: { id, seatid } }) {
         },
       });
       setRefresh(true)
-      alert("Data Deleted");
+    }
     } catch (err) {
       console.log(err.response.data);
     }

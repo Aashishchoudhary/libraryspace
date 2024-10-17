@@ -46,6 +46,7 @@ function Editreservation({ params: { id, seatid } }) {
   const [adharcard, setAdharcard] = useState("");
   const [photo, setPhoto] = useState("");
 
+
   const updateData = new FormData();
   if (name) updateData.append("name", name);
   if (mobile) updateData.append("mobile_number", mobile);
@@ -116,7 +117,7 @@ function Editreservation({ params: { id, seatid } }) {
       setCheckData(false);
     }
   };
-  console.log(updateData);
+
   //patch data
   const patchData = async () => {
     const adha = await handleImageUpload(adharcard || null);
@@ -171,16 +172,20 @@ function Editreservation({ params: { id, seatid } }) {
     }
   };
   // delete data
+ 
   const deleteData = async () => {
     try {
-      await axios.delete(`${url}/edit-reservation-view/${seatid}/`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      });
-      setRefresh(true);
-      alert("Data Deleted");
+      if (window.confirm("Do you really want to Delete?")) {
+        await axios.delete(`${url}/edit-reservation-view/${seatid}/`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        });
+         setRefresh(true);
+        
+      }
+    
     } catch (err) {
       alert("something went wrong please try agian later");
     }

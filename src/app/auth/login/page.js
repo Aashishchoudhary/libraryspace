@@ -40,7 +40,7 @@ function login() {
 
       }
     } catch (err) {
-      alert(err);
+      alert(err.response.data.details);
       console.log("err", err);
     }
   };

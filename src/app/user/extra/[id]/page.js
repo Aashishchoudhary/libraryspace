@@ -195,7 +195,7 @@ function Extra({ params: { id } }) {
             <Link
               style={{ textDecoration: "none" }}
               key={item.id}
-              href={`/user/extra-data/${item.id}/`}
+              href={`/user/extra-data/${item.id}/?push_back_id=${id}`}
               className={styles.container}
             >
               <div key={item.id} className={styles.dataContainer}>

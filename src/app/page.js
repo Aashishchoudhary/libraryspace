@@ -11,7 +11,7 @@ const router = useRouter()
 
 
   const cehckCookie=()=>{
-    
+    console.log('ff' ,getCookie('authToken'))
     if(getCookie('authToken')!=null){
       router.push('/user')
     }

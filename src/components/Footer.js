@@ -10,8 +10,8 @@ const Footer = () => {
           <h3 className={styles.h3}>Company</h3>
           <ul className={styles.ul}>
             <li className={styles.li}><Link className={styles.a} href={'/data/aboutus'}>About Us</Link></li>
-            <li className={styles.li}><a className={styles.a} href="/data/carrers">Careers</a></li>
-            <li className={styles.li}><a className={styles.a} href="#">Vision</a></li>
+   
+            <li className={styles.li}><a className={styles.a} href="/data/vision">Vision</a></li>
           </ul>
         </div>
 
@@ -19,14 +19,14 @@ const Footer = () => {
           <h3>Help</h3>
           <ul className={styles.ul}>
             <li className={styles.li}><a className={styles.a} href="/data/contact-us/">Contact -us</a></li>
-            <li className={styles.li}><a className={styles.a} href="#">Feedback</a></li>
+            <li className={styles.li}><a className={styles.a} href="/data/feedback">Feedback</a></li>
             <li className={styles.li}><a className={styles.a} href="/data/faq/">FAQ</a></li>
           </ul>
         </div>
       </div>
 
       <div className={styles.footerBottom}>
-        <p>&copy; {new Date().getFullYear()} Your Company. All Rights Reserved.</p>
+        <p>&copy; {new Date().getFullYear()} LibPot. All Rights Reserved.</p>
       </div>
     </footer>
   );

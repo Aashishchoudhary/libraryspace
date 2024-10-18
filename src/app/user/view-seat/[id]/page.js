@@ -9,6 +9,7 @@ import { Pie, Bar } from "react-chartjs-2";
 import styles from "./page.module.css";
 
 Chart.register(CategoryScale);
+ 
 function page({ params: { id } }) {
   const [data, setData] = useState([]);
   const [seatData, setSeatData] = useState({});

@@ -1,11 +1,12 @@
 "use client";
-import Link from "next/link";
+
 import styles from "../login/loginfor.module.css";
 import {useState ,useEffect} from "react";
 function page() {
     const [seconds, setSeconds] = useState(6);
     const [check , setCheck] = useState(false)
-
+    const [username , setUsername]= useState('')
+const [otp ,setOtp] = useState('')
     useEffect(() => {
       const intervalId = setInterval(() => {
         if (seconds > 0) {
@@ -38,13 +39,16 @@ const resendOtp=()=>{
             type="text"
             id="username"
             placeholder="username"
-            required
+           value={username}
+           onChange={(e)=>setUsername(e.target.value)}
           />
           <input
            
             className={styles.input}
             type="text"
             placeholder="otp..."
+            value={otp}
+            onChange={(e)=>setOtp(e.target.value)}
           />
 
 
@@ -57,12 +61,10 @@ const resendOtp=()=>{
           </a>:seconds +' - seconds'}</p> 
 
           <button type="submit" className={styles.loginBtn}>
-            Get Otp
+            login
           </button>
 
-          <p className={styles.signupPrompt}>
-            or <a href="#">signup</a>
-          </p>
+         
         </div>
       </div>
     </div>

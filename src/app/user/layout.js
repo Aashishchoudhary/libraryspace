@@ -3,7 +3,7 @@ import HeaderPage from "@/components/HeaderPage";
 
 
 export const metadata = {
-  title: "Home",
+  title: "Library",
   description: "",
 };
 

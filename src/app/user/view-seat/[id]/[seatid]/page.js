@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
 import { useScreenshot } from "use-react-screenshot";
-import styles from "./add-seat.module.css";
+import styles from '../../../view-all-seat/[id]/[seatid]/add-data.module.css'
 import { url, handleImageUpload, getCookie, yyyymmdd } from "@/store/url";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -27,7 +27,7 @@ function AddData({ params: { id, seatid } }) {
     document.body.removeChild(a);
   };
 
-  const [refresh , setRefresh] = useState(true)
+
   const [changeSeat, setChangeSeat] = useState(false);
   const [vaccentSeatData, setVaccentSeatData] = useState([]);
   const [checkData, setCheckData] = useState(false);
@@ -118,6 +118,7 @@ function AddData({ params: { id, seatid } }) {
       {
         res.seat_data[0]["gender"] && setGender(res.seat_data[0]["gender"]);
       }
+    
       setCheckData(true);
     } catch (e) {
       console.log("error ", e);
@@ -156,8 +157,8 @@ function AddData({ params: { id, seatid } }) {
           },
         }
       );
-      setRefresh(true)
-
+      
+getData()
       alert("Data saved");
       
     } catch (err) {
@@ -202,8 +203,8 @@ function AddData({ params: { id, seatid } }) {
         },
       });
 
-      setRefresh(true)
       alert("Data Updated");
+      getData()
     } catch (err) {
       console.log(err);
     }
@@ -244,10 +245,11 @@ function AddData({ params: { id, seatid } }) {
     fetch_vaccent_seat();
     setChangeSeat(!changeSeat);
   };
+  
   useEffect(() => {
     getData();
-    setRefresh(false)
-  }, [refresh]);
+   
+  }, []);
 
   return (
     <>

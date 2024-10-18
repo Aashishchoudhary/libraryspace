@@ -1,5 +1,9 @@
 import styles from './faq.module.css'; // Import the CSS module
 
+export const metadata = {
+  title: "Faq",
+  description: "",
+};
 const Faq = () => {
   return (
     <div className={styles.faqContainer}>
@@ -10,30 +14,30 @@ const Faq = () => {
 
       <section className={styles.faqSection}>
         <div className={styles.faqItem}>
-          <h3 className={styles.question}>What is your return policy?</h3>
+          <h3 className={styles.question}>What is your  policy?</h3>
           <p className={styles.answer}>
-            Our return policy allows returns within 30 days of receiving your item. Make sure the product is in its original condition.
+           Our priority to make your data is not visible to anyone , Even we can not see your data.
           </p>
         </div>
 
         <div className={styles.faqItem}>
-          <h3 className={styles.question}>How long does shipping take?</h3>
+          <h3 className={styles.question}>How Long it take to activate your account?</h3>
           <p className={styles.answer}>
-            Shipping usually takes 5-7 business days. International shipping may vary depending on the location.
+           In  fraction of Secoond your activate will be activated and you can add you data
           </p>
         </div>
 
         <div className={styles.faqItem}>
-          <h3 className={styles.question}>Can I change or cancel my order?</h3>
+          <h3 className={styles.question}>How many libraries can we add</h3>
           <p className={styles.answer}>
-            You can change or cancel your order within 24 hours of purchase. After this, the order will be processed for shipping.
+            You can add 5 libraries , if you want more we will do this for you
           </p>
         </div>
 
         <div className={styles.faqItem}>
-          <h3 className={styles.question}>How can I track my order?</h3>
+          <h3 className={styles.question}>what will be the subscription charges</h3>
           <p className={styles.answer}>
-            Once your order is shipped, you will receive a tracking number via email. You can use this number to track your order on our website.
+            It is completly Free
           </p>
         </div>
 

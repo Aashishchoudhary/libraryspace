@@ -2,16 +2,17 @@
 import Link from "next/link";
 import styles from "../login/loginfor.module.css";
 import { useState } from "react";
-import { url } from "@/store/url";
+import { url } from "@/store/url"
 
-import { redirect } from 'next/navigation'
 import axios from "axios";
+import { useRouter } from "next/navigation";
 function page() {
-    const [phone , setPhone] = useState()
-    const [email , setEmail] = useState()
+  const router = useRouter()
+    const [phone , setPhone] = useState("")
+    const [email , setEmail] = useState("")
 
     const getOtp=async()=>{
-        const response = await axios.post(`${url}/` ,{
+        try{ await axios.post(`${url}/send-otp/` ,{
             'phone':phone,
             'email':email
         },
@@ -20,15 +21,19 @@ function page() {
               'Content-Type': 'application/json'
         }
     })
-    const res= await response.data
+    localStorage.setItem("phone",phone)
+    localStorage.setItem("email",email)
+    router.push('/auth/verify-user/')
+  }
+  catch(err){alert(err)}
     }
   return (
     <div className={styles.container}>
       <div className={styles.loginBox}>
         <h1 className={styles.heading}>
-          Welcome <span className={styles.highlight}>back</span>
+         Signup <span className={styles.highlight}>Here</span>
         </h1>
-        <p className={styles.para}>Glad to see you again!</p>
+        <p className={styles.para}>We will happy help you! </p>
 
         <div className={styles.loginform} id="loginForm">
          

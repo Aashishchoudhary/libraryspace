@@ -2,6 +2,11 @@ import styles from './contact-us.module.css' // Import the CSS module
 import Link from 'next/link';
 import { FaPhoneAlt, FaEnvelope, FaWhatsapp } from 'react-icons/fa'; // Import icons for styling
 
+export const metadata = {
+  title: "Contact Us",
+  description: "",
+};
+
 const Contact = () => {
   const whatsappNumber = '+916367032851'; // Replace with your WhatsApp number
   const phoneNumber = '+916367032851'; // Replace with your phone number

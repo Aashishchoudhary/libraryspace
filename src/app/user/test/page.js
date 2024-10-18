@@ -1,6 +1,6 @@
 'use client'
 import { yyyymmdd } from '@/store/url';
-import {useState} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 
 
 function page() {
@@ -23,6 +23,16 @@ function page() {
         console.log(gender)
         console.log(img)
     }
+    const [data, setData] = useState('me')
+    const [a ,b]=useState(false)
+console.log('aa')
+const ff = () => {
+    setData('aashish')
+    b(true)
+}
+useEffect(() => {
+ ff()
+}, [])
   return (
     <div>
 
@@ -36,6 +46,7 @@ function page() {
 <button onClick={()=>gg()}>Check</button>
 <input type="file" onChange={(e)=>setImage(URL.createObjectURL(e.target.files[0]))} />
 <img src={img}/>
+{a&&<p>{data}</p>}
     </div>
   )
 }

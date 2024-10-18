@@ -1,6 +1,43 @@
-import Link from "next/link";
-import styles from "./loginfor.module.css";
+'use client'
+import styles from "../login/loginfor.module.css";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { url } from "@/store/url";
+import { useRouter } from "next/navigation";
+
 function page() {
+  const router = useRouter()
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const fetchLocalStorage = () => {
+    setPhone(localStorage.getItem("phone"));
+    setEmail(localStorage.getItem("email"));
+  };
+
+  const signup=async()=>{
+    try{ await axios.post(`${url}/register/` ,{
+        'phone':phone,
+        'email':email,
+        'password':password
+    },
+{
+    headers:{
+          'Content-Type': 'application/json'
+    }
+})
+
+router.push('/auth/login/')
+}
+catch(err){alert(err)}
+}
+  useEffect(() => {
+    
+    fetchLocalStorage();
+    
+  }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.loginBox}>
@@ -10,37 +47,42 @@ function page() {
         <p className={styles.para}>Glad to see you again!</p>
 
         <div className={styles.loginform} id="loginForm">
-            <input
-              className={styles.input}
-              type="text"
-              id="username"
-              placeholder="phone"
-              required
-            />
           <input
             className={styles.input}
-            type="email"
-            id="email"
+            type="text"
+            value={phone}
+            placeholder="username"
+            required
+          />
+          <input
+            className={styles.input}
+            type="text"
+            value={email}
             placeholder="email"
             required
           />
+          <input
+            className={styles.input}
+            type="text"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <div className={styles.forgotpara}>
-          <Link href="#" className={styles.forgotPassword}>
-            Login with otp
-          </Link>
-          <Link href="#" className={styles.forgotPassword}>
-            forgot password?
-          </Link>
-          </div>
+          {/* { check?<p  href="/" className={styles.forgotPassword}>
+            resend
+          </p>:seconds}
+          */}
+          <p className={styles.forgotPassword}>
+            
+            
+          </p>
 
-          <button type="submit" className={styles.loginBtn}>
-            login
+          <button onClick={signup} type="submit" className={styles.loginBtn}>
+            signUp
           </button>
 
-          <p className={styles.signupPrompt}>
-            or <a href="#">signup</a>
-          </p>
+          
         </div>
       </div>
     </div>

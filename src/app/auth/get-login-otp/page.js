@@ -1,23 +1,30 @@
-'use client'
+"use client";
 import Link from "next/link";
 import styles from "../login/loginfor.module.css";
 import { useState } from "react";
 import axios from "axios";
 import { url } from "@/store/url";
-import { redirect } from 'next/navigation'
-function page() {
-    const [username , setUsername]=useState('')
-const getOtp =async()=>{
-const response = await axios.post(`${url}` ,
-    {'username':username}
-    ,{
-    headers:{
-      'Content-Type': 'application/json'
-    }
-})
-const res = await response.data
+import { useRouter } from "next/navigation";
 
-}
+function page() {
+  const router = useRouter();
+  const [username, setUsername] = useState("");
+  const getOtp = async () => {
+    try {
+      await axios.post(
+        `${url}/send-login-otp/`,
+        { username: username },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      router.push('/auth/login-otp/')
+    } catch (err) {
+      alert(err);
+    }
+  };
   return (
     <div className={styles.container}>
       <div className={styles.loginBox}>
@@ -32,14 +39,13 @@ const res = await response.data
             type="text"
             id="username"
             placeholder="username"
-            onChange={(e)=>setUsername(e.target.value)}
-            required
+            onChange={(e) => setUsername(e.target.value)}
+           value={username}
           />
           <input
             disabled
             className={styles.inputdisbale}
             type="text"
-         
             placeholder="otp..."
           />
 
@@ -47,7 +53,11 @@ const res = await response.data
             forgot password
           </Link>
 
-          <button type="submit" onClick={()=>getOtp()} className={styles.loginBtn}>
+          <button
+            type="submit"
+            onClick={() => getOtp()}
+            className={styles.loginBtn}
+          >
             Get Otp
           </button>
 

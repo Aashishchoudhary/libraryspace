@@ -1,36 +1,29 @@
-'use client'
+"use client";
 // import { cookies } from 'next/headers'
 
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 // import { NextResponse } from 'next/server'
 
-
-
 function page() {
-    const router = useRouter()
-    // const cookieStore = cookies()
-    const logout=()=>{
-        var now = new Date();
-        
-  var time = now.getTime();
-  var expireTime = time - 1000*36000;
-  now.setTime(expireTime);
+  const router = useRouter();
+  // const cookieStore = cookies()
+  const logout = () => {
+    var now = new Date();
 
-  
- document.cookie=`authToken=null;expires=${now.toUTCString()};path='/'`
+    var time = now.getTime();
+    var expireTime = time - 1000 * 36000;
+    now.setTime(expireTime);
 
-      
-    return   router.push('/')
+    document.cookie = `authToken=null;expires=${now.toUTCString()};path='/'`;
 
-    }
-    logout()
-    
-  return (
-    <div>
-      
-    </div>
-  )
+    return router.push("/");
+  };
+  useEffect(()=>{ logout();},[])
+ 
+
+  return <div></div>;
 }
 
-export default page
+export default page;

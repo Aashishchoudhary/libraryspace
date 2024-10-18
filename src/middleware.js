@@ -14,7 +14,7 @@ export function middleware(request) {
   if (request.nextUrl.pathname.startsWith("/auth")) {
     const cookieStore = cookies();
 
-    console.log("path");
+    
     const user = cookieStore.has("authToken")
    
     if (user) {

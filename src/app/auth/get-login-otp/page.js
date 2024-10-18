@@ -20,6 +20,7 @@ function page() {
           },
         }
       );
+      localStorage.setItem('phone', username)
       router.push('/auth/login-otp/')
     } catch (err) {
       alert(err);

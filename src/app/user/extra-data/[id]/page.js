@@ -5,9 +5,9 @@ import styles from "./page.module.css";
 import { url, handleImageUpload, getCookie, yyyymmdd } from "@/store/url";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-
+import { useCookies } from "react-cookie";
 function ExtraStudent({ params: { id } }) {
-  const [token] = useState(getCookie("authToken").access);
+  const [token] =useCookies()
   const orig = "http://localhost:8000";
   const router = useRouter();
 
@@ -59,7 +59,7 @@ function ExtraStudent({ params: { id } }) {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
 
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access,
         },
       });
       const res = await response.data;
@@ -105,7 +105,7 @@ function ExtraStudent({ params: { id } }) {
             Accept: "application/json",
             "Content-Type": "multipart/form-data",
 
-            Authorization: "Bearer " + token,
+            Authorization: "Bearer " + token.access,
           },
         });
         router.push(`/user/extra/${pushBackId}/`);
@@ -125,7 +125,7 @@ function ExtraStudent({ params: { id } }) {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
 
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access,
         },
       });
 

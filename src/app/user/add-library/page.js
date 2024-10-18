@@ -3,9 +3,9 @@ import { url, getCookie, handleImageUpload } from "@/store/url";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
-
+import { useCookies } from "react-cookie";
 function AddLibrary() {
-  const [token] = useState(getCookie("authToken").access);
+  const [token] = useCookies()
   const [name, setName] = useState("");
   const [facilty, setFacilty] = useState("");
   const [locality, setlocality] = useState("");
@@ -57,7 +57,7 @@ function AddLibrary() {
       const response = await axios.get(`${url}/add-library/`, {
         headers: {
           Accept: "application/json",
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access,
         },
       });
       const res = await response.data;
@@ -93,7 +93,7 @@ function AddLibrary() {
         headers: {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access,
         },
       });
 

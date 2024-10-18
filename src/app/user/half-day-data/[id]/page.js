@@ -4,11 +4,11 @@ import { useScreenshot } from "use-react-screenshot";
 import styles from "./page.module.css";
 import { url, handleImageUpload, getCookie, yyyymmdd } from "@/store/url";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
 
 function ViewHalf({ params: { id } }) {
-  const [token] = useState(getCookie("authToken").access);
+  const [token] = useCookies()
   const orig = "http://localhost:8000";
   const router = useRouter();
 
@@ -60,7 +60,7 @@ function ViewHalf({ params: { id } }) {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
 
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access,
         },
       });
       const res = await response.data;
@@ -105,7 +105,7 @@ function ViewHalf({ params: { id } }) {
             Accept: "application/json",
             "Content-Type": "multipart/form-data",
 
-            Authorization: "Bearer " + token,
+            Authorization: "Bearer " + token.access,
           },
         });
        
@@ -126,7 +126,7 @@ function ViewHalf({ params: { id } }) {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
 
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access,
         },
       });
 

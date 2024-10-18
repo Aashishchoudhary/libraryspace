@@ -3,13 +3,13 @@ import { url ,getCookie} from '@/store/url'
 import axios from 'axios'
 import { useState ,useEffect } from 'react'
 import styles from './edit.module.css'
-import { redirect } from 'next/navigation'
+import { useCookies } from "react-cookie";
 
 
 
 function page({params: {id}}) {
   
-  const user = getCookie('authToken')
+const [token] = useCookies()
  
  
  
@@ -71,7 +71,7 @@ function page({params: {id}}) {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Bearer ' +user.access,
+            Authorization: 'Bearer ' +token.access,
           },
         },
       );
@@ -89,7 +89,7 @@ function page({params: {id}}) {
           Accept: 'application/json',
           'Content-Type': 'multipart/form-data',
 
-          Authorization: 'Bearer ' + user.access,
+          Authorization: 'Bearer ' + token.access,
         },
       });
       const res = await response.data;

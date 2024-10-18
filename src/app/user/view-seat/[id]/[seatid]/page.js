@@ -2,12 +2,13 @@
 import { useRef, useState, useEffect } from "react";
 import { useScreenshot } from "use-react-screenshot";
 import styles from '../../../view-all-seat/[id]/[seatid]/add-data.module.css'
-import { url, handleImageUpload, getCookie, yyyymmdd } from "@/store/url";
+import { url, handleImageUpload, yyyymmdd } from "@/store/url";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
+import { useCookies } from "react-cookie";
 function AddData({ params: { id, seatid } }) {
-  const [token] = useState(getCookie("authToken").access);
+  const [token] = useCookies()
   const orig = "http://localhost:8000";
   const router = useRouter();
 
@@ -54,14 +55,14 @@ function AddData({ params: { id, seatid } }) {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
 
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access
         },
       });
       const res = await response.data;
 
       // Construct the complete URL with all necessary parameters
       const qr_value = `${url}/chat-page/?libid=${id}&id=${seatid}&user_id=${
-        jwtDecode(token).user_id
+        jwtDecode(token.access).user_id
       }&sign=${res["sign"]}`;
 
       // Perform navigation using navigation.navigate
@@ -82,7 +83,7 @@ function AddData({ params: { id, seatid } }) {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
 
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access
         },
       });
       const res = await response.data;
@@ -153,7 +154,7 @@ function AddData({ params: { id, seatid } }) {
             Accept: "application/json",
             "Content-Type": "multipart/form-data",
 
-            Authorization: "Bearer " + token,
+            Authorization: "Bearer " + token.access
           },
         }
       );
@@ -178,7 +179,7 @@ getData()
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
 
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access
         },
       });
      
@@ -199,7 +200,7 @@ getData()
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
 
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access
         },
       });
 
@@ -215,7 +216,7 @@ getData()
   const fetch_vaccent_seat = async () => {
     const response = await axios.get(`${url}/vaccent-seats/${id}/`, {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + token.access
       },
     });
     const res = await response.data;
@@ -230,7 +231,7 @@ getData()
         { change_id: seat_id },
         {
           headers: {
-            Authorization: "Bearer " + token,
+            Authorization: "Bearer " + token.access
           },
         }
       );

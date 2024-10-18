@@ -1,18 +1,20 @@
 "use client";
-import { url, getCookie } from "@/store/url";
+import { url } from "@/store/url";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styles from "./library-home.module.css";
 import Link from "next/link";
+import { useCookies } from "react-cookie";
 
 function LibraryHome() {
-  const user = getCookie("authToken");
+ const [token ] =useCookies()
+
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
     const response = await axios.get(`${url}/library-view/`, {
       headers: {
-        Authorization: "Bearer " + user.access,
+        Authorization: "Bearer " + token.access,
       },
     });
     const res = await response.data;

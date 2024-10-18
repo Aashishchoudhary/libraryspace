@@ -1,17 +1,18 @@
 "use client";
-import { url, getCookie } from "@/store/url";
+import { url } from "@/store/url";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
 
 function Feedback_reply({ params: { id } }) {
-    const [token] = useState(getCookie("authToken").access);
+    const [token] = useCookies()
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
     try {
       const response = await axios.get(`${url}/feedback/${id}/`, {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access,
         },
       });
      

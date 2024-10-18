@@ -1,15 +1,17 @@
 'use client'
-import { url ,getCookie } from '@/store/url'
+import { url  } from '@/store/url'
 import axios from 'axios'
 import {useState , useEffect} from 'react'
 import styles from './previous.module.css'
+import { useCookies } from 'react-cookie'
+
 function page({params:{id}}) {
-  const [token] = useState(getCookie("authToken").access)
+  const [token] = useCookies()
   const [ data , setData] = useState([])
   const fetchData=async()=>{
     const response = await axios.get(`${url}/previous-student/${id}/` ,{
       headers:{
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + token.access,
       }
     })
     const res = await response.data

@@ -1,19 +1,21 @@
 'use client'
 import HomePage from '@/components/HomePage';
-import { getCookie } from '@/store/url';
+
 import { useRouter } from 'next/navigation';
 import {useEffect} from 'react';
+import { CookiesProvider, useCookies } from 'react-cookie';
 
 function page() {
 const router = useRouter()
-
+const [token]= useCookies()
   
 
 
+
   const cehckCookie=()=>{
-    console.log('ff' ,getCookie('authToken'))
-    if(getCookie('authToken')!=null){
+    if(token.access){
       router.push('/user')
+      
     }
     
   }
@@ -22,11 +24,11 @@ useEffect(()=>{
 },[])
 
   return (
-   <>
+   <CookiesProvider defaultSetOptions={{ path: '/' }}>
  
  <HomePage/>
 
-   </>
+   </CookiesProvider>
     
   )
 }

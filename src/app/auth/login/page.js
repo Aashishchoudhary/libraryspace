@@ -36,7 +36,7 @@ function login() {
       );
       const data = await response.data;
       if (response.status == 200) {
-        document.cookie = `authToken=${JSON.stringify(data)};path='/';`;
+        document.cookie = `authToken=${JSON.stringify(data)};path='//';expires=${new Date(Date.now() + 3600000*1000).toUTCString()};Secure;`;
         router.push("/user");
       }
     } catch (err) {

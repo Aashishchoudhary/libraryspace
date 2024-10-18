@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -5,20 +6,25 @@ import { NextResponse } from "next/server";
 export function middleware(request) {
   if (request.nextUrl.pathname.startsWith("/user")) {
     const cookieStore = cookies();
-    const user = cookieStore.get("authToken");
-    if (!user ) {
+    const user = cookieStore.get("access");
+ 
+    const decodedToken =user&& jwtDecode(user.value); // Decode the token to get user info
+    const currentTime = Date.now() / 1000;
+  
+    if (!user||decodedToken.exp < currentTime ) {
       return NextResponse.redirect(new URL("/", request.url));
     }
    
   }
+  
   if (request.nextUrl.pathname.startsWith("/auth")) {
     const cookieStore = cookies();
 
-    
-    const user = cookieStore.has("authToken")
-   
+    const user = cookieStore.has("access");
+ 
+  
     if (user) {
-      console.log('dd')
+     
       return NextResponse.redirect(new URL("/user", request.url));
     }
   }

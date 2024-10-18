@@ -5,15 +5,7 @@ export const url ='http://127.0.0.1:8000'
 
  
 
-export function getCookie(name) {
-  if (typeof document !== 'undefined') {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-   
-   
-    if ( parts.length === 2) return JSON.parse(parts.pop().split(";").shift());
-  }
-  }
+
 
  export async function handleImageUpload(event) {
     const imageFile = event;

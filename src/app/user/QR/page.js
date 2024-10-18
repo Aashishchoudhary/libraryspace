@@ -5,7 +5,8 @@ function QR() {
   const [data, setData] = useState("");
   const fetchValue = () => {
     const url = new URLSearchParams(window.location.search);
-    setData(url.get("data"));
+    setData(`${url.get("data")}&id=${url.get("id")}&user_id=${url.get("user_id")}&sign=${url.get('sign')}`);
+    
   };
   useEffect(() => {
     fetchValue();

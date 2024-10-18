@@ -1,3 +1,4 @@
+
 import style from '../components/page.module.css'
 
 export const metadata = {
@@ -5,9 +6,9 @@ export const metadata = {
   description: "",
 };
 
-export default function RootLayout({ children }) {
 
-   
+export default function RootLayout({ children }) {
+  
   return (
     <html lang="en">
       <body  className={style.body}>

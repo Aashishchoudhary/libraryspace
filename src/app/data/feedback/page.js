@@ -1,11 +1,12 @@
 "use client";
-import { url, getCookie, handleImageUpload } from "@/store/url";
+import { url, handleImageUpload } from "@/store/url";
 import axios from "axios";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import styles from "./page.module.css";
+import { useCookies } from "react-cookie";
 const Feedback = () => {
-  const [token] = useState(getCookie("authToken").access);
+  const [token] = useCookies()
  
   const [data, setData] = useState([]);
   const [message, setMessage] = useState("");
@@ -23,7 +24,7 @@ const Feedback = () => {
         headers: {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access
         },
       });
       fetchData()
@@ -36,7 +37,7 @@ const Feedback = () => {
     try {
       const response = await axios.get(`${url}/feedback/`, {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access
         },
       });
       const res = await response.data;

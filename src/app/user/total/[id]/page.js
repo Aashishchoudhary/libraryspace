@@ -1,16 +1,17 @@
 'use client'
-import { url, getCookie } from "@/store/url";
+import { url } from "@/store/url";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
 
 function Total({params:{id}}) {
   const [data, setData] = useState([]);
-  const [token] = useState(getCookie("authToken").access);
+  const [token] = useCookies()
   const fetchData = async () => {
     try {
       const respone = await axios.get(`${url}/total/${id}/`, {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access,
         },
       });
       const res = await respone.data;

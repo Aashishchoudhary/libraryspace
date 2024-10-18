@@ -1,5 +1,5 @@
 "use client";
-import { url, getCookie } from "@/store/url";
+import { url } from "@/store/url";
 import axios from "axios";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -7,17 +7,19 @@ import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 import { Pie, Bar } from "react-chartjs-2";
 import styles from "./page.module.css";
+import { useCookies } from "react-cookie";
 
 Chart.register(CategoryScale);
  
 function page({ params: { id } }) {
+  const [token] = useCookies()
   const [data, setData] = useState([]);
   const [seatData, setSeatData] = useState({});
 
   const fetchSeatData = async () => {
     const response = await axios.get(`${url}/booked-seat/${id}`, {
       headers: {
-        Authorization: "Bearer " + getCookie("authToken").access,
+        Authorization: "Bearer " + token.access,
       },
     });
     const res = await response.data;
@@ -30,7 +32,7 @@ function page({ params: { id } }) {
       const response = await axios.get(`${url}/view-seat/${id}/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + getCookie("authToken").access,
+          Authorization: "Bearer " +token.access,
         },
       });
       const res = await response.data;

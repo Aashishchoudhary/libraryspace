@@ -1,14 +1,15 @@
 "use client";
-import { url, getCookie, yyyymmdd, handleImageUpload } from "@/store/url";
+import { url,  yyyymmdd, handleImageUpload } from "@/store/url";
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import styles from "./add-data.module.css";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import { useScreenshot } from "use-react-screenshot";
+import { useCookies } from "react-cookie";
 
 function Editreservation({ params: { id, seatid } }) {
-  const [token] = useState(getCookie("authToken").access);
+  const [token] =useCookies()
 
   const router = useRouter();
 
@@ -74,7 +75,7 @@ function Editreservation({ params: { id, seatid } }) {
 
       // Construct the complete URL with all necessary parameters
       const qr_value = `${url}/chat-page/?libid=${id}&id=${seatid}&user_id=${
-        jwtDecode(`${token}`).user_id
+        jwtDecode(`${token.access}`).user_id
       }&sign=${res["sign"]}`;
 
       // Perform navigation using navigation.navigate
@@ -93,7 +94,7 @@ function Editreservation({ params: { id, seatid } }) {
           headers: {
             Accept: "application/json",
             "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + token,
+            Authorization: "Bearer " + token.access,
           },
         }
       );
@@ -129,7 +130,7 @@ function Editreservation({ params: { id, seatid } }) {
         headers: {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access,
         },
       });
 
@@ -147,7 +148,7 @@ function Editreservation({ params: { id, seatid } }) {
     const pho = await handleImageUpload(photo || null);
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
-    console.log(updateData ,token)
+   
     try {
       await axios.post(
         `${url}/edit-reservation-view/${seatid}/`,updateData,
@@ -156,7 +157,7 @@ function Editreservation({ params: { id, seatid } }) {
           headers: {
             Accept: "application/json",
             "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + token,
+            Authorization: "Bearer " + token.access,
           }
         }
       );
@@ -181,7 +182,7 @@ function Editreservation({ params: { id, seatid } }) {
         await axios.delete(`${url}/edit-reservation-view/${seatid}/`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
+            Authorization: "Bearer " + token.access,
           },
         });
         
@@ -200,7 +201,7 @@ function Editreservation({ params: { id, seatid } }) {
   const fetch_vaccent_seat = async () => {
     const response = await axios.get(`${url}/vaccent-seats/${id}/`, {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + token.access,
       },
     });
     const res = await response.data;
@@ -214,7 +215,7 @@ function Editreservation({ params: { id, seatid } }) {
         { change_id: seat_id },
         {
           headers: {
-            Authorization: "Bearer " + token,
+            Authorization: "Bearer " + token.access,
           },
         }
       );

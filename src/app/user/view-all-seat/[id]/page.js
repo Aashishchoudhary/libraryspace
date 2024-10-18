@@ -1,11 +1,13 @@
 "use client";
-import { url, getCookie } from "@/store/url";
+import { url } from "@/store/url";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 import Link from "next/link";
+import { useCookies } from "react-cookie";
 
 function View_all_seat({ params: { id } }) {
+  const [token] =useCookies()
   const [display, setDisplay] = useState(false);
   const [search, setSearch] = useState("");
   const [filteredDataSource, setFilteredDataSource] = useState([]);
@@ -77,7 +79,7 @@ function View_all_seat({ params: { id } }) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + getCookie("authToken").access,
+          Authorization: "Bearer " + token.acces,
         },
       }
     );

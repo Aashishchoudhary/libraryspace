@@ -1,14 +1,15 @@
 "use client";
-import { getCookie, url, yyyymmdd, handleImageUpload } from "@/store/url";
+import {  url, yyyymmdd, handleImageUpload } from "@/store/url";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 import Link from "next/link";
+import { useCookies } from "react-cookie";
 function Half({ params: { id } }) {
   const router = useRouter();
-  const [token] = useState(getCookie("authToken").access);
+  const [token] = useCookies()
   const [data, setData] = useState([]);
   const [filterdData, setFilteredData] = useState([]);
 
@@ -49,14 +50,14 @@ function Half({ params: { id } }) {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
 
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access,
         },
       });
       const res = await response.data;
 
       // Construct the complete URL with all necessary parameters
       const qr_value = `${url}/chat-page/?libid=${id}&user_id=${
-        jwtDecode(token).access
+        jwtDecode(token.access).user_id
       }&sign=${res["sign"]}&url=add-half-time`;
       router.push(`/user/QR/?data=${qr_value}`);
       // Perform navigation using navigation.navigate
@@ -79,7 +80,7 @@ function Half({ params: { id } }) {
         headers: {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access,
         },
       });
       console.warn("Data Saved");
@@ -94,7 +95,7 @@ function Half({ params: { id } }) {
     try {
       const response = await axios.get(`${url}/half-day-student/${id}/`, {
         headers: {
-          Authorization: 'Bearer ' +token,
+          Authorization: 'Bearer ' +token.access,
         },
       });
 

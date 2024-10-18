@@ -1,13 +1,46 @@
 "use client";
 
+import axios from "axios";
 import styles from "../login/loginfor.module.css";
 import {useState ,useEffect} from "react";
+import { url } from "@/store/url";
+import { useRouter } from "next/navigation";
+import { useCookies } from 'react-cookie';
 function page() {
+  const [ setCookie] = useCookies();
+  const router= useRouter()
     const [seconds, setSeconds] = useState(6);
     const [check , setCheck] = useState(false)
     const [username , setUsername]= useState('')
 const [otp ,setOtp] = useState('')
+
+console.log(new Date(Date.now() + 3600000*1000).toUTCString())
+function fectchLocalStorage(){
+ setUsername(localStorage.getItem('phone'))
+ 
+}
+const loginfun=async()=>{
+  try{
+    const response =await axios.post(`${url}/login-with-otp/` ,{
+      'username':username,
+      "otp":otp
+    },{headers: {
+      "Content-Type": "application/json",
+    }});
+const data = await response.data;
+if (response.status == 200) {
+  const token = JSON.stringify(data)
+  console.log(token)
+  setCookie('access' ,data.access , { path: '/' })
+  setCookie('refresh' ,data.refresh , { path: '/' })
+  router.push("/user");
+}
+  }
+  catch(err){alert(err)}
+}
+
     useEffect(() => {
+      fectchLocalStorage()
       const intervalId = setInterval(() => {
         if (seconds > 0) {
           setSeconds(seconds - 1);
@@ -60,7 +93,7 @@ const resendOtp=()=>{
           Resend Otp
           </a>:seconds +' - seconds'}</p> 
 
-          <button type="submit" className={styles.loginBtn}>
+          <button onClick={loginfun} type="submit" className={styles.loginBtn}>
             login
           </button>
 

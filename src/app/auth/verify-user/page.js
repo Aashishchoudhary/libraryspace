@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 function page() {
   const router = useRouter()
-  const [seconds, setSeconds] = useState(6);
+  const [seconds, setSeconds] = useState(60);
   const [check, setCheck] = useState(false);
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -34,6 +34,25 @@ router.push('/auth/signup/')
 }
 catch(err){alert(err)}
 }
+const getOtp=async()=>{
+  try{ await axios.post(`${url}/send-otp/` ,{
+      'phone':phone,
+      'email':email
+  },
+{
+  headers:{
+        'Content-Type': 'application/json'
+  }
+})
+alert("Otp Re-sent")
+}
+catch(err){alert(err)}
+}
+const resendOtp = () => {
+  getOtp()
+  setCheck(false);
+  setSeconds(60);
+};
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (seconds > 0) {
@@ -47,10 +66,6 @@ catch(err){alert(err)}
     return () => clearInterval(intervalId);
   }, [seconds]);
 
-  const resendOtp = () => {
-    setCheck(false);
-    setSeconds(6);
-  };
 
   return (
     <div className={styles.container}>

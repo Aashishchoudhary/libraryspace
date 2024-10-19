@@ -21,6 +21,7 @@ function page() {
               'Content-Type': 'application/json'
         }
     })
+    alert('Otp sent')
     localStorage.setItem("phone",phone)
     localStorage.setItem("email",email)
     router.push('/auth/verify-user/')

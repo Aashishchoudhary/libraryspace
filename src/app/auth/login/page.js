@@ -6,7 +6,9 @@ import axios from "axios";
 import { url } from "@/store/url";
 
 import { useRouter } from "next/navigation";
+import { useCookies } from "react-cookie";
 function login() {
+  const [cookie , setCookie] = useCookies()
   const router = useRouter();
 
   const [username, setUsername] = useState("");
@@ -36,19 +38,25 @@ function login() {
       );
       const data = await response.data;
       if (response.status == 200) {
-        document.cookie = `authToken=${JSON.stringify(data)};path='//';expires=${new Date(Date.now() + 3600000*1000).toUTCString()};Secure;`;
+        setCookie('access' ,data.access , { path: '/' ,secure:true,
+          sameSite: 'strict',maxAge: 60 * 60 * 24 * 90,})
+        setCookie('refresh' ,data.refresh , { path: '/' ,secure:true, 
+          sameSite: 'strict',maxAge: 60 * 60 * 24 * 90,})
         router.push("/user");
+       
       }
     } catch (err) {
       alert(err.response.data.details);
       console.log("err", err);
     }
   };
+ 
   useEffect(() => {
     fetchLocalStorage();
   }, []);
   return (
     <div className={styles.bgcolor}>
+     
       <div className={styles.container}>
         <div className={styles.loginBox}>
           <h1 className={styles.heading}>
@@ -81,7 +89,7 @@ function login() {
               >
                 Login with otp
               </Link>
-              <Link href="#" className={styles.forgotPassword}>
+              <Link href="/auth/send-password-otp/" className={styles.forgotPassword}>
                 forgot password?
               </Link>
             </div>

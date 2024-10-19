@@ -9,7 +9,7 @@ import { useCookies } from 'react-cookie';
 function page() {
   const [ setCookie] = useCookies();
   const router= useRouter()
-    const [seconds, setSeconds] = useState(6);
+    const [seconds, setSeconds] = useState(60);
     const [check , setCheck] = useState(false)
     const [username , setUsername]= useState('')
 const [otp ,setOtp] = useState('')
@@ -31,14 +31,37 @@ const data = await response.data;
 if (response.status == 200) {
   const token = JSON.stringify(data)
   console.log(token)
-  setCookie('access' ,data.access , { path: '/' })
-  setCookie('refresh' ,data.refresh , { path: '/' })
+  setCookie('access' ,data.access , { path: '/' ,secure:true,
+    sameSite: 'strict',maxAge: 60 * 60 * 24 * 90,})
+  setCookie('refresh' ,data.refresh ,  { path: '/' ,secure:true,
+    sameSite: 'strict',maxAge: 60 * 60 * 24 * 90,})
   router.push("/user");
 }
   }
   catch(err){alert(err)}
 }
 
+const getOtp = async () => {
+  try {
+    await axios.post(
+      `${url}/send-login-otp/`,
+      { username: username },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    
+  } catch (err) {
+    alert(err);
+  }
+};
+const resendOtp=()=>{
+  getOtp()
+    setCheck(false)
+    setSeconds(120)
+}
     useEffect(() => {
       fectchLocalStorage()
       const intervalId = setInterval(() => {
@@ -53,10 +76,6 @@ if (response.status == 200) {
       return () => clearInterval(intervalId);
     }, [seconds ]);
     
-const resendOtp=()=>{
-    setCheck(false)
-    setSeconds(6)
-}
 
   return (
     <div className={styles.container}>
@@ -89,9 +108,9 @@ const resendOtp=()=>{
             resend
           </p>:seconds}
           */}
-         <p className={styles.forgotPassword}>{check? <a onClick={()=>resendOtp()} className={styles.forgotPassword}>
+         <p className={styles.forgotPassword}>{check? <button onClick={()=>resendOtp()} className={styles.resendBtn}>
           Resend Otp
-          </a>:seconds +' - seconds'}</p> 
+          </button>:seconds +' - seconds'}</p> 
 
           <button onClick={loginfun} type="submit" className={styles.loginBtn}>
             login

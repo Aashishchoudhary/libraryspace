@@ -3,20 +3,19 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useCookies } from "react-cookie";
 
 // import { NextResponse } from 'next/server'
 
 function page() {
+  const [cookies, setCookie, removeCookie] = useCookies()
   const router = useRouter();
   // const cookieStore = cookies()
   const logout = () => {
-    var now = new Date();
-
-    var time = now.getTime();
-    var expireTime = time - 1000 * 36000;
-    now.setTime(expireTime);
-
-    document.cookie = `authToken=null;expires=${now.toUTCString()};path='/'`;
+    
+removeCookie('access')
+removeCookie('refresh')
+   
 
     return router.push("/");
   };

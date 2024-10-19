@@ -64,6 +64,7 @@
     border-radius: 8px;
     font-size: 16px;
     color: #ffffff;
+    box-shadow: 0 4px 10px rgba(241, 238, 238, 0.3);
   } 
   
   .input::placeholder {
@@ -71,11 +72,20 @@
   }
   
   .forgotPassword {
-    color: #ffffff;
+    color: #28ee92;
     font-size: 14px;
     margin-bottom: 20px;
     text-align: right;
     text-decoration: none;
+  }
+  .resendBtn{
+    border-radius: 5px;
+    text-align: right;
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 14px;
+    background: #2e2e2e;
+    cursor: pointer;
   }
   
   .loginBtn {

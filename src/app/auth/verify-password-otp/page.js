@@ -53,7 +53,7 @@ function VerifyPasswordOtp() {
       );
       alert("Otp Re-sent");
     } catch (err) {
-      alert(err);
+      alert(err.response?err.response.data.details:"something went wrong please try agin later");
     }
   };
   const resendOtp = () => {

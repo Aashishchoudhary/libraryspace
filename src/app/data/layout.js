@@ -12,11 +12,11 @@ export default function UserLayout({ children }) {
    
   return (
     
-      <div >
+      <>
    <HeaderPage/>
         {children}
      <Footer/>
-      </div>
+      </>
    
   );
 }

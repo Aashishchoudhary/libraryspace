@@ -1,8 +1,11 @@
 // components/Footer.js
+'use client'
 import Link from 'next/link';
 import styles from './css/footer.module.css';
+import { useCookies } from 'react-cookie';
 
 const Footer = () => {
+  const token =useCookies()
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
@@ -19,7 +22,7 @@ const Footer = () => {
           <h3>Help</h3>
           <ul className={styles.ul}>
             <li className={styles.li}><a className={styles.a} href="/data/contact-us/">Contact -us</a></li>
-            <li className={styles.li}><a className={styles.a} href="/data/feedback">Feedback</a></li>
+            {token.access&&<li className={styles.li}><a className={styles.a} href="/data/feedback">Feedback</a></li>}
             <li className={styles.li}><a className={styles.a} href="/data/faq/">FAQ</a></li>
           </ul>
         </div>

@@ -14,7 +14,6 @@ function page() {
     const [username , setUsername]= useState('')
 const [otp ,setOtp] = useState('')
 
-console.log(new Date(Date.now() + 3600000*1000).toUTCString())
 function fectchLocalStorage(){
  setUsername(localStorage.getItem('phone'))
  
@@ -29,8 +28,8 @@ const loginfun=async()=>{
     }});
 const data = await response.data;
 if (response.status == 200) {
-  const token = JSON.stringify(data)
-  console.log(token)
+ 
+  
   setCookie('access' ,data.access , { path: '/' ,secure:true,
     sameSite: 'strict',maxAge: 60 * 60 * 24 * 90,})
   setCookie('refresh' ,data.refresh ,  { path: '/' ,secure:true,
@@ -38,7 +37,10 @@ if (response.status == 200) {
   router.push("/user");
 }
   }
-  catch(err){alert(err)}
+  catch(err)
+  {
+    
+    alert(err.response?err.response.data.details:"something went wrong please try agin later")}
 }
 
 const getOtp = async () => {
@@ -54,7 +56,7 @@ const getOtp = async () => {
     );
     
   } catch (err) {
-    alert(err);
+    alert(err.response?err.response.data.details:"something went wrong please try agin later");
   }
 };
 const resendOtp=()=>{

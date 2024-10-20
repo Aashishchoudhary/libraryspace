@@ -11,7 +11,7 @@ function page() {
   const [username, setUsername] = useState("");
   const getOtp = async () => {
     try {
-      await axios.post(
+     const response = await axios.post(
         `${url}/send-login-otp/`,
         { username: username },
         {
@@ -20,11 +20,14 @@ function page() {
           },
         }
       );
-      alert('Otp sent')
+      const res = await response.data
+      console.log(res)
+      alert(res.details)
       localStorage.setItem('phone', username)
       router.push('/auth/login-otp/')
     } catch (err) {
-      alert(err);
+     
+      alert(err.response?err.response.data.details:"something went wrong please try agin later");
     }
   };
   return (

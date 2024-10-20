@@ -31,7 +31,7 @@ function page() {
 
 router.push('/auth/login/')
 }
-catch(err){alert(err)}
+catch(err){alert(err.response?err.response.data.details:"something went wrong please try agin later")}
 }
 useEffect(()=>{
     fetchLocalStorage()

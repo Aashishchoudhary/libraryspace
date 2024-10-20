@@ -26,7 +26,7 @@ function page() {
     localStorage.setItem("email",email)
     router.push('/auth/verify-user/')
   }
-  catch(err){alert(err)}
+  catch(err){alert(err.response?err.response.data.details:"something went wrong please try agin later")}
     }
   return (
     <div className={styles.container}>

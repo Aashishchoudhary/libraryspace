@@ -46,8 +46,9 @@ function login() {
        
       }
     } catch (err) {
-      alert(err.response.data.details);
-      console.log("err", err);
+      console.log('dsf')
+      alert(err.response?err.response.data.details:"something went wrong please try agin later");
+      
     }
   };
  

@@ -32,7 +32,7 @@ function page() {
 
 router.push('/auth/signup/')
 }
-catch(err){alert(err)}
+catch(err){alert(err.response?err.response.data.details:"something went wrong please try agin later")}
 }
 const getOtp=async()=>{
   try{ await axios.post(`${url}/send-otp/` ,{

@@ -10,7 +10,7 @@
     #ffd194,
     #70e1f5
   );
-  height: 100vh;
+  height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
@@ -37,37 +37,129 @@
   box-shadow: 1px;
   margin-right: 5px;
   text-decoration: none;
-  background: #ecd4d4;
+  background: #000000;
   justify-content: center;
   margin: 5px;
+  color: white;
 }
 .btn:hover{
   cursor: pointer;
 }
-.textContainer {
-  display: grid;
-  grid-template-columns: auto auto;
-  margin-top: 20px;
-  height: 350px;
-  justify-content: space-around;
+
+
+
+.hero {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: url('/hero-bg.jpg') no-repeat center center/cover;
+  color: #fff;
 }
 
-.imgdiv {
-  margin-right: 20px;
-  border-radius: 20px;
-}
-.heading {
-  text-align: center;
-}
-.para {
-  text-align: center;
-  width: 300px;
-  /* border: 2px solid black; */
-}
-.para2 {
-  margin-top: 20px;
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: black;
 }
 
-.linkstyle:hover{
+.hero p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: black;
+}
+
+.ctaButton {
+  padding: 0.75rem 2rem;
+  background-color: #f04e23;
+  color: #000000;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
+  font-size: 1rem;
+  text-decoration:none;
+}
+
+.features {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.featureCards {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.featureCard {
+  background-color: #f4f4f4;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 30%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.featureCard h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.testimonials {
+  background-color: #f0f0f0;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.testimonialCards {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.testimonialCard {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 30%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.callToAction {
+  background-color: #79ed4b;
+  color: white;
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.callToAction h2 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+.span{
+  font-size: 9px;
+  margin-left: 5px;
+  color: #000000;
+}
+.footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.footerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.footerLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.footerLinks a {
+  color: #fff;
+  text-decoration: none;
 }

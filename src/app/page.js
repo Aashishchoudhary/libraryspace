@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import {useCallback, useEffect} from 'react';
 import { CookiesProvider, useCookies } from 'react-cookie';
 
-function page() {
+function Page() {
 const router = useRouter()
 const [token]= useCookies()
   
@@ -35,4 +35,4 @@ checkCookie()
   )
 }
 
-export default page;
+export default Page;

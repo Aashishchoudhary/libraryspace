@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 function QR() {
   const [data, setData] = useState("");
@@ -9,7 +9,7 @@ function QR() {
     
   };
   useEffect(() => {
-    fetchValue();
+    useCallback(()=>{fetchValue()},[fetchValue])
   }, []);
   return (
     <div

@@ -250,8 +250,8 @@ getData()
   
   useEffect(() => {
     
-    useCallback(() => {getData();},[])
-  }, [getData]);
+    useCallback(() => {getData();},[getData])
+  }, []);
 
   return (
     <>

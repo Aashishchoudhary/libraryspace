@@ -233,8 +233,8 @@ function Editreservation({ params: { id, seatid } }) {
   };
   useEffect(() => {
    useCallback(()=> {fetchData();
-    setRefresh(false)},[])
-  }, [refresh]);
+    setRefresh(false)},[fetchData ,refresh])
+  }, []);
   return (
     <>
       <div>

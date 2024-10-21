@@ -19,9 +19,9 @@ function Page({params:{id}}) {
     console.log(res)
   }
   useEffect(() => {
-    useCallback(()=>{fetchData();
-    },[])
-  }, [getLocation , fetchData]);
+    useCallback(()=>{fetchData() 
+    },[fetchData])
+  }, []);
   return (
     <div className={styles.mainDiv}>{data.map((item)=><div className={styles.container} key={item.id}>
       <p className={styles.para}>{item.name}</p>

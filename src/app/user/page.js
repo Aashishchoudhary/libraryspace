@@ -22,8 +22,8 @@ function LibraryHome() {
     console.log(res);
   };
   useEffect(() => {
-   useCallback(()=> {fetchData()})
-  }, [fetchData]);
+   useCallback(()=> {fetchData()},[fetchData])
+  }, []);
   return (
     <div>
       {data.length > 0 ? (

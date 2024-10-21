@@ -53,8 +53,8 @@ function Login() {
   };
  
   useEffect(()=>{
-    useCallback(()=>{fetchLocalStorage()},[])
-},[fetchLocalStorage])
+    useCallback(()=>{fetchLocalStorage()},[fetchLocalStorage])
+},[])
   return (
     <div className={styles.bgcolor}>
      

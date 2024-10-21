@@ -33,12 +33,12 @@ function HeaderPage() {
 
     // Trigger the handler initially
     handleMediaQueryChange(mediaQuery);
-    },[])
+    },[handleMediaQueryChange])
     // Clean up the event listener on component unmount
     return () => {
       mediaQuery.removeEventListener("change", handleMediaQueryChange);
     }
-  }, [handleMediaQueryChange]);
+  }, []);
 
   return (
     <header>

@@ -19,7 +19,7 @@ removeCookie('refresh')
 
     return router.push("/");
   };
-  useEffect(()=>{ useCallback(()=>{logout()},[])},[logout])
+  useEffect(()=>{ useCallback(()=>{logout()},[logout])},[])
  
 
   return <></>;

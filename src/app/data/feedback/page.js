@@ -51,8 +51,8 @@ const Feedback = () => {
     setForm(!form);
   }
   useEffect(() => {
-    useCallback(()=>{fetchData()},[])
-  }, [fetchData]);
+    useCallback(()=>{fetchData()},[fetchData])
+  }, []);
   return (
     <div className={styles.mainContainer}>
       <div className={styles.btnContainer}>

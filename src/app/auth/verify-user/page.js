@@ -62,9 +62,9 @@ const resendOtp = () => {
         clearInterval(intervalId);
       }
     }, 1000);
-    useCallback(()=>{fetchLocalStorage()},[])
+    useCallback(()=>{fetchLocalStorage()},[fetchLocalStorage])
     return () => clearInterval(intervalId);
-  }, [seconds ,fetchLocalStorage]);
+  }, [seconds ]);
 
 
   return (

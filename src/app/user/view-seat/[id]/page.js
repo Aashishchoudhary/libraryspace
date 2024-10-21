@@ -45,8 +45,8 @@ function Page({ params: { id } }) {
   };
   useEffect(() => {
     useCallback(()=>{fetchData();
-    fetchSeatData()},[])
-  }, [fetchData , fetchSeatData]);
+    fetchSeatData()},[fetchData , fetchSeatData])
+  }, []);
 
   const chartData = {
     labels: ["Booked Seats", "Vaccent Seats"],

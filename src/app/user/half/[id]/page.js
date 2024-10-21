@@ -149,8 +149,8 @@ function Half({ params: { id } }) {
     }
   };
   useEffect(() => {
-    useCallback(()=>{fetchData()},[])
-  }, [ fetchData]);
+    useCallback(()=>{fetchData()},[fetchData])
+  }, [ ]);
   return (
    
     <div className={styles.subCon}>

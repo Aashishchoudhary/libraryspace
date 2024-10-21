@@ -34,8 +34,8 @@ router.push('/auth/login/')
 catch(err){alert(err.response?err.response.data.details:"something went wrong please try agin later")}
 }
 useEffect(()=>{
-    useCallback(()=>{fetchLocalStorage()},[])
-},[fetchLocalStorage])
+    useCallback(()=>{fetchLocalStorage()},[fetchLocalStorage])
+},[])
 
 
   return (

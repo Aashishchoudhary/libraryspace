@@ -157,8 +157,8 @@ function Extra({ params: { id } }) {
   };
 
   useEffect(() => {
-    useCallback(()=>{fetchData();},[]) 
-  }, [fetchData]);
+    useCallback(()=>{fetchData();},[fetchData]) 
+  }, []);
   return (
     <>
       <div className={styles.subCon}>

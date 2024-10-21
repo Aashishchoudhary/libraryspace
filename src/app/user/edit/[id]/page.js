@@ -128,8 +128,8 @@ const [token] = useCookies()
   
   useEffect(() => {
     useCallback(()=>{fetchData();
-    getlocation()},[])
-  }, [getLocation , fetchData]);
+    getlocation()},[getLocation , fetchData])
+  }, []);
   const handleSeat = (text) => {
     if (text.target.value < 201) {
       setTotalSeat(text.target.value);

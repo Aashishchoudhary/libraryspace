@@ -1,7 +1,7 @@
 "use client";
 import { url } from "@/store/url";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./page.module.css";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
@@ -94,7 +94,7 @@ function View_all_seat({ params: { id } }) {
   };
 
   useEffect(() => {
-    fetchData();
+   useCallback(()=>{ fetchData()},[fetchData])
   }, []);
 
   return (

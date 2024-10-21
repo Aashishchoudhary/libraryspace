@@ -139,8 +139,8 @@ function ExtraStudent({ params: { id } }) {
 
   useEffect(() => {
     useCallback(()=>{getData();
-      fetch_push_back_id();},[]) 
-  }, [ getData , fetch_push_back_id]);
+      fetch_push_back_id();},[ getData , fetch_push_back_id]) 
+  }, []);
   return (
     <>
       <div className={styles.dataContainer}>

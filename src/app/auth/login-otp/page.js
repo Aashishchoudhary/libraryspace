@@ -66,7 +66,7 @@ const resendOtp=()=>{
 }
    
     useEffect(()=>{
-      useCallback(()=>{fetchLocalStorage()},[])
+      useCallback(()=>{fetchLocalStorage()},[fetchLocalStorage ])
       const intervalId = setInterval(() => {
         if (seconds > 0) {
           setSeconds(seconds - 1);
@@ -77,7 +77,7 @@ const resendOtp=()=>{
       }, 1000);
   
       return () => clearInterval(intervalId);
-  },[fetchLocalStorage ,seconds])
+  },[seconds])
 
   return (
     <div className={styles.container}>

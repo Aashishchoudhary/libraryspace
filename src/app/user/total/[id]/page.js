@@ -53,8 +53,8 @@ function Total({params:{id}}) {
   console.log(currentMonthCollectiion)
   useEffect(() => {
     useCallback(()=>{fetchData();
-    fetchPayment()},[])
-  }, [fetchData , fetchPayment]);
+    fetchPayment()},[fetchData , fetchPayment])
+  }, []);
   return (
     <div>
         <div> Collection this month {currentMonthCollectiion.map(x => x.amount)}</div>

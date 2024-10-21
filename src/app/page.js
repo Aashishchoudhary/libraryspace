@@ -22,8 +22,8 @@ const [token]= useCookies()
     
   }
 useEffect(()=>{
-  useCallback(()=>{checkCookie()})
-},[checkCookie])
+  useCallback(()=>{checkCookie()},[checkCookie])
+},[])
 
   return (
    <CookiesProvider defaultSetOptions={{ path: '/' }}>

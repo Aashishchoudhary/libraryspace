@@ -1,7 +1,7 @@
 "use client";
 import { url } from "@/store/url";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState  ,useCallback} from "react";
 import styles from "./library-home.module.css";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
@@ -22,7 +22,7 @@ function LibraryHome() {
     console.log(res);
   };
   useEffect(() => {
-    fetchData();
+   fetchData()
   }, []);
   return (
     <div>

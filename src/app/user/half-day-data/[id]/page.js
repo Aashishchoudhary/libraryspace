@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { useScreenshot } from "use-react-screenshot";
 import styles from "./page.module.css";
 import { url, handleImageUpload, getCookie, yyyymmdd } from "@/store/url";
@@ -138,8 +138,9 @@ function ViewHalf({ params: { id } }) {
   };
 
   useEffect(() => {
+    
     getData();
-    fetch_push_back_id()
+      fetch_push_back_id()
   }, []);
   return (
     <>

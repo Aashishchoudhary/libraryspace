@@ -2,7 +2,7 @@
 import { url, handleImageUpload } from "@/store/url";
 import axios from "axios";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styles from "./page.module.css";
 import { useCookies } from "react-cookie";
 import Image from "next/image";
@@ -51,7 +51,7 @@ const Feedback = () => {
     setForm(!form);
   }
   useEffect(() => {
-    fetchData();
+    fetchData()
   }, []);
   return (
     <div className={styles.mainContainer}>

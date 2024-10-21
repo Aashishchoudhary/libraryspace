@@ -1,7 +1,7 @@
 "use client";
 import { url } from "@/store/url";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useCookies } from "react-cookie";
 
 function Feedback_reply({ params: { id } }) {
@@ -24,8 +24,7 @@ function Feedback_reply({ params: { id } }) {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData() }, []);
   return <div style={{display:"grid" ,gridColumn:"auto" , justifyContent:"center",padding:"20px" ,margin:"30px"}}><p>{data.reply}</p></div>;
 }
 

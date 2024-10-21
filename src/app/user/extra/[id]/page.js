@@ -3,7 +3,7 @@ import {  url, yyyymmdd, handleImageUpload } from "@/store/url";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./page.module.css";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
@@ -157,7 +157,7 @@ function Extra({ params: { id } }) {
   };
 
   useEffect(() => {
-    fetchData();
+   fetchData()
   }, []);
   return (
     <>

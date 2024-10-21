@@ -1,7 +1,7 @@
 'use client'
-import { url ,getCookie} from '@/store/url'
+import { url } from '@/store/url'
 import axios from 'axios'
-import { useState ,useEffect } from 'react'
+import { useState ,useEffect ,useCallback } from 'react'
 import styles from './edit.module.css'
 import { useCookies } from "react-cookie";
 
@@ -127,10 +127,9 @@ const [token] = useCookies()
   }
   
   useEffect(() => {
-    fetchData();
+fetchData();
     getlocation()
   }, []);
-
   const handleSeat = (text) => {
     if (text.target.value < 201) {
       setTotalSeat(text.target.value);

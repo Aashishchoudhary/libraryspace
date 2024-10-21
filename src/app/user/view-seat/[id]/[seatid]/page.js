@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { useScreenshot } from "use-react-screenshot";
 import styles from '../../../view-all-seat/[id]/[seatid]/add-data.module.css'
 import { url, handleImageUpload, yyyymmdd } from "@/store/url";

@@ -2,7 +2,7 @@
 import { url } from "@/store/url";
 import axios from "axios";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect  ,useCallback} from "react";
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 import { Pie, Bar } from "react-chartjs-2";
@@ -44,8 +44,8 @@ function Page({ params: { id } }) {
     }
   };
   useEffect(() => {
-    fetchData();
-    fetchSeatData();
+   fetchData();
+    fetchSeatData()
   }, []);
 
   const chartData = {

@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import styles from "../login/loginfor.module.css";
-import {useState ,useEffect} from "react";
+import {useState ,useEffect ,useCallback} from "react";
 import { url } from "@/store/url";
 import { useRouter } from "next/navigation";
 import { useCookies } from 'react-cookie';
@@ -14,7 +14,7 @@ function Page() {
     const [username , setUsername]= useState('')
 const [otp ,setOtp] = useState('')
 
-function fectchLocalStorage(){
+function fetchLocalStorage(){
  setUsername(localStorage.getItem('phone'))
  
 }
@@ -64,8 +64,9 @@ const resendOtp=()=>{
     setCheck(false)
     setSeconds(120)
 }
-    useEffect(() => {
-      fectchLocalStorage()
+   
+    useEffect(()=>{
+     fetchLocalStorage()
       const intervalId = setInterval(() => {
         if (seconds > 0) {
           setSeconds(seconds - 1);
@@ -76,8 +77,7 @@ const resendOtp=()=>{
       }, 1000);
   
       return () => clearInterval(intervalId);
-    }, [seconds ]);
-    
+  },[seconds])
 
   return (
     <div className={styles.container}>

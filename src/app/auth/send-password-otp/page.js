@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import styles from "../login/loginfor.module.css";
-import {useState ,useEffect} from "react";
+import {useState } from "react";
 import { url } from "@/store/url";
 import { useRouter } from "next/navigation";
 

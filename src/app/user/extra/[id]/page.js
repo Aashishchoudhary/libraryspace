@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
+import Image from "next/image";
 function Extra({ params: { id } }) {
   const router = useRouter();
   const [token] = useCookies()
@@ -327,7 +328,7 @@ function Extra({ params: { id } }) {
                   onChange={(e) => setPhoto(e.target.files[0])}
                 />
                 {photo && (
-                  <img
+                  <Image
                     className={styles.img}
                     src={URL.createObjectURL(photo)}
                     alt="phtot"
@@ -344,7 +345,7 @@ function Extra({ params: { id } }) {
                   onChange={(e) => setAdharcard(e.target.files[0])}
                 />
                 {adharcard && (
-                  <img
+                  <Image
                     className={styles.img}
                     src={URL.createObjectURL(adharcard)}
                     alt="Aadharcard"

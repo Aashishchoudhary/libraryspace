@@ -7,6 +7,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
+import Image from "next/image";
 function AddData({ params: { id, seatid } }) {
   const [token] = useCookies()
   const orig = "http://localhost:8000";
@@ -346,9 +347,7 @@ getData()
                   </div>
                 </div>
               ))}
-              {image && (
-                <img className={styles.img} src={image} alt={"Screenshot"} />
-              )}
+             
               {checkData && (
                 <div className={styles.buttonContainer}>
                   <button className={styles.button} onClick={() => getImage()}>
@@ -463,7 +462,7 @@ getData()
                     onChange={(e) => setPhoto(e.target.files[0])}
                   />
                   {photo && (
-                    <img
+                    <Image
                       className={styles.img}
                       src={URL.createObjectURL(photo)}
                       alt="phtot"
@@ -478,7 +477,7 @@ getData()
                     onChange={(e) => setAdharcard(e.target.files[0])}
                   />
                   {adharcard && (
-                    <img
+                    <Image
                       className={styles.img}
                       src={URL.createObjectURL(adharcard)}
                       alt="Aadharcard"
@@ -614,7 +613,7 @@ getData()
                     onChange={(e) => setPhoto(e.target.files[0])}
                   />
                   {photo && (
-                    <img
+                    <Image
                       className={styles.img}
                       src={URL.createObjectURL(photo)}
                       alt="phtot"
@@ -631,7 +630,7 @@ getData()
                     onChange={(e) => setAdharcard(e.target.files[0])}
                   />
                   {adharcard && (
-                    <img
+                    <Image
                       className={styles.img}
                       src={URL.createObjectURL(adharcard)}
                       alt="Aadharcard"

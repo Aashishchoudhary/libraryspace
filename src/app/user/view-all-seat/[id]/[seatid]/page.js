@@ -7,6 +7,7 @@ import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import { useScreenshot } from "use-react-screenshot";
 import { useCookies } from "react-cookie";
+import Image from "next/image";
 
 function Editreservation({ params: { id, seatid } }) {
   const [token] =useCookies()
@@ -333,9 +334,7 @@ function Editreservation({ params: { id, seatid } }) {
                 </div>
               ))}
               <br />
-              {image && (
-                <img className={styles.img} src={image} alt={"Screenshot"} />
-              )}
+             
               {checkData && (
                 <div className={styles.buttonContainer}>
                   <button className={styles.button} onClick={() => getImage()}>
@@ -450,7 +449,7 @@ function Editreservation({ params: { id, seatid } }) {
                     onChange={(e) => setPhoto(e.target.files[0])}
                   />
                   {photo && (
-                    <img
+                    <Image
                       className={styles.img}
                       src={URL.createObjectURL(photo)}
                       alt="phtot"
@@ -465,7 +464,7 @@ function Editreservation({ params: { id, seatid } }) {
                     onChange={(e) => setAdharcard(e.target.files[0])}
                   />
                   {adharcard && (
-                    <img
+                    <Image
                       className={styles.img}
                       src={URL.createObjectURL(adharcard)}
                       alt="Aadharcard"
@@ -595,7 +594,7 @@ function Editreservation({ params: { id, seatid } }) {
                     onChange={(e) => setPhoto(e.target.files[0])}
                   />
                   {photo && (
-                    <img
+                    <Image
                       className={styles.img}
                       src={URL.createObjectURL(photo)}
                       alt="phtot"
@@ -610,7 +609,7 @@ function Editreservation({ params: { id, seatid } }) {
                     onChange={(e) => setAdharcard(e.target.files[0])}
                   />
                   {adharcard && (
-                    <img
+                    <Image
                       className={styles.img}
                       src={URL.createObjectURL(adharcard)}
                       alt="Aadharcard"

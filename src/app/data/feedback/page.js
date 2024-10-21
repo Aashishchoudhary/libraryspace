@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import styles from "./page.module.css";
 import { useCookies } from "react-cookie";
+import Image from "next/image";
 const Feedback = () => {
   const [token] = useCookies()
  
@@ -75,7 +76,7 @@ const Feedback = () => {
             type="file"
             onChange={(e) => setImg(e.target.files[0])}
           />
-          {img && <img className={styles.img} src={URL.createObjectURL(img)} />}
+          {img && <Image className={styles.img} src={URL.createObjectURL(img)} alt='img'/>}
           <button
             style={{ width: "30%" }}
             onClick={postData}

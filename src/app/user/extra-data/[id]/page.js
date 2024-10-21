@@ -6,6 +6,7 @@ import { url, handleImageUpload, getCookie, yyyymmdd } from "@/store/url";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
+import Image from "next/image";
 function ExtraStudent({ params: { id } }) {
   const [token] =useCookies()
   const orig = "http://localhost:8000";
@@ -206,9 +207,7 @@ function ExtraStudent({ params: { id } }) {
             </div>
           ))}
           <br />
-          {image && (
-            <img className={styles.img} src={image} alt={"Screenshot"} />
-          )}
+          
 
           <div className={styles.buttonContainer}>
             <button className={styles.button} onClick={() => getImage()}>
@@ -327,7 +326,7 @@ function ExtraStudent({ params: { id } }) {
                 onChange={(e) => setPhoto(e.target.files[0])}
               />
               {photo && (
-                <img
+                <Image
                   className={styles.img}
                   src={URL.createObjectURL(photo)}
                   alt="phtot"
@@ -344,7 +343,7 @@ function ExtraStudent({ params: { id } }) {
                 onChange={(e) => setAdharcard(e.target.files[0])}
               />
               {adharcard && (
-                <img
+                <Image
                   className={styles.img}
                   src={URL.createObjectURL(adharcard)}
                   alt="Aadharcard"

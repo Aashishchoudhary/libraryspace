@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import styles from "../login/loginfor.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect ,useCallback } from "react";
 import axios from "axios";
 import { url } from "@/store/url";
 import { useRouter } from "next/navigation";
@@ -62,9 +62,9 @@ const resendOtp = () => {
         clearInterval(intervalId);
       }
     }, 1000);
-    fetchLocalStorage();
+    useCallback(()=>{fetchLocalStorage()},[])
     return () => clearInterval(intervalId);
-  }, [seconds]);
+  }, [seconds ,fetchLocalStorage]);
 
 
   return (

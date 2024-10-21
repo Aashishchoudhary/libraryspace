@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState ,useCallback } from "react";
 import Image from "next/image";
 import styles from "./header.module.css";
 import img from "../app/favicon.png";
@@ -25,7 +25,7 @@ function HeaderPage() {
     }
   };
   useEffect(() => {
-    setIsMounted(true);
+   useCallback(()=> {setIsMounted(true);
     const mediaQuery = window.matchMedia("(max-width: 720px)");
 
     // Attach the event listener
@@ -33,12 +33,12 @@ function HeaderPage() {
 
     // Trigger the handler initially
     handleMediaQueryChange(mediaQuery);
-
+    },[])
     // Clean up the event listener on component unmount
     return () => {
       mediaQuery.removeEventListener("change", handleMediaQueryChange);
-    };
-  }, []);
+    }
+  }, [handleMediaQueryChange]);
 
   return (
     <header>

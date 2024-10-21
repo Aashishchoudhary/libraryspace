@@ -1,7 +1,7 @@
 'use client'
 import { url } from "@/store/url";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect ,useCallback } from "react";
 import { useCookies } from "react-cookie";
 
 function Total({params:{id}}) {
@@ -52,9 +52,9 @@ function Total({params:{id}}) {
   });
   console.log(currentMonthCollectiion)
   useEffect(() => {
-    fetchData();
-    fetchPayment();
-  }, []);
+    useCallback(()=>{fetchData();
+    fetchPayment()},[])
+  }, [fetchData , fetchPayment]);
   return (
     <div>
         <div> Collection this month {currentMonthCollectiion.map(x => x.amount)}</div>

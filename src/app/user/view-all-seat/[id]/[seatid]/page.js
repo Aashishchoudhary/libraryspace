@@ -1,7 +1,7 @@
 "use client";
 import { url,  yyyymmdd, handleImageUpload } from "@/store/url";
 import axios from "axios";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef ,useCallback } from "react";
 import styles from "./add-data.module.css";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
@@ -232,8 +232,8 @@ function Editreservation({ params: { id, seatid } }) {
     setChangeSeat(!changeSeat);
   };
   useEffect(() => {
-    fetchData();
-    setRefresh(false);
+   useCallback(()=> {fetchData();
+    setRefresh(false)},[])
   }, [refresh]);
   return (
     <>

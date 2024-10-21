@@ -3,7 +3,7 @@ import HomePage from '@/components/HomePage';
 import { jwtDecode } from 'jwt-decode';
 
 import { useRouter } from 'next/navigation';
-import {useEffect} from 'react';
+import {useCallback, useEffect} from 'react';
 import { CookiesProvider, useCookies } from 'react-cookie';
 
 function page() {
@@ -13,7 +13,7 @@ const [token]= useCookies()
 
 
 
-  const cehckCookie=()=>{
+  const checkCookie=()=>{
     if(token.access){
       console.log('token' , jwtDecode(token.access).exp , Date.now() / 1000)
        router.push('/user')
@@ -22,8 +22,8 @@ const [token]= useCookies()
     
   }
 useEffect(()=>{
-  cehckCookie()
-},[])
+  useCallback(()=>{checkCookie()})
+},[checkCookie])
 
   return (
    <CookiesProvider defaultSetOptions={{ path: '/' }}>

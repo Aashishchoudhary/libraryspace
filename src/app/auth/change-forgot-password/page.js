@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "../login/loginfor.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { url } from "@/store/url";
 import { useRouter } from "next/navigation";
@@ -34,8 +34,8 @@ router.push('/auth/login/')
 catch(err){alert(err.response?err.response.data.details:"something went wrong please try agin later")}
 }
 useEffect(()=>{
-    fetchLocalStorage()
-},[])
+    useCallback(()=>{fetchLocalStorage()},[])
+},[fetchLocalStorage])
 
 
   return (

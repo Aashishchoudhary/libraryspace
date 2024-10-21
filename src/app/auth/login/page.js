@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import styles from "./loginfor.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState ,useCallback } from "react";
 import axios from "axios";
 import { url } from "@/store/url";
 
@@ -52,9 +52,9 @@ function Login() {
     }
   };
  
-  useEffect(() => {
-    fetchLocalStorage();
-  }, []);
+  useEffect(()=>{
+    useCallback(()=>{fetchLocalStorage()},[])
+},[fetchLocalStorage])
   return (
     <div className={styles.bgcolor}>
      

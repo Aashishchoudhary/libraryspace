@@ -1,7 +1,7 @@
 'use client'
 import { url  } from '@/store/url'
 import axios from 'axios'
-import {useState , useEffect} from 'react'
+import {useState , useEffect ,useCallback} from 'react'
 import styles from './previous.module.css'
 import { useCookies } from 'react-cookie'
 
@@ -18,9 +18,10 @@ function Page({params:{id}}) {
     setData(res)
     console.log(res)
   }
-  useEffect(()=>{
-   fetchData()
-  },[])
+  useEffect(() => {
+    useCallback(()=>{fetchData();
+    },[])
+  }, [getLocation , fetchData]);
   return (
     <div className={styles.mainDiv}>{data.map((item)=><div className={styles.container} key={item.id}>
       <p className={styles.para}>{item.name}</p>

@@ -1,7 +1,7 @@
 "use client";
 import { url, getCookie, handleImageUpload } from "@/store/url";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./page.module.css";
 import { useCookies } from "react-cookie";
 function AddLibrary() {
@@ -126,9 +126,9 @@ function AddLibrary() {
   }
   
   useEffect(() => {
-    fetchData();
-    getlocation()
-  }, []);
+    useCallback(()=>{fetchData();
+    getlocation()},[])
+  }, [getLocation , fetchData]);
 
   const handleSeat = (text) => {
     if (text.target.value < 201) {

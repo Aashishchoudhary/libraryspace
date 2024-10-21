@@ -2,7 +2,7 @@
 // import { cookies } from 'next/headers'
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useCookies } from "react-cookie";
 
 // import { NextResponse } from 'next/server'
@@ -19,7 +19,7 @@ removeCookie('refresh')
 
     return router.push("/");
   };
-  useEffect(()=>{ logout();},[])
+  useEffect(()=>{ useCallback(()=>{logout()},[])},[logout])
  
 
   return <></>;

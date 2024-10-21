@@ -19,6 +19,7 @@ function HomePage() {
       <header className={styles.hero}>
         <Image src={img} width={350}
                 height={250}
+                alt='logo'
 ></Image>
         <h1>Welcome to LibPot</h1>
         <p>Discover the best way to manage your Library efficiently.</p>

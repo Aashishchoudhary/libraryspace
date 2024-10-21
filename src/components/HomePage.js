@@ -54,11 +54,11 @@ function HomePage() {
         <h2>What Our Users Say</h2>
         <div className={styles.testimonialCards}>
           <div className={styles.testimonialCard}>
-            <p>"This service has transformed my library and now i can live tension free!"</p>
+            <p>This service has transformed my library and now i can live tension free!</p>
             <h3>- Shiv <span className={styles.span}>Library owner from Sikar</span></h3>
           </div>
           <div className={styles.testimonialCard}>
-            <p>"Efficient, user-friendly, and an absolute Time saver!"</p>
+            <p>Efficient, user-friendly, and an absolute Time saver!</p>
             <h4>- Subash <span className={styles.span}>Library owner from jaipur</span></h4>
           </div>
         </div>

@@ -11,7 +11,7 @@ import { useCookies } from "react-cookie";
 
 Chart.register(CategoryScale);
  
-function page({ params: { id } }) {
+function Page({ params: { id } }) {
   const [token] = useCookies()
   const [data, setData] = useState([]);
   const [seatData, setSeatData] = useState({});
@@ -124,4 +124,4 @@ function page({ params: { id } }) {
   );
 }
 
-export default page;
+export default Page;

@@ -250,7 +250,7 @@ getData()
   
   useEffect(() => {
     getData();
-  }, [getData]);
+  }, []);
 
   return (
     <>

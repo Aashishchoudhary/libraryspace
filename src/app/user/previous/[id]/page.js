@@ -5,7 +5,7 @@ import {useState , useEffect} from 'react'
 import styles from './previous.module.css'
 import { useCookies } from 'react-cookie'
 
-function page({params:{id}}) {
+function Page({params:{id}}) {
   const [token] = useCookies()
   const [ data , setData] = useState([])
   const fetchData=async()=>{
@@ -32,4 +32,4 @@ function page({params:{id}}) {
   )
 }
 
-export default page
+export default Page

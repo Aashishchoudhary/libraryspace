@@ -7,7 +7,7 @@ import { useCookies } from "react-cookie";
 
 
 
-function page({params: {id}}) {
+function Page({params: {id}}) {
   
 const [token] = useCookies()
  
@@ -228,4 +228,4 @@ const [token] = useCookies()
   )
 }
 
-export default page
+export default Page

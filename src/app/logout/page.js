@@ -7,7 +7,7 @@ import { useCookies } from "react-cookie";
 
 // import { NextResponse } from 'next/server'
 
-function page() {
+function Page() {
   const [cookies, setCookie, removeCookie] = useCookies()
   const router = useRouter();
   // const cookieStore = cookies()
@@ -22,7 +22,7 @@ removeCookie('refresh')
   useEffect(()=>{ logout();},[])
  
 
-  return <div></div>;
+  return <></>;
 }
 
-export default page;
+export default Page;

@@ -6,7 +6,7 @@ import axios from "axios";
 import { url } from "@/store/url";
 import { useRouter } from "next/navigation";
 
-function page() {
+function Page() {
   const router = useRouter()
   const [seconds, setSeconds] = useState(60);
   const [check, setCheck] = useState(false);
@@ -125,4 +125,4 @@ const resendOtp = () => {
   );
 }
 
-export default page;
+export default Page;

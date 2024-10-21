@@ -5,7 +5,7 @@ import axios from "axios";
 import { url } from "@/store/url";
 import { useRouter } from "next/navigation";
 
-function page() {
+function Page() {
   const router = useRouter()
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -89,4 +89,4 @@ catch(err){alert(err.response?err.response.data.details:"something went wrong pl
   );
 }
 
-export default page;
+export default Page;

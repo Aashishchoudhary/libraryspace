@@ -359,6 +359,7 @@ function Extra({ params: { id } }) {
             </div>
           </div>
         </div>
+        <input type="file" onChange={(e)=>handleImageUpload(e.target.files[0])} />
       </div>
     </>
   );

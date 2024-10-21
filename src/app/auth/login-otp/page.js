@@ -6,7 +6,7 @@ import {useState ,useEffect} from "react";
 import { url } from "@/store/url";
 import { useRouter } from "next/navigation";
 import { useCookies } from 'react-cookie';
-function page() {
+function Page() {
   const [ setCookie] = useCookies();
   const router= useRouter()
     const [seconds, setSeconds] = useState(60);
@@ -125,4 +125,4 @@ const resendOtp=()=>{
   );
 }
 
-export default page;
+export default Page;

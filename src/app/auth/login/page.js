@@ -7,7 +7,7 @@ import { url } from "@/store/url";
 
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
-function login() {
+function Login() {
   const [cookie , setCookie] = useCookies()
   const router = useRouter();
 
@@ -113,4 +113,4 @@ function login() {
   );
 }
 
-export default login;
+export default Login;

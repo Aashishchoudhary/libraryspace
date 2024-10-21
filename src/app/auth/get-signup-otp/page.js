@@ -6,7 +6,7 @@ import { url } from "@/store/url"
 
 import axios from "axios";
 import { useRouter } from "next/navigation";
-function page() {
+function Page() {
   const router = useRouter()
     const [phone , setPhone] = useState("")
     const [email , setEmail] = useState("")
@@ -70,4 +70,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

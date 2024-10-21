@@ -6,7 +6,7 @@ import axios from "axios";
 import { url } from "@/store/url";
 import { useRouter } from "next/navigation";
 
-function page() {
+function Page() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const getOtp = async () => {
@@ -75,4 +75,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

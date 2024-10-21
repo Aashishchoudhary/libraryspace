@@ -6,7 +6,7 @@ import {useState ,useEffect} from "react";
 import { url } from "@/store/url";
 import { useRouter } from "next/navigation";
 
-function page() {
+function Page() {
   
   const router= useRouter()
     
@@ -66,4 +66,4 @@ const getOtp=async()=>{
   );
 }
 
-export default page;
+export default Page;

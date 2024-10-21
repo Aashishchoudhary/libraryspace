@@ -5,12 +5,14 @@ import styles from "./header.module.css";
 import img from "../app/favicon.png";
 
 import Link from "next/link";
-import { useCookies } from "react-cookie";
+ import { useCookies } from "react-cookie";
 
 function HeaderPage() {
-  const [token] = useCookies();
+  const [isMounted, setIsMounted] = useState(false);
+  
   const [isNavVisible, setIsNavVisible] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [token] = useCookies();
 
   const toggleNav = () => {
     setIsNavVisible(!isNavVisible);
@@ -23,6 +25,7 @@ function HeaderPage() {
     }
   };
   useEffect(() => {
+    setIsMounted(true);
     const mediaQuery = window.matchMedia("(max-width: 720px)");
 
     // Attach the event listener
@@ -50,9 +53,9 @@ function HeaderPage() {
             <span></span>
           </button>
         </div>
-        {(!isSmallScreen || isNavVisible) && (
+        {isMounted&&(!isSmallScreen || isNavVisible) && 
           <ul className={styles.mainContainer}>
-            {token.access ? (
+            {token.access ? 
               <>
                 <li className={styles.listItem}>
                   <Link href="/user">Home</Link>
@@ -70,13 +73,13 @@ function HeaderPage() {
                   <Link href="">Subscription</Link>
                 </li> */}
                 <li className={styles.listItem}>
-                  <Link href={"/logout/"}>Logout</Link>
+                  <Link href={"/logout"}>Logout</Link>
                 </li>
               </>
-            ) : (
+             : 
               <>
               <li className={styles.listItem}>
-                  <Link href="/">Home</Link>
+                  <Link href="/user">Home</Link>
                 </li>
                 <li className={styles.listItem}>
                   <Link href="/data/aboutus">About Us</Link>
@@ -85,22 +88,22 @@ function HeaderPage() {
                   <Link href="/data/contact-us/">Conatct</Link>
                 </li>
                 <li className={styles.listItem}>
-                  <Link  href={"/auth/login/"}>
+                  <Link  href={"/auth/login"}>
                     Login
-                  </Link>{" "}
+                  </Link>
                 </li>
                 <li className={styles.listItem}>
                   <Link
                   
-                    href={"/auth/get-signup-otp/"}
+                    href={"/auth/get-signup-otp"}
                   >
                     Signup
                   </Link>
                 </li>
               </>
-            )}
+            }
           </ul>
-        )}
+        }
       </nav>
     </header>
   );

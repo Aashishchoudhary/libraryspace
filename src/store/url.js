@@ -1,6 +1,6 @@
 
 import imageCompression from 'browser-image-compression';
-export const url ='http://127.0.0.1:8000' 
+export const url ='https://backend.libpot.com' 
 
 
  
@@ -22,7 +22,7 @@ export const url ='http://127.0.0.1:8000'
       const compressedFile = await imageCompression(imageFile, options);
       // console.log('ddddd',event , compressedFile)
       // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
-      console.log(`compressedFile size =========${compressedFile.size / 1024 / 1024} MB` ); // smaller than maxSizeMB
+      // console.log(`compressedFile size =========${compressedFile.size / 1024 / 1024} MB` ); // smaller than maxSizeMB
       return compressedFile;
       // write your own logic
     } catch (error) {

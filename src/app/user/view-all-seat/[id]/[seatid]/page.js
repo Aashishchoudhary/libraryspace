@@ -328,7 +328,7 @@ function Editreservation({ params: { id, seatid } }) {
 
                     {/* Footer */}
                     <div className={styles.footer}>
-                      <p className={styles.footerP}>Product made by Labeo</p>
+                    <p className={styles.footerText}>A Aashish kalwaniya Product</p>
                     </div>
                   </div>
                 </div>

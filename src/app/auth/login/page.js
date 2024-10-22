@@ -19,7 +19,7 @@ function Login() {
     console.log(localStorage.getItem("phone"))
   };
   const loginFunc = async () => {
-    if (username.length < 10 || password.length < 8) {
+    if (username.length < 10 || password.length < 6) {
       alert("Please fill the fields");
       return;
     }

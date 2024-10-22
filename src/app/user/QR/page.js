@@ -13,7 +13,7 @@ function QR() {
   }, []);
   return (
     <div
-      style={{ height: "auto", margin: "0 auto", maxWidth: 250, width: "100%" }}
+      style={{ height: "auto", margin: "0 auto", maxWidth: 250, width: "100%" ,marginTop:"20px" , marginBottom:'20px' }}
     >
       <QRCode
         size={256}

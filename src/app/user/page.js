@@ -1,14 +1,15 @@
 "use client";
 import { url } from "@/store/url";
 import axios from "axios";
-import React, { useEffect, useState  ,useCallback} from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./library-home.module.css";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
+import { useRouter } from "next/navigation";
 
 function LibraryHome() {
  const [token ] =useCookies()
-
+const router = useRouter()
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
@@ -79,7 +80,7 @@ function LibraryHome() {
       ) : (
         <button
           className={styles.addLibraryButton}
-          onClick={() => navigation.navigate("AddLibrary")}
+          onClick={() =>router.push('/user/add-library/')}
         >
           Add
         </button>

@@ -1,7 +1,7 @@
 "use client";
 import { url } from "@/store/url";
 import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import styles from "./page.module.css";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
@@ -79,7 +79,7 @@ function View_all_seat({ params: { id } }) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + token.acces,
+          Authorization: "Bearer " + token.access,
         },
       }
     );

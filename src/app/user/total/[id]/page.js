@@ -23,7 +23,7 @@ function Total({params:{id}}) {
   const fetchPayment = async () => {
     await axios.get(`${url}/library-collection/${id}/`, {
       headers: {
-        Authorization: "Bearer " +token,
+        Authorization: "Bearer " +token.access,
       },
     });
   };

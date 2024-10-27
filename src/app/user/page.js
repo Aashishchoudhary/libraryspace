@@ -78,12 +78,15 @@ const router = useRouter()
           ))}
         </div>
       ) : (
+        <div className={styles.btnContainer}>
+
         <button
           className={styles.addLibraryButton}
           onClick={() =>router.push('/user/add-library/')}
-        >
+          >
           Add
         </button>
+          </div>
       )}
     </div>
   );

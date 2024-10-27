@@ -1,46 +1,78 @@
 "use client";
 import { url} from "@/store/url";
 import axios from "axios";
-import {  useEffect, useState } from "react";
+import React, {  useEffect, useState , useCallback} from "react";
 import styles from "./page.module.css";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
+import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
+
+const containerStyle = {
+  width: '400px',
+  height: '400px',
+  
+}
+
 function AddLibrary() {
   const router = useRouter()
   const [token] = useCookies()
   const [name, setName] = useState("");
-  const [facilty, setFacilty] = useState("");
-  const [locality, setlocality] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [pincode, setPincode] = useState("");
  
+ const [isMount , setIsmount]= useState(false)
   const [price, setPrice] = useState("");
   const [mobile_number, setMobileNumber] = useState("");
-  const [whatsapp_number, setWhatsappNumber] = useState("");
+  const [total_seat, setTotalSeat] = useState("");
   const [longitude, setLongitude] = useState("");
   const [latitude, setLatitude] = useState("");
-  const [total_seat, setTotalSeat] = useState("");
+  const [address , setAddress]=useState('')
 
-  // geo location
 
   const uploadData = new FormData();
   if (name) uploadData.append("name", name);
-  if (facilty) uploadData.append("facilty", facilty);
-  if (locality) uploadData.append("locality", locality);
-  if (city) uploadData.append("city", city);
-  if (state) uploadData.append("state", state);
-  if (pincode) uploadData.append("pincode", pincode);
-
-  // Optional image fields (null values are omitted)
- 
-
   if (price) uploadData.append("price", price);
   if (mobile_number) uploadData.append("mobile_number", mobile_number);
-  if (whatsapp_number) uploadData.append("whatsapp_number", whatsapp_number);
-  if (longitude) uploadData.append("longitude", longitude);
-  if (latitude) uploadData.append("latitude", latitude);
   if (total_seat) uploadData.append("total_seat", total_seat);
+  if(latitude)uploadData.append('latitude' , latitude)
+    if(longitude)uploadData.append('longitude' , longitude)
+    if(address)uploadData.append('address' , address)
+  
+
+
+
+
+
+
+
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: 'AIzaSyAgfvPHQTtPbSc5w9VPB0xa3jHr5olxnlI',
+  })
+
+  const [map, setMap] = useState(null)
+
+  
+  const geocode=async()=>{
+  const res= await  axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAgfvPHQTtPbSc5w9VPB0xa3jHr5olxnlI&latlng=${latitude},${longitude}`)
+  const data = await res.data
+  console.log(data.results[0].formatted_address)
+  setAddress(data.results[0].formatted_address)
+  }
+
+
+console.log({lat:latitude , lng:longitude})
+
+  const onLoad = useCallback(function callback(map) {
+    // This is just an example of getting and using the map instance!!! don't just blindly copy!
+    const bounds = new window.google.maps.LatLngBounds(latitude , longitude)
+    map.fitBounds(bounds)
+
+    setMap(map)
+  }, [])
+
+  const onUnmount = React.useCallback(function callback(map) {
+    setMap(null)
+  }, [])
+
 
   const fetchData = async () => {
     try {
@@ -70,20 +102,8 @@ function AddLibrary() {
         alert("Name must be more than 5 letters")
         return
       }
-      else if(locality.trim().length<1){
-        alert('fill the adress')
-        return
-      }
-      else if(city.trim().length<1){
-        alert('fill city')
-        return
-      }
-      else if(state.trim().length<1){
-        alert('Fill state')
-        return
-      }
-      else if(pincode.trim().length<6){
-        alert('Fill correct pincode')
+      else if(price.trim().length<1){
+        alert("Please fill the price")
         return
       }
       else if(mobile_number.trim().length<10){
@@ -103,17 +123,15 @@ function AddLibrary() {
       
 
      alert("library added")
-     router.push('/user')
+     router.push('/')
     } catch (err) {
-      console.log('dd' , err)
+     console.log(err)
       Alert.alert(err.response.data.deatils);
     }
   };
 
   const getLocation = (position) => {
-    // if(position.coords){
-    // alert('coordinates of current location is' ,position.coords.latitude .position.coords.longitude)
-    // }
+    
     setLatitude(position.coords.latitude);
     setLongitude(position.coords.longitude);
    
@@ -131,8 +149,14 @@ function AddLibrary() {
   useEffect(() => {
    fetchData();
     getlocation()
+    setIsmount(true)
+    
   }, []);
-
+  const clickfun=(event)=>{setLatitude(event.latLng.lat())
+    setLongitude(event.latLng.lng())
+    geocode()
+    
+  }
   const handleSeat = (text) => {
     if (text.target.value < 201) {
       setTotalSeat(text.target.value);
@@ -140,7 +164,9 @@ function AddLibrary() {
       alert("seat should be less than 201");
     }
   };
-  return (
+
+  
+  return isMount && (
     <div className={styles.container}>
       <div className={styles.formcontainer_two}>
         <div className={styles.form}>
@@ -152,41 +178,8 @@ function AddLibrary() {
             onChange={(e) => setName(e.target.value)}
             placeholder='Library Name....'
           />
-          <input
-            className={styles.input}
-            type="text"
-            value={facilty}
-            onChange={(e) => setFacilty(e.target.value)}
-            placeholder='Facilities...'
-          />
-          <input
-            className={styles.input}
-            type="text"
-            value={locality}
-            onChange={(e) => setlocality(e.target.value)}
-            placeholder='Address'
-          />
-          <input
-            className={styles.input}
-            type="text"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            placeholder='City....'
-          />
-          <input
-            className={styles.input}
-            type="text"
-            value={state}
-            onChange={(e) => setState(e.target.value)}
-            placeholder='State....'
-          />
-          <input
-            className={styles.input}
-            type="text"
-            value={pincode}
-            onChange={(e) => setPincode(e.target.value)}
-            placeholder='Pincode...'
-          />
+          
+         
           <input
             className={styles.input}
             type="text"
@@ -194,13 +187,21 @@ function AddLibrary() {
             onChange={(e) => setMobileNumber(e.target.value)}
             placeholder='Mobile Number....'
           />
-          <input
-            className={styles.input}
-            type="text"
-            value={whatsapp_number}
-            onChange={(e) => setWhatsappNumber(e.target.value)}
-            placeholder='WhatsApp Number...'
-          />
+         <input type="number"
+         value={price}
+         className={styles.input}
+         onChange={(e)=>setPrice(e.target.value)}
+         placeholder="price"
+         />
+          {isLoaded &&
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={{lat:latitude , lng:longitude}}
+      zoom={5}
+      onLoad={onLoad}
+      onClick={clickfun}
+      onUnmount={onUnmount}
+    />}
           <input
             className={styles.input}
             type="number"
@@ -211,22 +212,32 @@ function AddLibrary() {
           <input
             className={styles.input}
             type="number"
-            defaultValue={longitude}
-            
-            placeholder='Longitude'
+            value={latitude}
+            onChange={(e) =>setLatitude(e.target.value)}
+            placeholder='latitude'
           />
           <input
             className={styles.input}
             type="number"
-            defaultValue={latitude}
-            
-            placeholder='latitude'
+            value={longitude}
+            onChange={(e) => setLongitude(e.target.value)}
+            placeholder='longitude'
           />
+          <textarea
+            className={styles.input}
+           
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            placeholder='address'
+          />
+          
           <button className={styles.button} onClick={() => handleSubmit()}>Submit</button>
          
         </div>
       </div>
-   
+  
+
+    
     </div>
   );
 }

@@ -1,6 +1,6 @@
 
 import imageCompression from 'browser-image-compression';
-export const url ='https://backend.libpot.com' 
+export const url ='http://127.0.0.1:8000' 
 
 
  
@@ -16,7 +16,7 @@ export const url ='https://backend.libpot.com'
       useWebWorker: true,
 
       mediaType: "photo",
-      //quality: 0.001,
+      
     };
     try {
       const compressedFile = await imageCompression(imageFile, options);

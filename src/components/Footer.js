@@ -3,9 +3,16 @@
 import Link from 'next/link';
 import styles from './css/footer.module.css';
 import { useCookies } from 'react-cookie';
+import { useEffect, useState } from 'react';
 
 const Footer = () => {
-  const token =useCookies()
+  const [token] =useCookies()
+  const [isMounted , setIsMounted] = useState(false)
+  useEffect(()=>{
+    if(token.access){
+      setIsMounted(true)
+    }
+  },[])
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
@@ -22,7 +29,7 @@ const Footer = () => {
           <h3>Help</h3>
           <ul className={styles.ul}>
             <li className={styles.li}><a className={styles.a} href="/data/contact-us/">Contact -us</a></li>
-            {token.access&&<li className={styles.li}><a className={styles.a} href="/data/feedback">Feedback</a></li>}
+            {isMounted&&<li className={styles.li}><a className={styles.a} href="/data/feedback">Feedback</a></li>}
             <li className={styles.li}><a className={styles.a} href="/data/faq/">FAQ</a></li>
           </ul>
         </div>

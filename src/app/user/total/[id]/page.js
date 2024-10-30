@@ -1,14 +1,25 @@
 'use client'
 import { url } from "@/store/url";
 import axios from "axios";
-import { useState, useEffect ,useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
+import HashLoader from "react-spinners/HashLoader";
 
+const override  = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+  marginTop:"20px",
+  marginBottom:"100vh",
+};
 function Total({params:{id}}) {
+  let [loading, setLoading] = useState(true);
+  let [color] = useState("black");
   const [data, setData] = useState([]);
   const [token] = useCookies()
   const fetchData = async () => {
     try {
+
       const respone = await axios.get(`${url}/total/${id}/`, {
         headers: {
           Authorization: "Bearer " + token.access,
@@ -16,6 +27,7 @@ function Total({params:{id}}) {
       });
       const res = await respone.data;
       setData(res);
+      setLoading(false)
     } catch (err) {
       alert(err);
     }
@@ -56,7 +68,14 @@ function Total({params:{id}}) {
     fetchPayment()
   }, []);
   return (
-    <div>
+   <>{loading?<HashLoader
+    color={color}
+    loading={loading}
+    cssOverride={override}
+    size={50}
+    aria-label="Loading Spinner"
+    data-testid="loader"
+  />:<>
         <div> Collection this month {currentMonthCollectiion.map(x => x.amount)}</div>
       {data?.map((item) => (
         <div key={item.id}>
@@ -65,7 +84,7 @@ function Total({params:{id}}) {
             <p>{item.amount}</p>
         </div>
       ))}
-    </div>
+    </>}</> 
   );
 }
 

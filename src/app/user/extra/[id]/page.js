@@ -3,12 +3,23 @@ import {  url, yyyymmdd, handleImageUpload } from "@/store/url";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import styles from "./page.module.css";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
 import Image from "next/image";
+import HashLoader from "react-spinners/HashLoader";
+
+const override  = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+  marginTop:"20px",
+  marginBottom:"100vh",
+};
 function Extra({ params: { id } }) {
+  let [loading, setLoading] = useState(true);
+  let [color] = useState("black");
   const router = useRouter();
   const [token] = useCookies()
   const [data, setData] = useState([]);
@@ -72,11 +83,13 @@ function Extra({ params: { id } }) {
   };
 
   const postData = async () => {
+    
     const adha = await handleImageUpload(adharcard || null);
     const pho = await handleImageUpload(photo || null);
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
+      setLoading(true)
       await axios.post(`${url}/extra-student/${id}/`, updateData, {
         headers: {
           Accept: "application/json",
@@ -87,6 +100,7 @@ function Extra({ params: { id } }) {
       console.warn("Data Saved");
       
       fetchData();
+      setLoading(false)
     } catch (err) {
       console.log(err)
       if(err.status==400){
@@ -114,6 +128,7 @@ function Extra({ params: { id } }) {
 
       setFilteredData(newData);
       setData(res);
+      setLoading(false)
     } catch (err) {
       // console.log(err.response)
       alert(err.response.data);
@@ -161,7 +176,14 @@ function Extra({ params: { id } }) {
   }, []);
   return (
     <>
-      <div className={styles.subCon}>
+     {loading?<HashLoader
+        color={color}
+        loading={loading}
+        cssOverride={override}
+        size={50}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />: <div className={styles.subCon}>
         <div className={styles.mainContainer}>
           <div className={styles.serachField}>
             <input
@@ -360,8 +382,8 @@ function Extra({ params: { id } }) {
             </div>
           </div>
         </div>
-        <input type="file" onChange={(e)=>handleImageUpload(e.target.files[0])} />
-      </div>
+       
+      </div>}
     </>
   );
 }

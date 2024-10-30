@@ -6,7 +6,15 @@ import styles from "./page.module.css";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
+import HashLoader from "react-spinners/HashLoader";
 
+const override  = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+  marginTop:"20px",
+  marginBottom:"100vh",
+};
 const containerStyle = {
   width: '400px',
   height: '400px',
@@ -14,11 +22,11 @@ const containerStyle = {
 }
 
 function AddLibrary() {
+  let [loading, setLoading] = useState(true);
+  let [color] = useState("black");
   const router = useRouter()
   const [token] = useCookies()
   const [name, setName] = useState("");
- 
- const [isMount , setIsmount]= useState(false)
   const [price, setPrice] = useState("");
   const [mobile_number, setMobileNumber] = useState("");
   const [total_seat, setTotalSeat] = useState("");
@@ -97,7 +105,9 @@ console.log({lat:latitude , lng:longitude})
 
 
   const handleSubmit = async () => {
+
     try {
+      setLoading(true)
       if(name.trim().length<5){
         alert("Name must be more than 5 letters")
         return
@@ -149,7 +159,8 @@ console.log({lat:latitude , lng:longitude})
   useEffect(() => {
    fetchData();
     getlocation()
-    setIsmount(true)
+  
+    setLoading(false)
     
   }, []);
   const clickfun=(event)=>{setLatitude(event.latLng.lat())
@@ -166,8 +177,15 @@ console.log({lat:latitude , lng:longitude})
   };
 
   
-  return isMount && (
-    <div className={styles.container}>
+  return (
+    <> {loading? <HashLoader
+      color={color}
+      loading={loading}
+      cssOverride={override}
+      size={50}
+      aria-label="Loading Spinner"
+      data-testid="loader"
+    />:<div className={styles.container}>
       <div className={styles.formcontainer_two}>
         <div className={styles.form}>
           <input
@@ -238,7 +256,7 @@ console.log({lat:latitude , lng:longitude})
   
 
     
-    </div>
+    </div>}</>
   );
 }
 

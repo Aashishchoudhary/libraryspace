@@ -6,8 +6,20 @@ import styles from "./library-home.module.css";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
+import HashLoader from "react-spinners/HashLoader";
+
+const override  = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+  marginTop:"20px",
+  marginBottom:"100vh",
+};
 
 function LibraryHome() {
+  
+  let [loading, setLoading] = useState(true);
+  let [color] = useState("black");
  const [token ] =useCookies()
 const router = useRouter()
   const [data, setData] = useState([]);
@@ -21,12 +33,20 @@ const router = useRouter()
     const res = await response.data;
     setData(res);
     console.log(res);
+    setLoading(!loading)
   };
   useEffect(() => {
    fetchData()
   }, []);
   return (
-    <div>
+  <> {loading?<HashLoader
+    color={color}
+    loading={loading}
+    cssOverride={override}
+    size={50}
+    aria-label="Loading Spinner"
+    data-testid="loader"
+  />: <div>
       {data.length > 0 ? (
         <div className={styles.container}>
           {data.map((item) => (
@@ -88,7 +108,8 @@ const router = useRouter()
         </button>
           </div>
       )}
-    </div>
+    </div>}
+    </>
   );
 }
 

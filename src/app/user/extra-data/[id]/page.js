@@ -7,7 +7,18 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import Image from "next/image";
+import HashLoader from "react-spinners/HashLoader";
+
+const override  = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+  marginTop:"20px",
+  marginBottom:"100vh",
+};
 function ExtraStudent({ params: { id } }) {
+  let [loading, setLoading] = useState(true);
+  let [color] = useState("black");
   const [token] =useCookies()
   const orig = "http://localhost:8000";
   const router = useRouter();
@@ -79,6 +90,7 @@ function ExtraStudent({ params: { id } }) {
       res.data[0]["mobile_number"] && setMobile(res.data[0]["mobile_number"]);
       res.data[0]["amount"] && setAmount(res.data[0]["amount"]);
       res.data[0]["gender"] && setGender(res.data[0]["gender"]);
+      setLoading(false)
     } catch (err) {
       alert(err);
       router.back();
@@ -121,6 +133,7 @@ function ExtraStudent({ params: { id } }) {
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
+      setLoading(true)
       await axios.patch(`${url}/extra-student-view/${id}/`, updateData, {
         headers: {
           Accept: "application/json",
@@ -129,9 +142,9 @@ function ExtraStudent({ params: { id } }) {
           Authorization: "Bearer " + token.access,
         },
       });
-
       alert("Data Updated");
       getData();
+      setLoading(false)
     } catch (err) {
       console.log(err);
     }
@@ -143,7 +156,14 @@ function ExtraStudent({ params: { id } }) {
   }, []);
   return (
     <>
-      <div className={styles.dataContainer}>
+     {loading?<HashLoader
+        color={color}
+        loading={loading}
+        cssOverride={override}
+        size={50}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />: <div className={styles.dataContainer}>
         <div>
           {data?.data?.map((item) => (
             <div key={item.id}>
@@ -360,7 +380,7 @@ function ExtraStudent({ params: { id } }) {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
     </>
   );
 }

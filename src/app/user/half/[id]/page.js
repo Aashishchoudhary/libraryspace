@@ -8,7 +8,18 @@ import styles from "./page.module.css";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
 import Image from "next/image";
+import HashLoader from "react-spinners/HashLoader";
+
+const override  = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+  marginTop:"20px",
+  marginBottom:"100vh",
+};
 function Half({ params: { id } }) {
+  let [loading, setLoading] = useState(true);
+  let [color] = useState("black");
   const router = useRouter();
   const [token] = useCookies()
   const [data, setData] = useState([]);
@@ -72,11 +83,13 @@ function Half({ params: { id } }) {
 
 
   const postData = async () => {
+
     const adha = await handleImageUpload(adharcard || null);
     const pho = await handleImageUpload(photo || null);
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
+      setLoading(true)
       await axios.post(`${url}/half-day-student/${id}/`, updateData, {
         headers: {
           Accept: "application/json",
@@ -87,6 +100,7 @@ function Half({ params: { id } }) {
       console.warn("Data Saved");
 
       fetchData();
+      setLoading(false)
     } catch (err) {
       console.log(err.response);
       // alert('Something went wrong please try again later');
@@ -107,6 +121,7 @@ function Half({ params: { id } }) {
       
       setFilteredData(newData);
       setData(res);
+      setLoading(false)
     } catch (err) {
       // console.log(err.response)
       alert(err.response.data);
@@ -153,7 +168,15 @@ function Half({ params: { id } }) {
   }, [ ]);
   return (
    
-    <div className={styles.subCon}>
+   <> 
+  {loading?<HashLoader
+        color={color}
+        loading={loading}
+        cssOverride={override}
+        size={50}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />: <div className={styles.subCon}>
       <div className={styles.mainContainer}>
         <div className={styles.serachField}>
           <input
@@ -353,8 +376,8 @@ function Half({ params: { id } }) {
           </div>
         </div>
       </div>
-    </div>
-  
+    </div>}
+    </>
   );
 }
 

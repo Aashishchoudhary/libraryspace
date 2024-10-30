@@ -7,9 +7,20 @@ import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import { useScreenshot } from "use-react-screenshot";
 import { useCookies } from "react-cookie";
+import HashLoader from "react-spinners/HashLoader";
+
+const override  = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+  marginTop:"20px",
+  marginBottom:"100vh",
+};
 import Image from "next/image";
 
 function Editreservation({ params: { id, seatid } }) {
+  let [loading, setLoading] = useState(true);
+  let [color] = useState("black");
   const [token] =useCookies()
 
   const router = useRouter();
@@ -31,7 +42,7 @@ function Editreservation({ params: { id, seatid } }) {
     document.body.removeChild(a);
   };
 
-  const [refresh, setRefresh] = useState(true);
+
   const [changeSeat, setChangeSeat] = useState(false);
   const [vaccentSeatData, setVaccentSeatData] = useState([]);
   const [data, setData] = useState([]);
@@ -102,6 +113,7 @@ function Editreservation({ params: { id, seatid } }) {
       const res = await response.data;
 
       setData(res);
+
       res.data[0]["dob"] && setDob(yyyymmdd(new Date(res.data[0]["dob"])));
 
       res.data[0]["end_date"] &&
@@ -114,6 +126,7 @@ function Editreservation({ params: { id, seatid } }) {
       res.data[0]["amount"] && setAmount(res.data[0]["amount"]);
       res.data[0]["gender"] && setGender(res.data[0]["gender"]);
       setCheckData(true);
+      setLoading(false)
     } catch (err) {
       console.log(err);
       setCheckData(false);
@@ -127,6 +140,7 @@ function Editreservation({ params: { id, seatid } }) {
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
+      setLoading(true)
       await axios.patch(`${url}/edit-reservation-view/${seatid}/`, updateData, {
         headers: {
           Accept: "application/json",
@@ -137,7 +151,8 @@ function Editreservation({ params: { id, seatid } }) {
 
       
       alert("Data updated")
-      setRefresh(true)
+      
+      setLoading(false)
     } catch (err) {
       console.log(err.response.data);
       alert("something went wrong please try agian later");
@@ -151,6 +166,7 @@ function Editreservation({ params: { id, seatid } }) {
     if (pho) updateData.append("photo", pho, pho.name);
    
     try {
+      setLoading(true)
       await axios.post(
         `${url}/edit-reservation-view/${seatid}/`,updateData,
 
@@ -163,8 +179,9 @@ function Editreservation({ params: { id, seatid } }) {
         }
       );
 
-      setRefresh(true);
+   
       alert("Data Saved");
+      setLoading(false)
     } catch (err) {
       if(err.status==400){
         alert("please fill all the fields")
@@ -172,7 +189,7 @@ function Editreservation({ params: { id, seatid } }) {
        else{
         alert("Try agian later")
        }
-        setRefresh(true)
+      
     }
   };
   // delete data
@@ -233,11 +250,18 @@ function Editreservation({ params: { id, seatid } }) {
   };
   useEffect(() => {
     fetchData();
-    setRefresh(false);
-  }, [refresh]);
+   
+  }, []);
   return (
     <>
-      <div>
+      {loading?<HashLoader
+        color={color}
+        loading={loading}
+        cssOverride={override}
+        size={50}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />:<>
         {checkData && (
           <div className={styles.dataContainer}>
             <div>
@@ -626,7 +650,7 @@ function Editreservation({ params: { id, seatid } }) {
             </div>
           </div>
         )}
-      </div>
+      </>}
     </>
   );
 }

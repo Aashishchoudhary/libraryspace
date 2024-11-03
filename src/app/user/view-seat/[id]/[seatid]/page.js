@@ -137,6 +137,7 @@ function AddData({ params: { id, seatid } }) {
     } catch (e) {
       console.log("error ", e);
       setCheckData(false);
+      setLoading(false)
     }
   };
 
@@ -179,6 +180,7 @@ setLoading(false)
       
     } catch (err) {
    if(err.status==400){
+    setLoading(false)
     alert("please fill all the fields")
    }
    else{
@@ -224,6 +226,7 @@ setLoading(false)
       getData()
     } catch (err) {
       console.log(err);
+      setLoading(false)
     }
   };
   const initiateWhatsApp = (num) => {

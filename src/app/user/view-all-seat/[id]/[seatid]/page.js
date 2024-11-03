@@ -130,6 +130,7 @@ function Editreservation({ params: { id, seatid } }) {
     } catch (err) {
       console.log(err);
       setCheckData(false);
+      setLoading(false)
     }
   };
 
@@ -155,6 +156,7 @@ function Editreservation({ params: { id, seatid } }) {
       setLoading(false)
     } catch (err) {
       console.log(err.response.data);
+      setLoading(false)
       alert("something went wrong please try agian later");
     }
   };
@@ -183,6 +185,7 @@ function Editreservation({ params: { id, seatid } }) {
       alert("Data Saved");
       setLoading(false)
     } catch (err) {
+      setLoading(false)
       if(err.status==400){
         alert("please fill all the fields")
        }

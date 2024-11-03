@@ -1,21 +1,25 @@
 "use client";
-
 import axios from "axios";
 import styles from "../login/loginfor.module.css";
-import {useState ,useEffect ,useCallback} from "react";
+import {useState ,useEffect} from "react";
 import { url } from "@/store/url";
 import { useRouter } from "next/navigation";
 import { useCookies } from 'react-cookie';
 function Page() {
-  const [ setCookie] = useCookies();
+  const [cookie ,setCookie] = useCookies();
   const router= useRouter()
     const [seconds, setSeconds] = useState(60);
     const [check , setCheck] = useState(false)
     const [username , setUsername]= useState('')
 const [otp ,setOtp] = useState('')
 
-function fetchLocalStorage(){
- setUsername(localStorage.getItem('phone'))
+
+const fetchLocalStorage=()=>{
+  const get_username= localStorage.getItem('phone')
+  if(get_username){
+
+    setUsername(get_username)
+  }
  
 }
 const loginfun=async()=>{
@@ -27,7 +31,7 @@ const loginfun=async()=>{
       "Content-Type": "application/json",
     }});
 const data = await response.data;
-if (response.status == 200) {
+
  
   
   setCookie('access' ,data.access , { path: '/' ,secure:true,
@@ -35,7 +39,7 @@ if (response.status == 200) {
   setCookie('refresh' ,data.refresh ,  { path: '/' ,secure:true,
     sameSite: 'strict',maxAge: 60 * 60 * 24 * 90,})
   router.push("/user");
-}
+
   }
   catch(err)
   {
@@ -47,7 +51,9 @@ const getOtp = async () => {
   try {
     await axios.post(
       `${url}/send-login-otp/`,
-      { username: username },
+      { username: username 
+      
+      },
       {
         headers: {
           "Content-Type": "application/json",
@@ -56,6 +62,7 @@ const getOtp = async () => {
     );
     
   } catch (err) {
+    console.log(err,'==')
     alert(err.response?err.response.data.details:"something went wrong please try agin later");
   }
 };
@@ -79,7 +86,7 @@ const resendOtp=()=>{
       return () => clearInterval(intervalId);
   },[seconds])
 
-  return (
+  return  (
     <div className={styles.container}>
       <div className={styles.loginBox}>
         <h1 className={styles.heading}>
@@ -87,7 +94,7 @@ const resendOtp=()=>{
         </h1>
         <p className={styles.para}>Glad to see you again!</p>
 
-        <div className={styles.loginform} id="loginForm">
+        <div className={styles.loginform} >
           <input
             className={styles.input}
             type="text"
@@ -106,15 +113,11 @@ const resendOtp=()=>{
           />
 
 
-         {/* { check?<p  href="/" className={styles.forgotPassword}>
-            resend
-          </p>:seconds}
-          */}
          <p className={styles.forgotPassword}>{check? <button onClick={()=>resendOtp()} className={styles.resendBtn}>
           Resend Otp
           </button>:seconds +' - seconds'}</p> 
 
-          <button onClick={loginfun} type="submit" className={styles.loginBtn}>
+          <button onClick={()=>loginfun()} type="submit" className={styles.loginBtn}>
             login
           </button>
 

@@ -37,7 +37,8 @@ catch(err){alert(err.response?err.response.data.details:"something went wrong pl
 const getOtp=async()=>{
   try{ await axios.post(`${url}/send-otp/` ,{
       'phone':phone,
-      'email':email
+      'email':email,
+      
   },
 {
   headers:{
@@ -98,10 +99,7 @@ const resendOtp = () => {
             onChange={(e) => setOtp(e.target.value)}
           />
 
-          {/* { check?<p  href="/" className={styles.forgotPassword}>
-            resend
-          </p>:seconds}
-          */}
+         
           <p className={styles.forgotPassword}>
             {check ? (
               <a onClick={() => resendOtp()} className={styles.forgotPassword}>
@@ -112,7 +110,7 @@ const resendOtp = () => {
             )}
           </p>
 
-          <button onClick={verifyOtp} type="submit" className={styles.loginBtn}>
+          <button onClick={()=>verifyOtp()} type="submit" className={styles.loginBtn}>
             Verify
           </button>
 

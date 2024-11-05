@@ -12,7 +12,7 @@ function Page() {
   const [password, setPassword] = useState("");
 
   const fetchLocalStorage = () => {
-    setPhone(localStorage.getItem("phone"));
+    
     setEmail(localStorage.getItem("email"));
   };
 
@@ -47,20 +47,22 @@ catch(err){alert(err.response?err.response.data.details:"something went wrong pl
         <p className={styles.para}>Glad to see you again!</p>
 
         <div className={styles.loginform} id="loginForm">
-          <input
-            className={styles.input}
-            type="text"
-            value={phone}
-            placeholder="username"
-            required
-          />
-          <input
+        <input
             className={styles.input}
             type="text"
             value={email}
             placeholder="email"
             required
+          />    
+          <input
+            className={styles.input}
+            type="text"
+            value={phone}
+            placeholder="username"
+            onChange={(e)=>setPhone(e.target.value)}
+            required
           />
+          
           <input
             className={styles.input}
             type="text"

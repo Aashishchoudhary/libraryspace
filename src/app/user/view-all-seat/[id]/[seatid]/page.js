@@ -42,7 +42,10 @@ function Editreservation({ params: { id, seatid } }) {
     document.body.removeChild(a);
   };
 
-
+  const [getPhoto, setGetPhoto] = useState("");
+  const [getAdhar, setGetAdhar] = useState("");
+  const[loadphoto , setloadphoto]=useState(false)
+  const[loadadhar , setloadadhar]=useState(false)
   const [changeSeat, setChangeSeat] = useState(false);
   const [vaccentSeatData, setVaccentSeatData] = useState([]);
   const [data, setData] = useState([]);
@@ -125,6 +128,13 @@ function Editreservation({ params: { id, seatid } }) {
       res.data[0]["mobile_number"] && setMobile(res.data[0]["mobile_number"]);
       res.data[0]["amount"] && setAmount(res.data[0]["amount"]);
       res.data[0]["gender"] && setGender(res.data[0]["gender"]);
+      {
+        res.data[0]["adharcard"] &&
+          setGetAdhar(res.data[0]["adharcard"]);
+      }
+      {
+        res.data[0]["photo"] && setGetPhoto(res.data[0]["photo"]);
+      }
       setCheckData(true);
       setLoading(false)
     } catch (err) {
@@ -289,6 +299,40 @@ function Editreservation({ params: { id, seatid } }) {
                       <p className={styles.chairNumber}>{item.seat_num}</p>
                     </div>
                   ))}
+                  {checkData && (
+                  <>
+                    <button
+                      className={styles.button}
+                      onClick={() => setloadphoto(!loadphoto)}
+                    >
+                      {loadphoto ? "Hide" : "View Photo"}
+                    </button>
+                    {loadphoto && (
+                      <Image
+                        className={styles.img}
+                        src={getPhoto}
+                        width={100}
+                        height={100}
+                        alt={"photo"}
+                      />
+                    )}
+                    <button
+                      className={styles.button}
+                      onClick={() => setloadadhar(!loadadhar)}
+                    >
+                      {loadadhar ? "Hide" : "View Adharcard"}
+                    </button>
+                    {loadadhar && (
+                      <Image
+                        className={styles.img}
+                        src={getAdhar}
+                        width={100}
+                        height={100}
+                        alt={"adharcard"}
+                      />
+                    )}
+                  </>
+                )}
                 </div>
               )}
               {data?.data?.map((item) => (

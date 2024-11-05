@@ -1,7 +1,7 @@
 "use client";
-import Link from "next/link";
+
 import styles from "../login/loginfor.module.css";
-import { useState, useEffect ,useCallback } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { url } from "@/store/url";
 import { useRouter } from "next/navigation";
@@ -10,17 +10,17 @@ function Page() {
   const router = useRouter()
   const [seconds, setSeconds] = useState(60);
   const [check, setCheck] = useState(false);
-  const [phone, setPhone] = useState("");
+ 
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const fetchLocalStorage = () => {
-    setPhone(localStorage.getItem("phone"));
+ 
     setEmail(localStorage.getItem("email"));
   };
 
   const verifyOtp=async()=>{
     try{ await axios.post(`${url}/validate-otp/` ,{
-        'phone':phone,
+       
         'email':email,
         'otp':otp
     },
@@ -36,7 +36,7 @@ catch(err){alert(err.response?err.response.data.details:"something went wrong pl
 }
 const getOtp=async()=>{
   try{ await axios.post(`${url}/send-otp/` ,{
-      'phone':phone,
+      
       'email':email,
       
   },
@@ -77,13 +77,7 @@ const resendOtp = () => {
         <p className={styles.para}>Your wait will worthy</p>
 
         <div className={styles.loginform} id="loginForm">
-          <input
-            className={styles.input}
-            type="text"
-            value={phone}
-            placeholder="username"
-            required
-          />
+          
           <input
             className={styles.input}
             type="text"

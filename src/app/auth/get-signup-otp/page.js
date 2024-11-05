@@ -8,12 +8,12 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 function Page() {
   const router = useRouter()
-    const [phone , setPhone] = useState("")
+
     const [email , setEmail] = useState("")
 
     const getOtp=async()=>{
         try{ await axios.post(`${url}/send-otp/` ,{
-            'phone':phone,
+           
             'email':email
         },
     {
@@ -22,7 +22,7 @@ function Page() {
         }
     })
     alert('Otp sent')
-    localStorage.setItem("phone",phone)
+  
     localStorage.setItem("email",email)
     router.push('/auth/verify-user/')
   }
@@ -39,14 +39,6 @@ function Page() {
         <div className={styles.loginform} id="loginForm">
          
 
-          <input
-            className={styles.input}
-            type="text"
-            id="username"
-            placeholder="Phone number..."
-            onChange={(e)=>setPhone(e.target.value)}
-            required
-          />
            <input
             className={styles.input}
             type="email"

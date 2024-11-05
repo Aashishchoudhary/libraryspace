@@ -1,7 +1,7 @@
 "use client";
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useScreenshot } from "use-react-screenshot";
-import styles from '../../../view-all-seat/[id]/[seatid]/add-data.module.css'
+import styles from "../../../view-all-seat/[id]/[seatid]/add-data.module.css";
 import { url, handleImageUpload, yyyymmdd } from "@/store/url";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -10,18 +10,18 @@ import { useCookies } from "react-cookie";
 import Image from "next/image";
 import HashLoader from "react-spinners/HashLoader";
 
-const override  = {
+const override = {
   display: "block",
   margin: "0 auto",
   borderColor: "red",
-  marginTop:"20px",
-  marginBottom:"100vh",
+  marginTop: "20px",
+  marginBottom: "100vh",
 };
 function AddData({ params: { id, seatid } }) {
   let [loading, setLoading] = useState(true);
   let [color] = useState("black");
-  const [token] = useCookies()
-  const orig = "http://localhost:8000";
+  const [token] = useCookies();
+
   const router = useRouter();
 
   const ref = useRef(null);
@@ -40,11 +40,12 @@ function AddData({ params: { id, seatid } }) {
     document.body.removeChild(a);
   };
 
-
   const [changeSeat, setChangeSeat] = useState(false);
   const [vaccentSeatData, setVaccentSeatData] = useState([]);
   const [checkData, setCheckData] = useState(false);
   const [data, setData] = useState([]);
+  const [loadphoto, setloadphoto] = useState(false);
+  const [loadadhar, setloadadhar] = useState(false);
 
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
@@ -57,6 +58,8 @@ function AddData({ params: { id, seatid } }) {
   const [adress, setAdress] = useState("");
   const [adharcard, setAdharcard] = useState();
   const [photo, setPhoto] = useState();
+  const [getPhoto, setGetPhoto] = useState("");
+  const [getAdhar, setGetAdhar] = useState("");
 
   // chat room creation  and qr code
   const createRoom = async () => {
@@ -67,7 +70,7 @@ function AddData({ params: { id, seatid } }) {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
 
-          Authorization: "Bearer " + token.access
+          Authorization: "Bearer " + token.access,
         },
       });
       const res = await response.data;
@@ -95,13 +98,13 @@ function AddData({ params: { id, seatid } }) {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
 
-          Authorization: "Bearer " + token.access
+          Authorization: "Bearer " + token.access,
         },
       });
       const res = await response.data;
 
       setData(res);
-
+      console.log(res);
       {
         res.seat_data[0]["dob"] &&
           setDob(yyyymmdd(new Date(res.seat_data[0]["dob"])));
@@ -131,13 +134,20 @@ function AddData({ params: { id, seatid } }) {
       {
         res.seat_data[0]["gender"] && setGender(res.seat_data[0]["gender"]);
       }
-    
+      {
+        res.seat_data[0]["adharcard"] &&
+          setGetAdhar(res.seat_data[0]["adharcard"]);
+      }
+      {
+        res.seat_data[0]["photo"] && setGetPhoto(res.seat_data[0]["photo"]);
+      }
+
       setCheckData(true);
-      setLoading(false)
+      setLoading(false);
     } catch (e) {
       console.log("error ", e);
       setCheckData(false);
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -160,48 +170,42 @@ function AddData({ params: { id, seatid } }) {
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
-      setLoading(true)
-      await axios.post(
-        `${url}/view-seat/${id}/${seatid}/`,
-        updateData,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "multipart/form-data",
+      setLoading(true);
+      await axios.post(`${url}/view-seat/${id}/${seatid}/`, updateData, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "multipart/form-data",
 
-            Authorization: "Bearer " + token.access
-          },
-        }
-      );
-      
-getData()
-setLoading(false)
+          Authorization: "Bearer " + token.access,
+        },
+      });
+
+      getData();
+      setLoading(false);
       alert("Data saved");
-      
     } catch (err) {
-   if(err.status==400){
-    setLoading(false)
-    alert("please fill all the fields")
-   }
-   else{
-    alert("check all the data fileds or try again later")
-   }
+      if (err.status == 400) {
+        setLoading(false);
+        alert("please fill all the fields");
+      } else {
+        alert("check all the data fileds or try again later");
+      }
     }
   };
   const deleteData = async () => {
     try {
       if (window.confirm("Do you really want to Delete?")) {
-      await axios.delete(`${url}/view-seat/${id}/${seatid}/`, {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "multipart/form-data",
+        await axios.delete(`${url}/view-seat/${id}/${seatid}/`, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
 
-          Authorization: "Bearer " + token.access
-        },
-      });
-     
-      router.push(`/user/view-seat/${id}`)
-    }
+            Authorization: "Bearer " + token.access,
+          },
+        });
+
+        router.push(`/user/view-seat/${id}`);
+      }
     } catch (err) {
       console.log(err.response.data);
     }
@@ -212,21 +216,21 @@ setLoading(false)
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
-      setLoading(true)
+      setLoading(true);
       await axios.patch(`${url}/view-seat/${id}/${seatid}/`, updateData, {
         headers: {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
 
-          Authorization: "Bearer " + token.access
+          Authorization: "Bearer " + token.access,
         },
       });
-setLoading(false)
+      setLoading(false);
       alert("Data Updated");
-      getData()
+      getData();
     } catch (err) {
       console.log(err);
-      setLoading(false)
+      setLoading(false);
     }
   };
   const initiateWhatsApp = (num) => {
@@ -235,7 +239,7 @@ setLoading(false)
   const fetch_vaccent_seat = async () => {
     const response = await axios.get(`${url}/vaccent-seats/${id}/`, {
       headers: {
-        Authorization: "Bearer " + token.access
+        Authorization: "Bearer " + token.access,
       },
     });
     const res = await response.data;
@@ -250,13 +254,13 @@ setLoading(false)
         { change_id: seat_id },
         {
           headers: {
-            Authorization: "Bearer " + token.access
+            Authorization: "Bearer " + token.access,
           },
         }
       );
-     
-      alert("Seat changed")
-      router.push(`/user/view-seat/${id}/${seat_id}/`)
+
+      alert("Seat changed");
+      router.push(`/user/view-seat/${id}/${seat_id}/`);
     } catch (err) {
       console.log(err);
     }
@@ -265,420 +269,470 @@ setLoading(false)
     fetch_vaccent_seat();
     setChangeSeat(!changeSeat);
   };
-  
+
   useEffect(() => {
     getData();
   }, []);
 
   return (
     <>
-      {loading?<HashLoader
-        color={color}
-        loading={loading}
-        cssOverride={override}
-        size={50}
-        aria-label="Loading Spinner"
-        data-testid="loader"
-      />:<>
-        {checkData && (
-          <div className={styles.dataContainer}>
-            <div>
-            <div className={styles.buttonContainer}>
-                <button
-                style={{marginTop:"5px" ,marginLeft:'10px'}}
-                  onClick={() => get_vaccent_seat()}
-                  className={styles.button}
-                >
-                  Chanage Seat
-                </button>
-              </div>
-              {changeSeat && (
-                <div className={styles.seat}>
-                  
-                  {vaccentSeatData?.map((item) => (
-                    <div key={item.id} onClick={()=>change_seat_number(item.id)} className={styles.chair}>
-                      <p className={styles.chairNumber}>{item.seat_num}</p>
-                    </div>
-                  ))}
+      {loading ? (
+        <HashLoader
+          color={color}
+          loading={loading}
+          cssOverride={override}
+          size={50}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      ) : (
+        <>
+          {checkData && (
+            <div className={styles.dataContainer}>
+              <div>
+                <div className={styles.buttonContainer}>
+                  <button
+                    style={{ marginTop: "5px", marginLeft: "10px" }}
+                    onClick={() => get_vaccent_seat()}
+                    className={styles.button}
+                  >
+                    Chanage Seat
+                  </button>
                 </div>
-              )}
-              {data?.seat_data?.map((item) => (
-                <div key={item.id}>
-                  <div className={styles.container} ref={ref}>
-                    {/* Header with Company Info */}
-                    <div className={styles.header}>
-                      <p className={styles.companyName}>
-                        {data.library_name.slice(0, 1).toUpperCase() +
-                          data.library_name.slice(1)}
-                      </p>
-                      <p className={styles.companyDetails}>{data.address}</p>
-                      <p className={styles.companyDetails}>
-                        Phone: {data.mobile_number}
-                      </p>
-                      <p className={styles.companyDetails}>
-                        Email: info@company.com
-                      </p>
-                    </div>
-
-                    {/* Invoice Details */}
-                    <div className={styles.invoiceInfo}>
-                      <div className={styles.invoiceHeader}>
-                        <p className={styles.invoiceTitle}>INVOICE</p>
+                {changeSeat && (
+                  <div className={styles.seat}>
+                    {vaccentSeatData?.map((item) => (
+                      <div
+                        key={item.id}
+                        onClick={() => change_seat_number(item.id)}
+                        className={styles.chair}
+                      >
+                        <p className={styles.chairNumber}>{item.seat_num}</p>
                       </div>
-                      <div className={styles.detailsRow}>
-                        <p className={styles.label}>Seat No. :</p>
-                        <p className={styles.value}> {data.seat_num}</p>
-                      </div>
-                      <div className={styles.detailsRow}>
-                        <p className={styles.label}>Date:</p>
-                        <p className={styles.value}>
-                          {new Date().toDateString()}
+                    ))}
+                  </div>
+                )}
+                {data?.seat_data?.map((item) => (
+                  <div key={item.id}>
+                    <div className={styles.container} ref={ref}>
+                      {/* Header with Company Info */}
+                      <div className={styles.header}>
+                        <p className={styles.companyName}>
+                          {data.library_name.slice(0, 1).toUpperCase() +
+                            data.library_name.slice(1)}
+                        </p>
+                        <p className={styles.companyDetails}>{data.address}</p>
+                        <p className={styles.companyDetails}>
+                          Phone: {data.mobile_number}
+                        </p>
+                        <p className={styles.companyDetails}>
+                          Email: info@company.com
                         </p>
                       </div>
-                      <div className={styles.detailsRow}>
-                        <p className={styles.label}>Due Date:</p>
-                        <p className={styles.value}>{item.end_date}</p>
-                      </div>
-                      <div className={styles.detailsRow}>
-                        <p className={styles.label}>Amount :</p>
-                        <p className={styles.value}>₹ {item.amount}</p>
-                      </div>
-                    </div>
 
-                    {/* Client Information */}
-                    <div className={styles.clientInfo}>
-                      <p className={styles.sectionTitle}>Bill To:</p>
-                      <p className={styles.clientName}>
-                        {item.name.slice(0, 1).toUpperCase() +
-                          item.name.slice(1)}
-                      </p>
-                      <p className={styles.clientDetails}>{item.adress}</p>
-                      <p className={styles.clientDetails}>
-                        Phone: {item.mobile_number}
-                      </p>
-                      <p className={styles.clientDetails}>
-                        Preapring For: {item.field}
-                      </p>
-                      <p className={styles.clientDetails}>
-                        Gender: {item.gender}
-                      </p>
-                    </div>
+                      {/* Invoice Details */}
+                      <div className={styles.invoiceInfo}>
+                        <div className={styles.invoiceHeader}>
+                          <p className={styles.invoiceTitle}>INVOICE</p>
+                        </div>
+                        <div className={styles.detailsRow}>
+                          <p className={styles.label}>Seat No. :</p>
+                          <p className={styles.value}> {data.seat_num}</p>
+                        </div>
+                        <div className={styles.detailsRow}>
+                          <p className={styles.label}>Date:</p>
+                          <p className={styles.value}>
+                            {new Date().toDateString()}
+                          </p>
+                        </div>
+                        <div className={styles.detailsRow}>
+                          <p className={styles.label}>Due Date:</p>
+                          <p className={styles.value}>{item.end_date}</p>
+                        </div>
+                        <div className={styles.detailsRow}>
+                          <p className={styles.label}>Amount :</p>
+                          <p className={styles.value}>₹ {item.amount}</p>
+                        </div>
+                      </div>
 
-                    {/* Footer */}
-                    <div className={styles.footer}>
-                      <p className={styles.footerText}>A Aashish kalwaniya Product</p>
+                      {/* Client Information */}
+                      <div className={styles.clientInfo}>
+                        <p className={styles.sectionTitle}>Bill To:</p>
+                        <p className={styles.clientName}>
+                          {item.name.slice(0, 1).toUpperCase() +
+                            item.name.slice(1)}
+                        </p>
+                        <p className={styles.clientDetails}>{item.adress}</p>
+                        <p className={styles.clientDetails}>
+                          Phone: {item.mobile_number}
+                        </p>
+                        <p className={styles.clientDetails}>
+                          Preapring For: {item.field}
+                        </p>
+                        <p className={styles.clientDetails}>
+                          Gender: {item.gender}
+                        </p>
+                      </div>
+
+                      {/* Footer */}
+                      <div className={styles.footer}>
+                        <p className={styles.footerText}>
+                          A Aashish kalwaniya Product
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-             
-              {checkData && (
-                <div className={styles.buttonContainer}>
-                  <button className={styles.button} onClick={() => getImage()}>
-                    Download Invoice
-                  </button>
-                  <button
-                    className={styles.button}
-                    onClick={() => initiateWhatsApp(mobile)}
-                  >
-                    Open Whatsapp
-                  </button>
-                </div>
-              )}
-            </div>
-            <div className={styles.formcontainer}>
-              
-              <div className={styles.form}>
-                <input
-                  type="text"
-                  className={styles.input}
-                  value={name}
-                  placeholder="Name..."
-                  onChange={(e) => setName(e.target.value)}
-                />
+                ))}
 
-                <input
-                  type="number"
-                  className={
-                    `input ${mobile.length > 9 ? "green" : "red"} ` +
-                    styles.input
-                  }
-                  value={mobile}
-                  placeholder="Mobile number..."
-                  onChange={(e) => setMobile(e.target.value) }
-                 
-                />
+                {checkData && (
+                  <div className={styles.buttonContainer}>
+                    <button
+                      className={styles.button}
+                      onClick={() => getImage()}
+                    >
+                      Download Invoice
+                    </button>
+                    <button
+                      className={styles.button}
+                      onClick={() => initiateWhatsApp(mobile)}
+                    >
+                      Open Whatsapp
+                    </button>
+                  </div>
+                )}
+                {checkData && (
+                  <>
+                    <button
+                      className={styles.button}
+                      onClick={() => setloadphoto(!loadphoto)}
+                    >
+                      {loadphoto ? "Hide" : "View Photo"}
+                    </button>
+                    {loadphoto && (
+                      <Image
+                        className={styles.img}
+                        src={getPhoto}
+                        width={100}
+                        height={100}
+                        alt={"photo"}
+                      />
+                    )}
+                    <button
+                      className={styles.button}
+                      onClick={() => setloadadhar(!loadadhar)}
+                    >
+                      {loadadhar ? "Hide" : "View Adharcard"}
+                    </button>
+                    {loadadhar && (
+                      <Image
+                        className={styles.img}
+                        src={getAdhar}
+                        width={100}
+                        height={100}
+                        alt={"adharcard"}
+                      />
+                    )}
+                  </>
+                )}
+              </div>
+              <div className={styles.formcontainer}>
+                <div className={styles.form}>
+                  <input
+                    type="text"
+                    className={styles.input}
+                    value={name}
+                    placeholder="Name..."
+                    onChange={(e) => setName(e.target.value)}
+                  />
 
-                <input
-                  type="number"
-                  className={styles.input}
-                  value={amount}
-                  placeholder="Amount..."
-                  onChange={(e) => setAmount(e.target.value)}
-                />
+                  <input
+                    type="number"
+                    className={
+                      `input ${mobile.length > 9 ? "green" : "red"} ` +
+                      styles.input
+                    }
+                    value={mobile}
+                    placeholder="Mobile number..."
+                    onChange={(e) => setMobile(e.target.value)}
+                  />
 
-                <input
-                  type="text"
-                  className={styles.input}
-                  value={adress}
-                  placeholder="Address..."
-                  onChange={(e) => setAdress(e.target.value)}
-                />
+                  <input
+                    type="number"
+                    className={styles.input}
+                    value={amount}
+                    placeholder="Amount..."
+                    onChange={(e) => setAmount(e.target.value)}
+                  />
 
-                <div className={styles.dateCon}>
-                  <label className={styles.label}>Date of Birth</label>
                   <input
-                    type="date"
-                    value={dob}
-                    onChange={(e) => setDob(e.target.value)}
+                    type="text"
+                    className={styles.input}
+                    value={adress}
+                    placeholder="Address..."
+                    onChange={(e) => setAdress(e.target.value)}
                   />
-                </div>
 
-                {/* Gender Radio buttons */}
-                <div className={styles.radiocontainer}>
-                  <input
-                    type="radio"
-                    onChange={(e) => setGender(e.target.value)}
-                    id="female"
-                    name="gender"
-                    value="Female"
-                    checked={gender == "Female"}
-                  />
-                   {" "}
-                  <label className={styles.label} htmlFor="female">
-                    Female
-                  </label>
-                  <br />
-                  <input
-                    type="radio"
-                    onChange={(e) => setGender(e.target.value)}
-                    id="male"
-                    name="gender"
-                    value="Male"
-                    checked={gender == "Male"}
-                  />
-                   {" "}
-                  <label className={styles.label} htmlFor="male">
-                    Male
-                  </label>
-                  <br />
-                </div>
-
-                <div className={styles.dateCon}>
-                  <label className={styles.label}>From</label>
-                  <input
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartdate(e.target.value)}
-                  />
-                  <label className={styles.label}>To</label>
-                  <input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                  />
-                </div>
-                {/* Image selection */}
-                <div className={styles.imageupload}>
-                  <label className={styles.label}>Upload Photo</label>
-                  <input
-                    type="file"
-                    onChange={(e) => setPhoto(e.target.files[0])}
-                  />
-                  {photo && (
-                    <Image
-                      className={styles.img}
-                      src={URL.createObjectURL(photo)}
-                      alt="phtot"
-                      width={100}
-                      height={100}
+                  <div className={styles.dateCon}>
+                    <label className={styles.label}>Date of Birth</label>
+                    <input
+                      type="date"
+                      value={dob}
+                      onChange={(e) => setDob(e.target.value)}
                     />
-                  )}
-                </div>
+                  </div>
 
-                <div className={styles.imageupload}>
-                  <label className={styles.label}>Upload Aadharcard</label>
-                  <input
-                    type="file"
-                    onChange={(e) => setAdharcard(e.target.files[0])}
-                  />
-                  {adharcard && (
-                    <Image
-                      className={styles.img}
-                      src={URL.createObjectURL(adharcard)}
-                      alt="Aadharcard"
-                      width={100}
-                      height={100}
+                  {/* Gender Radio buttons */}
+                  <div className={styles.radiocontainer}>
+                    <input
+                      type="radio"
+                      onChange={(e) => setGender(e.target.value)}
+                      id="female"
+                      name="gender"
+                      value="Female"
+                      checked={gender == "Female"}
                     />
-                  )}
-                </div>
-                <div className={styles.buttonContainer}>
-                  <button className={styles.button} onClick={() => patchData()}>
-                    Upadte
-                  </button>
-                  <button
-                    className={styles.button}
-                    onClick={() => deleteData()}
-                  >
-                    Delete
-                  </button>
+                     {" "}
+                    <label className={styles.label} htmlFor="female">
+                      Female
+                    </label>
+                    <br />
+                    <input
+                      type="radio"
+                      onChange={(e) => setGender(e.target.value)}
+                      id="male"
+                      name="gender"
+                      value="Male"
+                      checked={gender == "Male"}
+                    />
+                     {" "}
+                    <label className={styles.label} htmlFor="male">
+                      Male
+                    </label>
+                    <br />
+                  </div>
+
+                  <div className={styles.dateCon}>
+                    <label className={styles.label}>From</label>
+                    <input
+                      type="date"
+                      value={startDate}
+                      onChange={(e) => setStartdate(e.target.value)}
+                    />
+                    <label className={styles.label}>To</label>
+                    <input
+                      type="date"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                    />
+                  </div>
+                  {/* Image selection */}
+                  <div className={styles.imageupload}>
+                    <label className={styles.label}>Upload Photo</label>
+                    <input
+                      type="file"
+                      onChange={(e) => setPhoto(e.target.files[0])}
+                    />
+                    {photo && (
+                      <Image
+                        className={styles.img}
+                        src={URL.createObjectURL(photo)}
+                        alt="phtot"
+                        width={100}
+                        height={100}
+                      />
+                    )}
+                  </div>
+
+                  <div className={styles.imageupload}>
+                    <label className={styles.label}>Upload Aadharcard</label>
+                    <input
+                      type="file"
+                      onChange={(e) => setAdharcard(e.target.files[0])}
+                    />
+                    {adharcard && (
+                      <Image
+                        className={styles.img}
+                        src={URL.createObjectURL(adharcard)}
+                        alt="Aadharcard"
+                        width={100}
+                        height={100}
+                      />
+                    )}
+                  </div>
+                  <div className={styles.buttonContainer}>
+                    <button
+                      className={styles.button}
+                      onClick={() => patchData()}
+                    >
+                      Upadte
+                    </button>
+                    <button
+                      className={styles.button}
+                      onClick={() => deleteData()}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-        {!checkData && (
-          <div className={styles.dataContainer_two}>
-            <div className={styles.buttonContainer_two}>
-              <button
-                className={styles.button_two}
-                onClick={() => createRoom()}
-              >
-                Show QR
-              </button>
-            </div>
-            <div className={styles.formcontainer_two}>
-              <div className={styles.form}>
-                <input
-                  type="text"
-                  className={styles.input}
-                  value={name}
-                  placeholder="Name..."
-                  onChange={(e) => setName(e.target.value)}
-                />
-
-                <input
-                  type="text"
-                  className={
-                    `input ${mobile.length > 9 ? "green" : "red"} ` +
-                    styles.input
-                  }
-                  value={mobile}
-                  placeholder="Mobile number..."
-                  onChange={(e) => setMobile(e.target.value)}
-                />
-
-                <input
-                  type="text"
-                  className={styles.input}
-                  value={amount}
-                  placeholder="Amount..."
-                  onChange={(e) => setAmount(e.target.value)}
-                />
-
-                <input
-                  type="text"
-                  className={styles.input}
-                  value={adress}
-                  placeholder="Address..."
-                  onChange={(e) => setAdress(e.target.value)}
-                />
-
-                <div className={styles.dateCon}>
-                  <label className={styles.label}>Date of Birth</label>
+          )}
+          {!checkData && (
+            <div className={styles.dataContainer_two}>
+              <div className={styles.buttonContainer_two}>
+                <button
+                  className={styles.button_two}
+                  onClick={() => createRoom()}
+                >
+                  Show QR
+                </button>
+              </div>
+              <div className={styles.formcontainer_two}>
+                <div className={styles.form}>
                   <input
-                    style={{ width: "40%" }}
+                    type="text"
                     className={styles.input}
-                    type="date"
-                    value={dob}
-                    onChange={(e) => setDob(e.target.value)}
+                    value={name}
+                    placeholder="Name..."
+                    onChange={(e) => setName(e.target.value)}
                   />
-                </div>
 
-                {/* Gender Radio buttons */}
-                <div className={styles.radiocontainer}>
                   <input
-                    type="radio"
-                    onChange={(e) => setGender(e.target.value)}
-                    id="female"
-                    name="gender"
-                    value="Female"
-                    checked={gender == "Female"}
+                    type="text"
+                    className={
+                      `input ${mobile.length > 9 ? "green" : "red"} ` +
+                      styles.input
+                    }
+                    value={mobile}
+                    placeholder="Mobile number..."
+                    onChange={(e) => setMobile(e.target.value)}
                   />
-                   {" "}
-                  <label className={styles.label} htmlFor="female">
-                    Female
-                  </label>
-                  <br />
-                  <input
-                    type="radio"
-                    onChange={(e) => setGender(e.target.value)}
-                    id="male"
-                    name="gender"
-                    value="Male"
-                    checked={gender == "Male"}
-                  />
-                   {" "}
-                  <label className={styles.label} htmlFor="male">
-                    Male
-                  </label>
-                  <br />
-                </div>
 
-                <div className={styles.dateCon}>
-                  <label className={styles.label}>From</label>
                   <input
+                    type="text"
                     className={styles.input}
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartdate(e.target.value)}
+                    value={amount}
+                    placeholder="Amount..."
+                    onChange={(e) => setAmount(e.target.value)}
                   />
-                  <label className={styles.label}>To</label>
+
                   <input
+                    type="text"
                     className={styles.input}
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
+                    value={adress}
+                    placeholder="Address..."
+                    onChange={(e) => setAdress(e.target.value)}
                   />
-                </div>
-                {/* Image selection */}
-                <div className={styles.imageupload}>
-                  <label className={styles.label}>Upload Photo</label>
-                  <input
-                    style={{ width: "40%" }}
-                    className={styles.input}
-                    type="file"
-                    onChange={(e) => setPhoto(e.target.files[0])}
-                  />
-                  {photo && (
-                    <Image
-                      className={styles.img}
-                      src={URL.createObjectURL(photo)}
-                      alt="phtot"
-                      width={100}
-                      height={100}
+
+                  <div className={styles.dateCon}>
+                    <label className={styles.label}>Date of Birth</label>
+                    <input
+                      style={{ width: "40%" }}
+                      className={styles.input}
+                      type="date"
+                      value={dob}
+                      onChange={(e) => setDob(e.target.value)}
                     />
-                  )}
-                </div>
+                  </div>
 
-                <div className={styles.imageupload}>
-                  <label className={styles.label}>Upload Aadharcard</label>
-                  <input
-                    style={{ width: "40%" }}
-                    className={styles.input}
-                    type="file"
-                    onChange={(e) => setAdharcard(e.target.files[0])}
-                  />
-                  {adharcard && (
-                    <Image
-                      className={styles.img}
-                      src={URL.createObjectURL(adharcard)}
-                      alt="Aadharcard"
-                      width={100}
-                      height={100}
+                  {/* Gender Radio buttons */}
+                  <div className={styles.radiocontainer}>
+                    <input
+                      type="radio"
+                      onChange={(e) => setGender(e.target.value)}
+                      id="female"
+                      name="gender"
+                      value="Female"
+                      checked={gender == "Female"}
                     />
-                  )}
-                </div>
-                <div className={styles.buttonContainer}>
-                  <button className={styles.button} onClick={() => postData()}>
-                    Save
-                  </button>
+                     {" "}
+                    <label className={styles.label} htmlFor="female">
+                      Female
+                    </label>
+                    <br />
+                    <input
+                      type="radio"
+                      onChange={(e) => setGender(e.target.value)}
+                      id="male"
+                      name="gender"
+                      value="Male"
+                      checked={gender == "Male"}
+                    />
+                     {" "}
+                    <label className={styles.label} htmlFor="male">
+                      Male
+                    </label>
+                    <br />
+                  </div>
+
+                  <div className={styles.dateCon}>
+                    <label className={styles.label}>From</label>
+                    <input
+                      className={styles.input}
+                      type="date"
+                      value={startDate}
+                      onChange={(e) => setStartdate(e.target.value)}
+                    />
+                    <label className={styles.label}>To</label>
+                    <input
+                      className={styles.input}
+                      type="date"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                    />
+                  </div>
+                  {/* Image selection */}
+                  <div className={styles.imageupload}>
+                    <label className={styles.label}>Upload Photo</label>
+                    <input
+                      style={{ width: "40%" }}
+                      className={styles.input}
+                      type="file"
+                      onChange={(e) => setPhoto(e.target.files[0])}
+                    />
+                    {photo && (
+                      <Image
+                        className={styles.img}
+                        src={URL.createObjectURL(photo)}
+                        alt="phtot"
+                        width={100}
+                        height={100}
+                      />
+                    )}
+                  </div>
+
+                  <div className={styles.imageupload}>
+                    <label className={styles.label}>Upload Aadharcard</label>
+                    <input
+                      style={{ width: "40%" }}
+                      className={styles.input}
+                      type="file"
+                      onChange={(e) => setAdharcard(e.target.files[0])}
+                    />
+                    {adharcard && (
+                      <Image
+                        className={styles.img}
+                        src={URL.createObjectURL(adharcard)}
+                        alt="Aadharcard"
+                        width={100}
+                        height={100}
+                      />
+                    )}
+                  </div>
+                  <div className={styles.buttonContainer}>
+                    <button
+                      className={styles.button}
+                      onClick={() => postData()}
+                    >
+                      Save
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-      </>}
+          )}
+        </>
+      )}
     </>
   );
 }

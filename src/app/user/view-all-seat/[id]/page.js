@@ -145,7 +145,7 @@ function View_all_seat({ params: { id } }) {
       {filteredDataSource?.map((item) => (
         <Link style={{textDecoration:"none"}}
           key={item.seat_num}
-          href={`/user/view-all-seat/${id}/${item?.ser?.map((y) => y.id)}/`}
+          href={`/user/view-all-seat/${id}/${item?.ser.id}/`}
           className={[
             styles.container,
             item.seat_num % 2 ? styles.evenStyle : styles.oddStyle,

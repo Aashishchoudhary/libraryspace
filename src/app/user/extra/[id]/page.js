@@ -70,9 +70,9 @@ function Extra({ params: { id } }) {
       const res = await response.data;
 
       // Construct the complete URL with all necessary parameters
-      const qr_value = `${url}/half_chat_message/?libid=${id}&user_id=${
+      const qr_value = `${url}/half-chat-page/?libid=${id}&user_id=${
         jwtDecode(token.access).user_id
-      }&sign=${res["sign"]}&url=add-half-time`;
+      }&sign=${res["sign"]}&url=add-extra-time`;
       router.push(`/user/QR/?data=${qr_value}`);
       // Perform navigation using navigation.navigate
     } catch (error) {

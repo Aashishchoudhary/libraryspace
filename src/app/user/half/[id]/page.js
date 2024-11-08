@@ -68,7 +68,7 @@ function Half({ params: { id } }) {
       const res = await response.data;
 
       // Construct the complete URL with all necessary parameters
-      const qr_value = `${url}/chat-page/?libid=${id}&user_id=${
+      const qr_value = `${url}/half-chat-page/?libid=${id}&user_id=${
         jwtDecode(token.access).user_id
       }&sign=${res["sign"]}&url=add-half-time`;
       router.push(`/user/QR/?data=${qr_value}`);

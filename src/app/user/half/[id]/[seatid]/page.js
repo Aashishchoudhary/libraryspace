@@ -1,11 +1,11 @@
 "use client";
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useScreenshot } from "use-react-screenshot";
 import styles from "./page.module.css";
-import { url, handleImageUpload, getCookie, yyyymmdd } from "@/store/url";
+import { url, handleImageUpload,  yyyymmdd } from "@/store/url";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import HashLoader from "react-spinners/HashLoader";
 
@@ -16,22 +16,22 @@ const override = {
   marginTop: "20px",
   marginBottom: "100vh",
 };
-function ExtraStudent({ params: { id } }) {
+function ViewHalf({ params: { id,seatid } }) {
   let [loading, setLoading] = useState(true);
   let [color] = useState("black");
   const [token] = useCookies();
-
+  const orig = "http://localhost:8000";
   const router = useRouter();
 
   const ref = useRef(null);
-
   const [image, takeScreenshot] = useScreenshot();
-
   const getImage = async () => {
     const image = await takeScreenshot(ref.current);
-
+    if (!image) {
+      console.error("Error taking screenshot!");
+      return;
+    }
     const a = document.createElement("a");
-
     a.href = image;
     a.download = `${name}.jpg`;
     document.body.appendChild(a);
@@ -70,7 +70,7 @@ function ExtraStudent({ params: { id } }) {
 
   const getData = async () => {
     try {
-      const response = await axios.get(`${url}/extra-student-view/${id}/`, {
+      const response = await axios.get(`${url}/half-day-student/${id}/${seatid}/`, {
         headers: {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
@@ -101,9 +101,8 @@ function ExtraStudent({ params: { id } }) {
         res.data[0]["photo"] && setGetPhoto(res.data[0]["photo"]);
       }
       setLoading(false);
-    } catch (err) {
-      alert(err);
-      router.back();
+    } catch (e) {
+      console.log("error ", e);
     }
   };
 
@@ -123,7 +122,7 @@ function ExtraStudent({ params: { id } }) {
   const deleteData = async () => {
     try {
       if (window.confirm("Do you really want to Delete?")) {
-        await axios.delete(`${url}/extra-student-view/${id}/`, {
+        await axios.delete(`${url}/half-day-student/${id}/${seatid}/`, {
           headers: {
             Accept: "application/json",
             "Content-Type": "multipart/form-data",
@@ -131,10 +130,11 @@ function ExtraStudent({ params: { id } }) {
             Authorization: "Bearer " + token.access,
           },
         });
-        router.push(`/user/extra/${pushBackId}/`);
+
+        router.push(`/user/half/${pushBackId}/`);
       }
     } catch (err) {
-      console.log(err.response.data);
+      console.log(err.response.data.details);
     }
   };
   const patchData = async () => {
@@ -144,7 +144,7 @@ function ExtraStudent({ params: { id } }) {
     if (pho) updateData.append("photo", pho, pho.name);
     try {
       setLoading(true);
-      await axios.patch(`${url}/extra-student-view/${id}/`, updateData, {
+      await axios.patch(`${url}/half-day-student/${id}/${seatid}/`, updateData, {
         headers: {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
@@ -152,6 +152,7 @@ function ExtraStudent({ params: { id } }) {
           Authorization: "Bearer " + token.access,
         },
       });
+
       alert("Data Updated");
       getData();
       setLoading(false);
@@ -201,7 +202,6 @@ function ExtraStudent({ params: { id } }) {
                     <div className={styles.invoiceHeader}>
                       <p className={styles.invoiceTitle}>INVOICE</p>
                     </div>
-
                     <div className={styles.detailsRow}>
                       <p className={styles.label}>Date:</p>
                       <p className={styles.value}>
@@ -258,6 +258,8 @@ function ExtraStudent({ params: { id } }) {
                 Open Whatsapp
               </button>
             </div>
+
+            <br />
             <button
               className={styles.button}
               onClick={() => setloadphoto(!loadphoto)}
@@ -288,7 +290,6 @@ function ExtraStudent({ params: { id } }) {
                 alt={"adharcard"}
               />
             )}
-            <br />
           </div>
           <div className={styles.formcontainer}>
             <div className={styles.form}>
@@ -329,8 +330,8 @@ function ExtraStudent({ params: { id } }) {
               <div className={styles.dateCon}>
                 <label className={styles.label}>Date of Birth</label>
                 <input
-                  style={{ width: "40%" }}
                   className={styles.input}
+                  style={{ width: "40%" }}
                   type="date"
                   value={dob}
                   onChange={(e) => setDob(e.target.value)}
@@ -433,4 +434,4 @@ function ExtraStudent({ params: { id } }) {
   );
 }
 
-export default ExtraStudent;
+export default ViewHalf;

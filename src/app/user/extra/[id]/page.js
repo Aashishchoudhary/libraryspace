@@ -107,9 +107,11 @@ function Extra({ params: { id } }) {
         alert("please fill all the fields")
        }
        else{
+
         alert("check all the data fileds or try again later")
        
         }
+        setLoading(false)
       // alert('Something went wrong please try again later');
     }
   };
@@ -131,6 +133,7 @@ function Extra({ params: { id } }) {
       setLoading(false)
     } catch (err) {
       // console.log(err.response)
+      setLoading(false)
       alert(err.response.data);
     }
   };
@@ -219,7 +222,7 @@ function Extra({ params: { id } }) {
             <Link
               style={{ textDecoration: "none" }}
               key={item.id}
-              href={`/user/extra-data/${item.id}/?push_back_id=${id}`}
+              href={`/user/extra/${id}/${item.id}/?push_back_id=${id}`}
               className={styles.container}
             >
               <div key={item.id} className={styles.dataContainer}>

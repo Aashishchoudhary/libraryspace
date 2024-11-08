@@ -211,7 +211,7 @@ function Half({ params: { id } }) {
         {filterdData?.map((item) => (
           <Link style={{textDecoration:"none"}}
             key={item.id}
-            href={`/user/half-day-data/${item.id}/?push_back_id=${id}`}
+            href={`/user/half/${id}/${item.id}/?push_back_id=${id}`}
             className={
               styles.container
             }

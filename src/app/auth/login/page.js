@@ -1,19 +1,30 @@
 "use client";
 import Link from "next/link";
 import styles from "./loginfor.module.css";
-import { useEffect, useState ,useCallback } from "react";
+import { useEffect, useState  } from "react";
 import axios from "axios";
 import { url } from "@/store/url";
-
+import HashLoader from "react-spinners/HashLoader";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 function Login() {
   const [cookie , setCookie] = useCookies()
   const router = useRouter();
+  let [loading, setLoading] = useState(false);
+  let [color] = useState("black");
+
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+
+  const override  = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red",
+    marginTop:"20px",
+    marginBottom:"100vh",
+  };
   const fetchLocalStorage = () => {
     setUsername(localStorage.getItem("phone"));
     console.log(localStorage.getItem("phone"))
@@ -37,6 +48,7 @@ function Login() {
         }
       );
       const data = await response.data;
+      setLoading(true)
       if (response.status == 200) {
         setCookie('access' ,data.access , { path: '/' ,secure:true,
           sameSite: 'strict',maxAge: 60 * 60 * 24 * 90,})
@@ -46,7 +58,7 @@ function Login() {
        
       }
     } catch (err) {
-      console.log('dsf')
+      
       alert(err.response?err.response.data.details:"something went wrong please try agin later");
       
     }
@@ -57,7 +69,14 @@ function Login() {
 },[])
   return (
     <div className={styles.bgcolor}>
-     
+     <HashLoader
+        color={color}
+        loading={loading}
+        cssOverride={override}
+        size={50}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />
       <div className={styles.container}>
         <div className={styles.loginBox}>
           <h1 className={styles.heading}>

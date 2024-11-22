@@ -1,49 +1,78 @@
 "use client";
 import { url } from "@/store/url";
 import axios from "axios";
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styles from "./edit.module.css";
 import { useCookies } from "react-cookie";
+import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import HashLoader from "react-spinners/HashLoader";
 
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+  marginTop: "20px",
+  marginBottom: "100vh",
+};
+const containerStyle = {
+  width: "400px",
+  height: "400px",
+};
 function Page({ params: { id } }) {
-  const [token] = useCookies();
 
+
+  const [openMap, setOpenMap] = useState(false);
+  let [loading, setLoading] = useState(true);
+  let [color] = useState("black");
+
+  const [token] = useCookies();
   const [name, setName] = useState("");
-  const [facilty, setFacilty] = useState("");
-  const [locality, setlocality] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [pincode, setPincode] = useState("");
-  const [imageOne, setImageOne] = useState(null);
-  const [imageTwo, setimageTwo] = useState(null);
-  const [imageThree, setimageThree] = useState(null);
-  const [imageFour, setimageFour] = useState(null);
-  const [imageFive, setimageFive] = useState(null);
-  const [imageSix, setimageSix] = useState(null);
-  const [imageSeven, setimageSeven] = useState(null);
   const [price, setPrice] = useState("");
   const [mobile_number, setMobileNumber] = useState("");
-  const [whatsapp_number, setWhatsappNumber] = useState("");
+  const [total_seat, setTotalSeat] = useState("");
   const [longitude, setLongitude] = useState("");
   const [latitude, setLatitude] = useState("");
-  const [total_seat, setTotalSeat] = useState("");
+  const [address, setAddress] = useState("");
 
   const uploadData = new FormData();
   if (name) uploadData.append("name", name);
-  if (facilty) uploadData.append("facilty", facilty);
-  if (locality) uploadData.append("locality", locality);
-  if (city) uploadData.append("city", city);
-  if (state) uploadData.append("state", state);
-  if (pincode) uploadData.append("pincode", pincode);
-
-  // Optional image fields (null values are omitted)
-
   if (price) uploadData.append("price", price);
   if (mobile_number) uploadData.append("mobile_number", mobile_number);
-  if (whatsapp_number) uploadData.append("whatsapp_number", whatsapp_number);
-  if (longitude) uploadData.append("longitude", longitude);
-  if (latitude) uploadData.append("latitude", latitude);
   if (total_seat) uploadData.append("total_seat", total_seat);
+  if (latitude) uploadData.append("latitude", latitude);
+  if (longitude) uploadData.append("longitude", longitude);
+  if (address) uploadData.append("address", address);
+
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyAgfvPHQTtPbSc5w9VPB0xa3jHr5olxnlI",
+  });
+
+  const [map, setMap] = useState(null);
+
+  const geocode = async () => {
+   
+    const res = await axios.get(
+      `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAgfvPHQTtPbSc5w9VPB0xa3jHr5olxnlI&latlng=${latitude},${longitude}`
+    );
+    const data = await res.data;
+  
+    setAddress(data.results[0].formatted_address);
+  };
+
+
+  const onLoad = useCallback(function callback(map) {
+    // This is just an example of getting and using the map instance!!! don't just blindly copy!
+    const bounds = new window.google.maps.LatLngBounds(latitude, longitude);
+    map.fitBounds(bounds);
+
+    setMap(map);
+  }, []);
+
+  const onUnmount = React.useCallback(function callback(map) {
+    setMap(null);
+  }, []);
 
   const handleSubmit = async () => {
    
@@ -87,12 +116,7 @@ function Page({ params: { id } }) {
       {
         res.data[0].city && setCity(res.data[0].city);
       }
-      {
-        res.data[0].state && setState(res.data[0].state);
-      }
-      {
-        res.data[0].pincode && setPincode(res.data[0].pincode);
-      }
+      
       {
         res.data[0].total_seat && setTotalSeat(res.data[0].total_seat);
       }
@@ -109,28 +133,29 @@ function Page({ params: { id } }) {
       {
         res.data[0].longitude && setLongitude(res.data[0].longitude);
       }
+      {
+        res.data[0].address && setAddress(res.data[0].address);
+      }
+      setLoading(false)
     } catch (err) {
       console.log();
     }
   };
-  const getLocation = (position) => {
-    // if(position.coords){
-    // alert('coordinates of current location is' ,position.coords.latitude .position.coords.longitude)
-    // }
-    setLatitude(position.coords.latitude);
-    setLongitude(position.coords.longitude);
+  const clickfun = (event) => {
+    setLatitude(event.latLng.lat());
+    setLongitude(event.latLng.lng());
+    geocode();
   };
 
-  function getlocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(getLocation);
-      // console.log(navigator.geolocation.getCurrentPosition())
-    }
-  }
 
+  const openMapFunction=()=>{
+    
+
+    setOpenMap(!openMap)
+  }
   useEffect(() => {
     fetchData();
-    getlocation();
+    
   }, []);
   const handleSeat = (text) => {
     if (text.target.value < 201) {
@@ -141,93 +166,97 @@ function Page({ params: { id } }) {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.formcontainer_two}>
-        <div className={styles.form}>
-          <input
-            className={styles.input}
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Library Name...."
-          />
-          <input
-            className={styles.input}
-            type="text"
-            value={facilty}
-            onChange={(e) => setFacilty(e.target.value)}
-            placeholder="Facilities..."
-          />
-          <input
-            className={styles.input}
-            type="text"
-            value={locality}
-            onChange={(e) => setlocality(e.target.value)}
-            placeholder="Address"
-          />
-          <input
-            className={styles.input}
-            type="text"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            placeholder="City...."
-          />
-          <input
-            className={styles.input}
-            type="text"
-            value={state}
-            onChange={(e) => setState(e.target.value)}
-            placeholder="State...."
-          />
-          <input
-            className={styles.input}
-            type="text"
-            value={pincode}
-            onChange={(e) => setPincode(e.target.value)}
-            placeholder="Pincode..."
-          />
-          <input
-            className={styles.input}
-            type="text"
-            value={mobile_number}
-            onChange={(e) => setMobileNumber(e.target.value)}
-            placeholder="Mobile Number...."
-          />
-          <input
-            className={styles.input}
-            type="text"
-            value={whatsapp_number}
-            onChange={(e) => setWhatsappNumber(e.target.value)}
-            placeholder="WhatsApp Number..."
-          />
-          <input
-            className={styles.input}
-            type="number"
-            value={total_seat}
-            onChange={(e) => handleSeat(e)}
-            placeholder="Number Seat"
-          />
-          <input
-            className={styles.input}
-            type="number"
-            value={longitude}
-            onChange={() => getlocation()}
-            placeholder="Longitude"
-          />
-          <input
-            className={styles.input}
-            type="number"
-            value={latitude}
-            onChange={() => getlocation()}
-            placeholder="latitude"
-          />
-          <button className={styles.button} onClick={() => handleSubmit()}>
-            Submit
-          </button>
-          \
+    <>
+    {loading ? (
+      <HashLoader
+        color={color}
+        loading={loading}
+        cssOverride={override}
+        size={50}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />
+    ) : (
+      <div className={styles.container}>
+        <div className={styles.formcontainer_two}>
+          <div className={styles.form}>
+            <input
+              className={styles.input}
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Library Name...."
+            />
+
+            <input
+              className={styles.input}
+              type="text"
+              value={mobile_number}
+              onChange={(e) => setMobileNumber(e.target.value)}
+              placeholder="Mobile Number...."
+            />
+            <input
+              type="number"
+              value={price}
+              className={styles.input}
+              onChange={(e) => setPrice(e.target.value)}
+              placeholder="price"
+            />
+            <button onClick={() => openMapFunction()}>
+             {!openMap? 'Select Location on Map..':"Hide Map"}
+            </button>
+            {openMap && (
+              <>
+             
+                {isLoaded && (
+                  <GoogleMap
+                    mapContainerStyle={containerStyle}
+                    center={{ lat: latitude, lng: longitude }}
+                    zoom={20}
+                    onLoad={onLoad}
+                    onClick={clickfun}
+                    onUnmount={onUnmount}
+                  />
+                )}
+              </>
+            )}
+            <input
+              className={styles.input}
+              type="number"
+              value={total_seat}
+              onChange={(e) => handleSeat(e)}
+              placeholder="Number of Seat...."
+            />
+            <input
+              className={styles.input}
+              type="number"
+              value={latitude}
+              onChange={(e) => setLatitude(e.target.value)}
+              placeholder="latitude"
+            />
+            <input
+              className={styles.input}
+              type="number"
+              value={longitude}
+              onChange={(e) => setLongitude(e.target.value)}
+              placeholder="longitude"
+            />
+            <textarea
+              className={styles.input}
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="address"
+            />
+
+            <button className={styles.button} onClick={() => handleSubmit()}>
+              Submit
+            </button>
+          </div>
         </div>
+      
       </div>
-    </div>
+    )}
+  </>
   );
 }
 

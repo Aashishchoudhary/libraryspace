@@ -58,7 +58,7 @@ useEffect(()=>{
           <input
             className={styles.input}
             type="text"
-            placeholder="otp..."
+            placeholder="New Password....."
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

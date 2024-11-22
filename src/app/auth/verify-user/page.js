@@ -5,14 +5,22 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { url } from "@/store/url";
 import { useRouter } from "next/navigation";
-
+import HashLoader from "react-spinners/HashLoader";
 function Page() {
   const router = useRouter()
   const [seconds, setSeconds] = useState(60);
   const [check, setCheck] = useState(false);
- 
+  let [loading, setLoading] = useState(false);
+  let [color] = useState("black");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
+  const override = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red",
+    marginTop: "100px",
+    marginBottom: "100vh",
+  };
   const fetchLocalStorage = () => {
  
     setEmail(localStorage.getItem("email"));
@@ -35,7 +43,9 @@ router.push('/auth/signup/')
 catch(err){alert(err.response?err.response.data.details:"something went wrong please try agin later")}
 }
 const getOtp=async()=>{
-  try{ await axios.post(`${url}/send-otp/` ,{
+  try{
+    setLoading(true)
+     await axios.post(`${url}/send-otp/` ,{
       
       'email':email,
       

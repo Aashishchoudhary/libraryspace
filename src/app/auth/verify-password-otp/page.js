@@ -5,8 +5,10 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { url } from "@/store/url";
 import { useRouter } from "next/navigation";
-
+import HashLoader from "react-spinners/HashLoader";
 function VerifyPasswordOtp() {
+  let [loading, setLoading] = useState(false);
+  let [color] = useState("black");
   const router = useRouter();
   const [seconds, setSeconds] = useState(60);
   const [check, setCheck] = useState(false);
@@ -16,9 +18,16 @@ function VerifyPasswordOtp() {
   const fetchLocalStorage = () => {
     setPhone(localStorage.getItem("phone"));
   };
-
+  const override = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red",
+    marginTop: "100px",
+    marginBottom: "100vh",
+  };
   const verifyOtp = async () => {
     try {
+      setLoading(true)
       await axios.post(
         `${url}/validate-forgot-otp/`,
         {
@@ -32,10 +41,11 @@ function VerifyPasswordOtp() {
           },
         }
       );
-
+      
       router.push("/auth/change-forgot-password/");
     } catch (err) {
-      alert(err);
+      setLoading(false)
+      alert(err.response?err.response.data.details:"something went wrong please try agin later");
     }
   };
   const getOtp = async () => {
@@ -76,6 +86,14 @@ function VerifyPasswordOtp() {
 
   return (
     <div className={styles.container}>
+    { loading? <HashLoader
+        color={color}
+        loading={loading}
+        cssOverride={override}
+        size={50}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />:
       <div className={styles.loginBox}>
         <h1 className={styles.heading}>
           verify <span className={styles.highlight}>otp</span>
@@ -121,7 +139,7 @@ function VerifyPasswordOtp() {
             or <a href="#">signup</a>
           </p>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

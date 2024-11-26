@@ -58,7 +58,7 @@ catch(err){alert(err.response?err.response.data.details:"something went wrong pl
             className={styles.input}
             type="text"
             value={phone}
-            placeholder="username"
+            placeholder="Phone number..."
             onChange={(e)=>setPhone(e.target.value)}
             required
           />

@@ -258,12 +258,12 @@ function ExtraStudent({ params: { id,seatid } }) {
                 Open Whatsapp
               </button>
             </div>
-            <button
+            {getPhoto&&<button
               className={styles.button}
               onClick={() => setloadphoto(!loadphoto)}
             >
               {loadphoto ? "Hide" : "View Photo"}
-            </button>
+            </button>}
             {loadphoto && (
               <Image
                 className={styles.img}
@@ -273,12 +273,12 @@ function ExtraStudent({ params: { id,seatid } }) {
                 alt={"photo"}
               />
             )}
-            <button
+           {getAdhar&& <button
               className={styles.button}
               onClick={() => setloadadhar(!loadadhar)}
             >
               {loadadhar ? "Hide" : "View Adharcard"}
-            </button>
+            </button>}
             {loadadhar && (
               <Image
                 className={styles.img}

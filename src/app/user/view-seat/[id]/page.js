@@ -27,7 +27,7 @@ function Page({ params: { id } }) {
   const [seatData, setSeatData] = useState({});
 
   const fetchSeatData = async () => {
-    const response = await axios.get(`${url}/booked-seat/${id}`, {
+    const response = await axios.get(`${url}/booked-seat/${id}/`, {
       headers: {
         Authorization: "Bearer " + token.access,
       },

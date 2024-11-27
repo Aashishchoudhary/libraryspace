@@ -22,6 +22,7 @@ function AddData({ params: { id, seatid } }) {
   let [color] = useState("black");
   const [token] = useCookies();
 
+  
   const router = useRouter();
 
   const ref = useRef(null);
@@ -402,12 +403,12 @@ function AddData({ params: { id, seatid } }) {
                 )}
                 {checkData && (
                   <>
-                    <button
+                    {getPhoto&&<button
                       className={styles.button}
                       onClick={() => setloadphoto(!loadphoto)}
                     >
                       {loadphoto ? "Hide" : "View Photo"}
-                    </button>
+                    </button>}
                     {loadphoto && (
                       <Image
                         className={styles.img}
@@ -417,12 +418,12 @@ function AddData({ params: { id, seatid } }) {
                         alt={"photo"}
                       />
                     )}
-                    <button
+                   {getAdhar&& <button
                       className={styles.button}
                       onClick={() => setloadadhar(!loadadhar)}
                     >
                       {loadadhar ? "Hide" : "View Adharcard"}
-                    </button>
+                    </button>}
                     {loadadhar && (
                       <Image
                         className={styles.img}

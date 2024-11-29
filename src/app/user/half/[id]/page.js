@@ -102,8 +102,7 @@ function Half({ params: { id } }) {
       fetchData();
       setLoading(false)
     } catch (err) {
-      console.log(err.response);
-      // alert('Something went wrong please try again later');
+      alert(err.response.data.details);
     }
   };
   const fetchData = async () => {
@@ -124,7 +123,7 @@ function Half({ params: { id } }) {
       setLoading(false)
     } catch (err) {
       // console.log(err.response)
-      alert(err.response.data);
+      alert(err.response.data.details);
     }
   };
   const filterFun = () => {

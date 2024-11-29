@@ -102,8 +102,9 @@ function ExtraStudent({ params: { id,seatid } }) {
       }
       setLoading(false);
     } catch (err) {
-      alert(err);
+      alert(err.response.data.details);
       router.back();
+
     }
   };
 
@@ -131,10 +132,11 @@ function ExtraStudent({ params: { id,seatid } }) {
             Authorization: "Bearer " + token.access,
           },
         });
+        alert("data deleted")
         router.push(`/user/extra/${pushBackId}/`);
       }
     } catch (err) {
-      console.log(err.response.data);
+      alert(err.response.data.details);
     }
   };
   const patchData = async () => {
@@ -156,7 +158,7 @@ function ExtraStudent({ params: { id,seatid } }) {
       getData();
       setLoading(false);
     } catch (err) {
-      console.log(err);
+      alert(err.response.data.details);
     }
   };
 

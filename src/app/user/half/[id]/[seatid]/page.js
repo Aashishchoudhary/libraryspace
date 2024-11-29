@@ -101,8 +101,8 @@ function ViewHalf({ params: { id,seatid } }) {
         res.data[0]["photo"] && setGetPhoto(res.data[0]["photo"]);
       }
       setLoading(false);
-    } catch (e) {
-      console.log("error ", e);
+    } catch (err) {
+      alert(err.response.data.details);
     }
   };
 
@@ -134,7 +134,7 @@ function ViewHalf({ params: { id,seatid } }) {
         router.push(`/user/half/${pushBackId}/`);
       }
     } catch (err) {
-      console.log(err.response.data.details);
+      alert(err.response.data.details);
     }
   };
   const patchData = async () => {
@@ -157,7 +157,7 @@ function ViewHalf({ params: { id,seatid } }) {
       getData();
       setLoading(false);
     } catch (err) {
-      console.log(err);
+      alert(err.response.data.details);
     }
   };
 

@@ -134,7 +134,7 @@ function Extra({ params: { id } }) {
     } catch (err) {
       // console.log(err.response)
       setLoading(false)
-      alert(err.response.data);
+      alert(err.response.data.details);;
     }
   };
   const filterFun = () => {

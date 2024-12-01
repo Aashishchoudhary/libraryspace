@@ -4,7 +4,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import HashLoader from "react-spinners/HashLoader";
-
+import styles from './page.module.css'
 const override  = {
   display: "block",
   margin: "0 auto",
@@ -54,7 +54,7 @@ function Total({params:{id}}) {
     10: 'Nov',
     11: 'Dec',
   };
-  const currentMonthCollectiion = data.filter((x) => {
+  const currentMonthCollection = data.filter((x) => {
     const currentDate = new Date().getMonth();
     const itemDate = new Date(x.collection_month).getMonth();
     if (currentDate === itemDate) {
@@ -62,7 +62,7 @@ function Total({params:{id}}) {
     }
     return false;
   });
-  console.log(currentMonthCollectiion)
+  
   useEffect(() => {
     fetchData();
     fetchPayment()
@@ -76,14 +76,29 @@ function Total({params:{id}}) {
     aria-label="Loading Spinner"
     data-testid="loader"
   />:<>
-        <div> Collection this month {currentMonthCollectiion.map(x => x.amount)}</div>
-      {data?.map((item) => (
-        <div key={item.id}>
-            <p>{months[new Date(item.collection_month).getMonth()]}{' '}
-            {new Date(item.collection_month).getFullYear()}</p>
-            <p>{item.amount}</p>
+        <div className={styles.collectionContainer}>
+      <div className={styles.collectionSummary}>
+        <div>
+          <span>Collection this month - </span>
+          <span className={styles.amount}>
+          ₹ {currentMonthCollection.map(x => x.amount).reduce((acc, amount) => acc + amount, 0)}
+          </span>
         </div>
-      ))}
+      </div>
+
+      <div className={styles.collectionItems}>
+        {data?.map((item) => (
+          <div key={item.id} className={styles.collectionItem}>
+            <p className="month">
+              {months[new Date(item.collection_month).getMonth()]}{' '}
+              {new Date(item.collection_month).getFullYear()}
+            </p>
+            <p className="amount">₹ {item.amount}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+      
     </>}</> 
   );
 }

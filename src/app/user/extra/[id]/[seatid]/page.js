@@ -399,6 +399,8 @@ function ExtraStudent({ params: { id,seatid } }) {
                     className={styles.img}
                     src={URL.createObjectURL(photo)}
                     alt="phtot"
+                    width={100}
+                  height={100}
                   />
                 )}
               </div>
@@ -416,6 +418,8 @@ function ExtraStudent({ params: { id,seatid } }) {
                     className={styles.img}
                     src={URL.createObjectURL(adharcard)}
                     alt="Aadharcard"
+                    width={100}
+                  height={100}
                   />
                 )}
               </div>

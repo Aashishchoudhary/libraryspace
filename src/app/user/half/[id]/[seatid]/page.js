@@ -397,6 +397,8 @@ function ViewHalf({ params: { id,seatid } }) {
                   <Image
                     className={styles.img}
                     src={URL.createObjectURL(photo)}
+                    width={100}
+                  height={100}
                     alt="phtot"
                   />
                 )}
@@ -415,6 +417,8 @@ function ViewHalf({ params: { id,seatid } }) {
                     className={styles.img}
                     src={URL.createObjectURL(adharcard)}
                     alt="Aadharcard"
+                    width={100}
+                  height={100}
                   />
                 )}
               </div>

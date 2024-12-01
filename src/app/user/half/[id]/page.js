@@ -346,6 +346,8 @@ function Half({ params: { id } }) {
                 <Image
                   className={styles.img}
                   src={URL.createObjectURL(photo)}
+                  width={100}
+                  height={100}
                   alt="phtot"
                 />
               )}
@@ -363,6 +365,8 @@ function Half({ params: { id } }) {
                 <Image
                   className={styles.img}
                   src={URL.createObjectURL(adharcard)}
+                  width={100}
+                  height={100}
                   alt="Aadharcard"
                 />
               )}

@@ -84,21 +84,22 @@ function View_all_seat({ params: { id } }) {
 
   //
   const fetchData = async () => {
-    const response = await axios.get(
-      `${url}/all-seat-reservation-view/${id}/`,
+    try{
+
+      const response = await axios.get(
+        `${url}/all-seat-reservation-view/${id}/`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token.access,
         },
-      }
+      }   
     );
-
     const res = await response.data;
-
     setFilteredDataSource(res);
     setMasterDataSource(res);
-    setLoading(false)
+    setLoading(false)}
+    catch(err){setLoading(false)}
   };
   const filterFun = () => {
     setDisplay(!display);

@@ -84,12 +84,12 @@ function Extra({ params: { id } }) {
 
   const postData = async () => {
     
+    setLoading(true)
     const adha = await handleImageUpload(adharcard || null);
     const pho = await handleImageUpload(photo || null);
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
-      setLoading(true)
       await axios.post(`${url}/extra-student/${id}/`, updateData, {
         headers: {
           Accept: "application/json",

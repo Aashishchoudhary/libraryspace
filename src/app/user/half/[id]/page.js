@@ -84,12 +84,12 @@ function Half({ params: { id } }) {
 
   const postData = async () => {
 
+    setLoading(true)
     const adha = await handleImageUpload(adharcard || null);
     const pho = await handleImageUpload(photo || null);
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
-      setLoading(true)
       await axios.post(`${url}/half-day-student/${id}/`, updateData, {
         headers: {
           Accept: "application/json",
@@ -103,6 +103,7 @@ function Half({ params: { id } }) {
       setLoading(false)
     } catch (err) {
       alert(err.response.data.details);
+      setLoading(false)
     }
   };
   const fetchData = async () => {
@@ -124,6 +125,7 @@ function Half({ params: { id } }) {
     } catch (err) {
       // console.log(err.response)
       alert(err.response.data.details);
+      setLoading(false)
     }
   };
   const filterFun = () => {

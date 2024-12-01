@@ -166,12 +166,12 @@ function AddData({ params: { id, seatid } }) {
   if (gender) updateData.append("gender", gender);
 
   const postData = async () => {
+    setLoading(true);
     const adha = await handleImageUpload(adharcard || null);
     const pho = await handleImageUpload(photo || null);
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
-      setLoading(true);
       await axios.post(`${url}/view-seat/${id}/${seatid}/`, updateData, {
         headers: {
           Accept: "application/json",
@@ -194,6 +194,7 @@ function AddData({ params: { id, seatid } }) {
     }
   };
   const deleteData = async () => {
+    setLoading(true)
     try {
       if (window.confirm("Do you really want to Delete?")) {
         await axios.delete(`${url}/view-seat/${id}/${seatid}/`, {
@@ -204,20 +205,22 @@ function AddData({ params: { id, seatid } }) {
             Authorization: "Bearer " + token.access,
           },
         });
-
+        setLoading(false)
         router.push(`/user/view-seat/${id}`);
       }
     } catch (err) {
       console.log(err.response.data);
+      alert('something went wrong')
+      setLoading(false)
     }
   };
   const patchData = async () => {
+    setLoading(true);
     const adha = await handleImageUpload(adharcard || null);
     const pho = await handleImageUpload(photo || null);
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
-      setLoading(true);
       await axios.patch(`${url}/view-seat/${id}/${seatid}/`, updateData, {
         headers: {
           Accept: "application/json",

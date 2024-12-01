@@ -81,7 +81,7 @@ function ExtraStudent({ params: { id,seatid } }) {
       const res = await response.data;
 
       setData(res);
-      console.log(res);
+    
 
       res.data[0]["dob"] && setDob(yyyymmdd(new Date(res.data[0]["dob"])));
 
@@ -103,6 +103,7 @@ function ExtraStudent({ params: { id,seatid } }) {
       setLoading(false);
     } catch (err) {
       alert(err.response.data.details);
+      setLoading(false)
       router.back();
 
     }
@@ -122,6 +123,7 @@ function ExtraStudent({ params: { id,seatid } }) {
   if (gender) updateData.append("gender", gender);
 
   const deleteData = async () => {
+    setLoading(false)
     try {
       if (window.confirm("Do you really want to Delete?")) {
         await axios.delete(`${url}/extra-student/${id}/${seatid}/`, {
@@ -132,20 +134,23 @@ function ExtraStudent({ params: { id,seatid } }) {
             Authorization: "Bearer " + token.access,
           },
         });
+        setLoading(false)
         alert("data deleted")
-        router.push(`/user/extra/${pushBackId}/`);
+        router.push(`/user/extra/${
+        pushBackId}/`);
       }
     } catch (err) {
       alert(err.response.data.details);
+      setLoading(false)
     }
   };
   const patchData = async () => {
+    setLoading(true);
     const adha = await handleImageUpload(adharcard || null);
     const pho = await handleImageUpload(photo || null);
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
-      setLoading(true);
       await axios.patch(`${url}/extra-student/${id}/${seatid}/`, updateData, {
         headers: {
           Accept: "application/json",
@@ -159,6 +164,7 @@ function ExtraStudent({ params: { id,seatid } }) {
       setLoading(false);
     } catch (err) {
       alert(err.response.data.details);
+      setLoading(false)
     }
   };
 

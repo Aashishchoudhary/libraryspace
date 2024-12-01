@@ -103,6 +103,7 @@ function ViewHalf({ params: { id,seatid } }) {
       setLoading(false);
     } catch (err) {
       alert(err.response.data.details);
+      setLoading(false)
     }
   };
 
@@ -120,6 +121,7 @@ function ViewHalf({ params: { id,seatid } }) {
   if (gender) updateData.append("gender", gender);
 
   const deleteData = async () => {
+    setLoading(true)
     try {
       if (window.confirm("Do you really want to Delete?")) {
         await axios.delete(`${url}/half-day-student/${id}/${seatid}/`, {
@@ -130,20 +132,21 @@ function ViewHalf({ params: { id,seatid } }) {
             Authorization: "Bearer " + token.access,
           },
         });
-
+        setLoading(false)
         router.push(`/user/half/${pushBackId}/`);
       }
     } catch (err) {
       alert(err.response.data.details);
+      setLoading(false)
     }
   };
   const patchData = async () => {
+    setLoading(true);
     const adha = await handleImageUpload(adharcard || null);
     const pho = await handleImageUpload(photo || null);
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
-      setLoading(true);
       await axios.patch(`${url}/half-day-student/${id}/${seatid}/`, updateData, {
         headers: {
           Accept: "application/json",
@@ -158,6 +161,7 @@ function ViewHalf({ params: { id,seatid } }) {
       setLoading(false);
     } catch (err) {
       alert(err.response.data.details);
+      setLoading(false)
     }
   };
 

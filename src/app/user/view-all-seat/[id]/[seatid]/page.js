@@ -146,12 +146,12 @@ function Editreservation({ params: { id, seatid } }) {
 
   //patch data
   const patchData = async () => {
+    setLoading(true)
     const adha = await handleImageUpload(adharcard || null);
     const pho = await handleImageUpload(photo || null);
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
-      setLoading(true)
       await axios.patch(`${url}/edit-reservation-view/${seatid}/`, updateData, {
         headers: {
           Accept: "application/json",
@@ -172,13 +172,12 @@ function Editreservation({ params: { id, seatid } }) {
   };
   // add data
   const postData = async () => {
+    setLoading(true)
     const adha = await handleImageUpload(adharcard || null);
     const pho = await handleImageUpload(photo || null);
     if (adha) updateData.append("adharcard", adha, adha.name);
-    if (pho) updateData.append("photo", pho, pho.name);
-   
+    if (pho) updateData.append("photo", pho, pho.name);   
     try {
-      setLoading(true)
       await axios.post(
         `${url}/edit-reservation-view/${seatid}/`,updateData,
 
@@ -265,6 +264,7 @@ function Editreservation({ params: { id, seatid } }) {
     fetchData();
    
   }, []);
+ 
   return (
     <>
       {loading?<HashLoader
@@ -299,40 +299,7 @@ function Editreservation({ params: { id, seatid } }) {
                       <p className={styles.chairNumber}>{item.seat_num}</p>
                     </div>
                   ))}
-                  {checkData && (
-                  <>
-                    {getPhoto&&<button
-                      className={styles.button}
-                      onClick={() => setloadphoto(!loadphoto)}
-                    >
-                      {loadphoto ? "Hide" : "View Photo"}
-                    </button>}
-                    {loadphoto && (
-                      <Image
-                        className={styles.img}
-                        src={getPhoto}
-                        width={100}
-                        height={100}
-                        alt={"photo"}
-                      />
-                    )}
-                    {getAdhar&& <button
-                      className={styles.button}
-                      onClick={() => setloadadhar(!loadadhar)}
-                    >
-                      {loadadhar ? "Hide" : "View Adharcard"}
-                    </button>}
-                    {loadadhar && (
-                      <Image
-                        className={styles.img}
-                        src={getAdhar}
-                        width={100}
-                        height={100}
-                        alt={"adharcard"}
-                      />
-                    )}
-                  </>
-                )}
+               
                 </div>
               )}
               {data?.data?.map((item) => (
@@ -419,6 +386,40 @@ function Editreservation({ params: { id, seatid } }) {
                   </button>
                 </div>
               )}
+               {checkData && 
+                  <>
+                    {getPhoto&&<button
+                      className={styles.button}
+                      onClick={() => setloadphoto(!loadphoto)}
+                    >
+                      {loadphoto ? "Hide" : "View Photo"}
+                    </button>}
+                    {loadphoto && (
+                      <Image
+                        className={styles.img}
+                        src={getPhoto}
+                        width={100}
+                        height={100}
+                        alt={"photo"}
+                      />
+                    )}
+                    {getAdhar&& <button
+                      className={styles.button}
+                      onClick={() => setloadadhar(!loadadhar)}
+                    >
+                      {loadadhar ? "Hide" : "View Adharcard"}
+                    </button>}
+                    {loadadhar && (
+                      <Image
+                        className={styles.img}
+                        src={getAdhar}
+                        width={100}
+                        height={100}
+                        alt={"adharcard"}
+                      />
+                    )}
+                  </>
+                }
               <br />
             </div>
             <div className={styles.formcontainer}>

@@ -76,7 +76,8 @@ const Feedback = () => {
             type="file"
             onChange={(e) => setImg(e.target.files[0])}
           />
-          {img && <Image className={styles.img} src={URL.createObjectURL(img)} alt='img'/>}
+          {img && <Image className={styles.img} src={URL.createObjectURL(img)} alt='img' width={100}
+                        height={100}/>}
           <button
             style={{ width: "30%" }}
             onClick={postData}

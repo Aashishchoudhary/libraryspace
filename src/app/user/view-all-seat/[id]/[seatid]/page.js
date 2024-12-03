@@ -104,7 +104,7 @@ function Editreservation({ params: { id, seatid } }) {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${url}/edit-reservation-view/${seatid}/`,
+        `${url}/edit-reservation-view/${id}/${seatid}/`,
         {
           headers: {
             Accept: "application/json",
@@ -152,7 +152,7 @@ function Editreservation({ params: { id, seatid } }) {
     if (adha) updateData.append("adharcard", adha, adha.name);
     if (pho) updateData.append("photo", pho, pho.name);
     try {
-      await axios.patch(`${url}/edit-reservation-view/${seatid}/`, updateData, {
+      await axios.patch(`${url}/edit-reservation-view/${id}/${seatid}/`, updateData, {
         headers: {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
@@ -179,7 +179,7 @@ function Editreservation({ params: { id, seatid } }) {
     if (pho) updateData.append("photo", pho, pho.name);   
     try {
       await axios.post(
-        `${url}/edit-reservation-view/${seatid}/`,updateData,
+        `${url}/edit-reservation-view/${id}/${seatid}/`,updateData,
 
         {
           headers: {
@@ -209,7 +209,7 @@ function Editreservation({ params: { id, seatid } }) {
   const deleteData = async () => {
     try {
       if (window.confirm("Do you really want to Delete?")) {
-        await axios.delete(`${url}/edit-reservation-view/${seatid}/`, {
+        await axios.delete(`${url}/edit-reservation-view/${id}/${seatid}/`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + token.access,

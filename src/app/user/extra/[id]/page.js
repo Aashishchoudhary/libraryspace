@@ -57,6 +57,7 @@ function Extra({ params: { id } }) {
  
 
   const createRoom = async () => {
+    setLoading(true)
     try {
       // Call signatureGenration() and handle potential errors
       const response = await axios.get(`${url}/create-signature/`, {
@@ -74,9 +75,11 @@ function Extra({ params: { id } }) {
         jwtDecode(token.access).user_id
       }&sign=${res["sign"]}&url=add-extra-time`;
       router.push(`/user/QR/?data=${qr_value}`);
+      setLoading(false)
       // Perform navigation using navigation.navigate
     } catch (error) {
-      // Handle errors gracefully, e.g., display an error message or retry logic
+      setLoading(false)
+      alert("error while genrating QR")
       console.error("Error creating room:", error);
       // You can add error handling specific to your application's requirements
     }

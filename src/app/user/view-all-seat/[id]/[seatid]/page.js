@@ -76,6 +76,7 @@ function Editreservation({ params: { id, seatid } }) {
   if (photo) updateData.append("photo", photo);
   // chat room creation  and qr code
   const createRoom = async () => {
+    setLoading(true)
     try {
       // Call signatureGenration() and handle potential errors
       const response = await axios.get(`${url}/create-signature/`, {
@@ -83,7 +84,7 @@ function Editreservation({ params: { id, seatid } }) {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
 
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.access,
         },
       });
       const res = await response.data;
@@ -92,11 +93,12 @@ function Editreservation({ params: { id, seatid } }) {
       const qr_value = `${url}/chat-page/?libid=${id}&id=${seatid}&user_id=${
         jwtDecode(`${token.access}`).user_id
       }&sign=${res["sign"]}`;
-
       // Perform navigation using navigation.navigate
       router.push(`/user/QR/?data=${qr_value}`);
+      setLoading(false)
     } catch (error) {
-      // Handle errors gracefully, e.g., display an error message or retry logic
+      setLoading(false)
+      alert("error while genrating QR")
       console.error("Error creating room:", error);
       // You can add error handling specific to your application's requirements
     }
@@ -162,7 +164,7 @@ function Editreservation({ params: { id, seatid } }) {
 
       
       alert("Data updated")
-      
+      fetchData()
       setLoading(false)
     } catch (err) {
       console.log(err.response.data);
@@ -203,6 +205,7 @@ function Editreservation({ params: { id, seatid } }) {
        }
       
     }
+    console.log(err,'---')
   };
   // delete data
  

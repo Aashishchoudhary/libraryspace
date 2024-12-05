@@ -64,6 +64,7 @@ function AddData({ params: { id, seatid } }) {
 
   // chat room creation  and qr code
   const createRoom = async () => {
+    setLoading(true)
     try {
       // Call signatureGenration() and handle potential errors
       const response = await axios.get(`${url}/create-signature/`, {
@@ -80,10 +81,12 @@ function AddData({ params: { id, seatid } }) {
       const qr_value = `${url}/chat-page/?libid=${id}&id=${seatid}&user_id=${
         jwtDecode(token.access).user_id
       }&sign=${res["sign"]}`;
-
       // Perform navigation using navigation.navigate
       router.push(`/user/QR/?data=${qr_value}`);
+      setLoading(false)
     } catch (error) {
+      setLoading(false)
+      alert("error while genrating QR")
       // Handle errors gracefully, e.g., display an error message or retry logic
       console.error("Error creating room:", error);
       // You can add error handling specific to your application's requirements

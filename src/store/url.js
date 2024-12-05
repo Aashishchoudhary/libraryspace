@@ -22,7 +22,7 @@ export const url ='https://backend.libpot.com'
       const compressedFile = await imageCompression(imageFile, options);
       // console.log('ddddd',event , compressedFile)
       // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
-      // console.log(`compressedFile size =========${compressedFile.size / 1024 / 1024} MB` ); // smaller than maxSizeMB
+      console.log(`compressedFile size =========${compressedFile.size / 1024 / 1024} MB` ); // smaller than maxSizeMB
       return compressedFile;
       // write your own logic
     } catch (error) {

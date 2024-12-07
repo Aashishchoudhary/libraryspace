@@ -90,7 +90,7 @@ function Login() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="username..."
+              placeholder="Phone Number or Emial..."
            
             />
 

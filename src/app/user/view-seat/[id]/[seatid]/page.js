@@ -145,7 +145,7 @@ function AddData({ params: { id, seatid } }) {
       {
         res.seat_data[0]["photo"] && setGetPhoto(res.seat_data[0]["photo"]);
       }
-
+console.log(res)
       setCheckData(true);
       setLoading(false);
     } catch (e) {
@@ -461,6 +461,7 @@ function AddData({ params: { id, seatid } }) {
                     value={mobile}
                     placeholder="Mobile number..."
                     onChange={(e) => setMobile(e.target.value)}
+                    maxlength="10"
                   />
 
                   <input

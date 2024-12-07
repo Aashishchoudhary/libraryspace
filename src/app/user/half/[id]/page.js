@@ -264,6 +264,7 @@ function Half({ params: { id } }) {
               value={mobile}
               placeholder="Mobile number..."
               onChange={(e) => setMobile(e.target.value)}
+              maxlength="10"
             />
 
             <input

@@ -60,6 +60,7 @@ catch(err){alert(err.response?err.response.data.details:"something went wrong pl
             value={phone}
             placeholder="Phone number..."
             onChange={(e)=>setPhone(e.target.value)}
+            maxlength="10"
             required
           />
           

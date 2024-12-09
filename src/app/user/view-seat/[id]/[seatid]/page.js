@@ -61,6 +61,9 @@ function AddData({ params: { id, seatid } }) {
   const [photo, setPhoto] = useState();
   const [getPhoto, setGetPhoto] = useState("");
   const [getAdhar, setGetAdhar] = useState("");
+  const [due_amount , set_Due_amount]=useState(0)
+  const[showDueAmount ,setShowDueAmount] =useState(false)
+  const [prepare , setPrepare] =useState('')
 
   // chat room creation  and qr code
   const createRoom = async () => {
@@ -138,6 +141,9 @@ function AddData({ params: { id, seatid } }) {
       {
         res.seat_data[0]["gender"] && setGender(res.seat_data[0]["gender"]);
       }
+      res.seat_data[0]['due_amount']&& set_Due_amount(res.seat_data[0]['due_amount'])
+      res.seat_data[0]['due_amount']!=0&&setShowDueAmount(true)
+      res.seat_data[0]['field'] && setPrepare(res.seat_data[0]['field'])
       {
         res.seat_data[0]["adharcard"] &&
           setGetAdhar(res.seat_data[0]["adharcard"]);
@@ -167,6 +173,8 @@ console.log(res)
   if (dob) updateData.append("dob", dob);
   if (adress) updateData.append("adress", adress);
   if (gender) updateData.append("gender", gender);
+  if(due_amount)updateData.append('due_amount' ,due_amount)
+    if(prepare)updateData.append('field' ,prepare)
 
   const postData = async () => {
     setLoading(true);
@@ -360,6 +368,10 @@ console.log(res)
                           <p className={styles.label}>Amount :</p>
                           <p className={styles.value}>₹ {item.amount}</p>
                         </div>
+                        {item.due_amount!=0&&<div className={styles.detailsRow}>
+                        <p className={styles.label}>Due Amount :</p>
+                        <p className={styles.value}>₹ {item.due_amount}</p>
+                      </div>}
                       </div>
 
                       {/* Client Information */}
@@ -444,41 +456,85 @@ console.log(res)
               </div>
               <div className={styles.formcontainer}>
                 <div className={styles.form}>
-                  <input
-                    type="text"
-                    className={styles.input}
-                    value={name}
-                    placeholder="Name..."
-                    onChange={(e) => setName(e.target.value)}
-                  />
+                <label htmlFor="name" className={styles.label}>
+    Name
+  </label>
+  <input
+    type="text"
+    id="name"
+    className={styles.input}
+    value={name}
+    placeholder="Name..."
+    onChange={(e) => setName(e.target.value)}
+  />
 
-                  <input
-                    type="number"
-                    className={
-                      `input ${mobile.length > 9 ? "green" : "red"} ` +
-                      styles.input
-                    }
-                    value={mobile}
-                    placeholder="Mobile number..."
-                    onChange={(e) => setMobile(e.target.value)}
-                    maxlength="10"
-                  />
+  <label htmlFor="mobile" className={styles.label}>
+    Mobile number
+  </label>
+  <input
+    type="text"
+    id="mobile"
+    className={`${styles.input} ${mobile.length > 9 ? styles.green : styles.red}`}
+    value={mobile}
+    placeholder="Mobile number..."
+    onChange={(e) => setMobile(e.target.value)}
+    maxLength="10"
+  />
 
-                  <input
-                    type="number"
-                    className={styles.input}
-                    value={amount}
-                    placeholder="Amount..."
-                    onChange={(e) => setAmount(e.target.value)}
-                  />
+  <label htmlFor="amount" className={styles.label}>
+    Amount
+  </label>
+  <input
+    type="text"
+    id="amount"
+    className={styles.input}
+    value={amount}
+    placeholder="Amount..."
+    onChange={(e) => setAmount(e.target.value)}
+  />
 
-                  <input
-                    type="text"
-                    className={styles.input}
-                    value={adress}
-                    placeholder="Address..."
-                    onChange={(e) => setAdress(e.target.value)}
-                  />
+  {!showDueAmount && (
+    <button className={styles.button} style={{width:"120px"}} onClick={() => setShowDueAmount(true)}>Due Amount</button>
+  )}
+
+  {showDueAmount && (
+    <>
+      <label htmlFor="dueAmount" className={styles.label}>
+        Due Amount
+      </label>
+      <input
+        type="text"
+        id="dueAmount"
+        className={styles.input}
+        value={due_amount}
+        placeholder="Amount..."
+        onChange={(e) => set_Due_amount(e.target.value)}
+      />
+    </>
+  )}
+
+  <label htmlFor="prepare" className={styles.label}>
+    Preparing For
+  </label>
+  <input
+    type="text"
+    id="address"
+    className={styles.input}
+    value={prepare}
+    placeholder="Prepare..."
+    onChange={(e) => setPrepare(e.target.value)}
+  />
+  <label htmlFor="address" className={styles.label}>
+    Address
+  </label>
+  <input
+    type="text"
+    id="address"
+    className={styles.input}
+    value={adress}
+    placeholder="Address..."
+    onChange={(e) => setAdress(e.target.value)}
+  />
 
                   <div className={styles.dateCon}>
                     <label className={styles.label}>Date of Birth</label>
@@ -597,41 +653,85 @@ console.log(res)
               </div>
               <div className={styles.formcontainer_two}>
                 <div className={styles.form}>
-                  <input
-                    type="text"
-                    className={styles.input}
-                    value={name}
-                    placeholder="Name..."
-                    onChange={(e) => setName(e.target.value)}
-                  />
+                <label htmlFor="name" className={styles.label}>
+    Name
+  </label>
+  <input
+    type="text"
+    id="name"
+    className={styles.input}
+    value={name}
+    placeholder="Name..."
+    onChange={(e) => setName(e.target.value)}
+  />
 
-                  <input
-                    type="text"
-                    className={
-                      `input ${mobile.length > 9 ? "green" : "red"} ` +
-                      styles.input
-                    }
-                    value={mobile}
-                    placeholder="Mobile number..."
-                    onChange={(e) => setMobile(e.target.value)}
-                    maxlength="10"
-                  />
+  <label htmlFor="mobile" className={styles.label}>
+    Mobile number
+  </label>
+  <input
+    type="text"
+    id="mobile"
+    className={`${styles.input} ${mobile.length > 9 ? styles.green : styles.red}`}
+    value={mobile}
+    placeholder="Mobile number..."
+    onChange={(e) => setMobile(e.target.value)}
+    maxLength="10"
+  />
 
-                  <input
-                    type="text"
-                    className={styles.input}
-                    value={amount}
-                    placeholder="Amount..."
-                    onChange={(e) => setAmount(e.target.value)}
-                  />
+  <label htmlFor="amount" className={styles.label}>
+    Amount
+  </label>
+  <input
+    type="text"
+    id="amount"
+    className={styles.input}
+    value={amount}
+    placeholder="Amount..."
+    onChange={(e) => setAmount(e.target.value)}
+  />
 
-                  <input
-                    type="text"
-                    className={styles.input}
-                    value={adress}
-                    placeholder="Address..."
-                    onChange={(e) => setAdress(e.target.value)}
-                  />
+  {!showDueAmount && (
+    <button className={styles.button} style={{width:"120px"}} onClick={() => setShowDueAmount(true)}>Due Amount</button>
+  )}
+
+  {showDueAmount && (
+    <>
+      <label htmlFor="dueAmount" className={styles.label}>
+        Due Amount
+      </label>
+      <input
+        type="text"
+        id="dueAmount"
+        className={styles.input}
+        value={due_amount}
+        placeholder="Amount..."
+        onChange={(e) => set_Due_amount(e.target.value)}
+      />
+    </>
+  )}
+
+  <label htmlFor="prepare" className={styles.label}>
+    Preparing For
+  </label>
+  <input
+    type="text"
+    id="address"
+    className={styles.input}
+    value={prepare}
+    placeholder="Prepare..."
+    onChange={(e) => setPrepare(e.target.value)}
+  />
+  <label htmlFor="address" className={styles.label}>
+    Address
+  </label>
+  <input
+    type="text"
+    id="address"
+    className={styles.input}
+    value={adress}
+    placeholder="Address..."
+    onChange={(e) => setAdress(e.target.value)}
+  />
 
                   <div className={styles.dateCon}>
                     <label className={styles.label}>Date of Birth</label>

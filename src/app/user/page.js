@@ -81,6 +81,22 @@ const router = useRouter()
                   Half Day
                 </Link>
               </div>
+              <div className={styles.buttonContainer}>
+                <Link style={{textDecoration:"none"}} className={styles.button} href={`/user/due-amount/${item.id}`}>
+                  Due Amount
+                </Link>
+                <Link style={{textDecoration:"none"}} className={styles.button} href={`/user/ending/${item.id}`}>
+                  End in 5 Days
+                </Link>
+              </div>
+              <div className={styles.buttonContainer}>
+                <Link style={{textDecoration:"none"}} className={styles.button} href={`/user/bday/${item.id}`}>
+                  BirthDay this month
+                </Link>
+                <Link style={{textDecoration:"none"}} className={styles.button} href={`/user/enquiry/${item.id}`}>
+                 Enquiry
+                </Link>
+              </div>
 
               <div className={styles.buttonContainer}>
                 <Link style={{textDecoration:"none"}}

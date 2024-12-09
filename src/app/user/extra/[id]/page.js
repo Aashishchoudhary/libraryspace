@@ -38,7 +38,9 @@ function Extra({ params: { id } }) {
   const [adress, setAdress] = useState("");
   const [adharcard, setAdharcard] = useState("");
   const [photo, setPhoto] = useState("");
-
+  const [due_amount , set_Due_amount]=useState(0)
+  const[showDueAmount ,setShowDueAmount] =useState(false)
+  const [prepare , setPrepare] =useState('')
   
   const [display, setDisplay] = useState(false);
 
@@ -53,8 +55,8 @@ function Extra({ params: { id } }) {
   if (amount) updateData.append("amount", amount);
   if (adharcard) updateData.append("adharcard", adharcard);
   if (photo) updateData.append("photo", photo);
-
- 
+  if(due_amount)updateData.append('due_amount' ,due_amount)
+  if(prepare)updateData.append('field' ,prepare)
 
   const createRoom = async () => {
     setLoading(true)
@@ -255,40 +257,85 @@ function Extra({ params: { id } }) {
         <div className={styles.dataContainer_two}>
           <div className={styles.formcontainer_two}>
             <div className={styles.form}>
-              <input
-                type="text"
-                className={styles.input}
-                value={name}
-                placeholder="Name..."
-                onChange={(e) => setName(e.target.value)}
-              />
+            <label htmlFor="name" className={styles.label}>
+    Name
+  </label>
+  <input
+    type="text"
+    id="name"
+    className={styles.input}
+    value={name}
+    placeholder="Name..."
+    onChange={(e) => setName(e.target.value)}
+  />
 
-              <input
-                type="text"
-                className={
-                  `input ${mobile.length > 9 ? "green" : "red"} ` + styles.input
-                }
-                value={mobile}
-                placeholder="Mobile number..."
-                onChange={(e) => setMobile(e.target.value)}
-                maxlength="10"
-              />
+  <label htmlFor="mobile" className={styles.label}>
+    Mobile number
+  </label>
+  <input
+    type="text"
+    id="mobile"
+    className={`${styles.input} ${mobile.length > 9 ? styles.green : styles.red}`}
+    value={mobile}
+    placeholder="Mobile number..."
+    onChange={(e) => setMobile(e.target.value)}
+    maxLength="10"
+  />
 
-              <input
-                type="text"
-                className={styles.input}
-                value={amount}
-                placeholder="Amount..."
-                onChange={(e) => setAmount(e.target.value)}
-              />
+  <label htmlFor="amount" className={styles.label}>
+    Amount
+  </label>
+  <input
+    type="text"
+    id="amount"
+    className={styles.input}
+    value={amount}
+    placeholder="Amount..."
+    onChange={(e) => setAmount(e.target.value)}
+  />
 
-              <input
-                type="text"
-                className={styles.input}
-                value={adress}
-                placeholder="Address..."
-                onChange={(e) => setAdress(e.target.value)}
-              />
+  {!showDueAmount && (
+    <button className={styles.button} style={{width:"120px"}} onClick={() => setShowDueAmount(true)}>Due Amount</button>
+  )}
+
+  {showDueAmount && (
+    <>
+      <label htmlFor="dueAmount" className={styles.label}>
+        Due Amount
+      </label>
+      <input
+        type="text"
+        id="dueAmount"
+        className={styles.input}
+        value={due_amount}
+        placeholder="Amount..."
+        onChange={(e) => set_Due_amount(e.target.value)}
+      />
+    </>
+  )}
+
+  <label htmlFor="prepare" className={styles.label}>
+    Preparing For
+  </label>
+  <input
+    type="text"
+    id="address"
+    className={styles.input}
+    value={prepare}
+    placeholder="Prepare..."
+    onChange={(e) => setPrepare(e.target.value)}
+  />
+  <label htmlFor="address" className={styles.label}>
+    Address
+  </label>
+  <input
+    type="text"
+    id="address"
+    className={styles.input}
+    value={adress}
+    placeholder="Address..."
+    onChange={(e) => setAdress(e.target.value)}
+  />
 
               <div className={styles.dateCon}>
                 <label className={styles.label}>Date of Birth</label>

@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useScreenshot } from "use-react-screenshot";
 import { useCookies } from "react-cookie";
 import HashLoader from "react-spinners/HashLoader";
-import Link from "next/link";
+
 const override  = {
   display: "block",
   margin: "0 auto",
@@ -273,6 +273,12 @@ function Editreservation({ params: { id, seatid } }) {
    
   }, []);
   useEffect(()=>{if(due_amount!=0){setShowDueAmount(true)}} ,[loading])
+ // whatsapp url
+  const initiateWhatsApp = (num) => {
+    router.push(`https://wa.me/${num.replace("+", "")}`);
+    window.location.reload()
+  };
+
   return (
     <>
       {loading?<HashLoader
@@ -390,7 +396,12 @@ function Editreservation({ params: { id, seatid } }) {
                   <button className={styles.button} onClick={() => getImage()}>
                     Download Invoice
                   </button>
-                  <Link className={styles.button} style={{textDecoration:"none"}} href={`https://wa.me/${mobile.replace("+", "")}`}>Open Whatsapp</Link>
+                  <button
+                className={styles.button}
+                onClick={() => initiateWhatsApp(mobile)}
+              >
+                Open Whatsapp
+              </button>
                 </div>
               )}
                {checkData && 

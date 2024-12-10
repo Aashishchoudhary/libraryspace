@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import Image from "next/image";
 import HashLoader from "react-spinners/HashLoader";
-import Link from "next/link";
+
 const override = {
   display: "block",
   margin: "0 auto",
@@ -250,7 +250,11 @@ setLoading(false);
       setLoading(false);
     }
   };
-  
+    // whatsapp url
+    const initiateWhatsApp = (num) => {
+      router.push(`https://wa.me/${num.replace("+", "")}`);
+      window.location.reload()
+    };
   const fetch_vaccent_seat = async () => {
     const response = await axios.get(`${url}/vaccent-seats/${id}/`, {
       headers: {
@@ -412,7 +416,12 @@ setLoading(false);
                     >
                       Download Invoice
                     </button>
-                    <Link className={styles.button} style={{textDecoration:"none"}} href={`https://wa.me/${mobile.replace("+", "")}`}>Open Whatsapp</Link>
+                    <button
+                className={styles.button}
+                onClick={() => initiateWhatsApp(mobile)}
+              >
+                Open Whatsapp
+              </button>
                   </div>
                 )}
                 {checkData && (

@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import Image from "next/image";
 import HashLoader from "react-spinners/HashLoader";
-import Link from "next/link";
+
 const override = {
   display: "block",
   margin: "0 auto",
@@ -174,7 +174,11 @@ function ExtraStudent({ params: { id,seatid } }) {
       setLoading(false)
     }
   };
-
+ // whatsapp url
+ const initiateWhatsApp = (num) => {
+  router.push(`https://wa.me/${num.replace("+", "")}`);
+  window.location.reload()
+};
   useEffect(() => {
     getData();
     fetch_push_back_id();
@@ -271,7 +275,12 @@ function ExtraStudent({ params: { id,seatid } }) {
               <button className={styles.button} onClick={() => getImage()}>
                 Download Invoice
               </button>
-              <Link className={styles.button} style={{textDecoration:"none"}} href={`https://wa.me/${mobile.replace("+", "")}`}>Open Whatsapp</Link>
+              <button
+                className={styles.button}
+                onClick={() => initiateWhatsApp(mobile)}
+              >
+                Open Whatsapp
+              </button>
             </div>
             {getPhoto&&<button
               className={styles.button}

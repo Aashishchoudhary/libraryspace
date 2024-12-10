@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import Image from "next/image";
 import HashLoader from "react-spinners/HashLoader";
-
+import Link from "next/link";
 const override = {
   display: "block",
   margin: "0 auto",
@@ -65,6 +65,7 @@ function AddData({ params: { id, seatid } }) {
   const[showDueAmount ,setShowDueAmount] =useState(false)
   const [prepare , setPrepare] =useState('')
 
+
   // chat room creation  and qr code
   const createRoom = async () => {
     setLoading(true)
@@ -111,7 +112,7 @@ function AddData({ params: { id, seatid } }) {
       const res = await response.data;
 
       setData(res);
-      console.log(res);
+      
       {
         res.seat_data[0]["dob"] &&
           setDob(yyyymmdd(new Date(res.seat_data[0]["dob"])));
@@ -142,7 +143,7 @@ function AddData({ params: { id, seatid } }) {
         res.seat_data[0]["gender"] && setGender(res.seat_data[0]["gender"]);
       }
       res.seat_data[0]['due_amount']&& set_Due_amount(res.seat_data[0]['due_amount'])
-      res.seat_data[0]['due_amount']!=0&&setShowDueAmount(true)
+      
       res.seat_data[0]['field'] && setPrepare(res.seat_data[0]['field'])
       {
         res.seat_data[0]["adharcard"] &&
@@ -151,12 +152,13 @@ function AddData({ params: { id, seatid } }) {
       {
         res.seat_data[0]["photo"] && setGetPhoto(res.seat_data[0]["photo"]);
       }
-console.log(res)
-      setCheckData(true);
-      setLoading(false);
-    } catch (e) {
-      console.log("error ", e);
-      setCheckData(false);
+
+setCheckData(true);
+setLoading(false);
+} catch (e) {
+  console.log("error ", e);
+  setCheckData(false);
+     
       setLoading(false);
     }
   };
@@ -174,7 +176,7 @@ console.log(res)
   if (adress) updateData.append("adress", adress);
   if (gender) updateData.append("gender", gender);
   if(due_amount)updateData.append('due_amount' ,due_amount)
-    if(prepare)updateData.append('field' ,prepare)
+  if(prepare)updateData.append('field' ,prepare)
 
   const postData = async () => {
     setLoading(true);
@@ -248,9 +250,7 @@ console.log(res)
       setLoading(false);
     }
   };
-  const initiateWhatsApp = (num) => {
-    router.push(`https://wa.me/${num.replace("+", "")}`);
-  };
+  
   const fetch_vaccent_seat = async () => {
     const response = await axios.get(`${url}/vaccent-seats/${id}/`, {
       headers: {
@@ -288,6 +288,7 @@ console.log(res)
   useEffect(() => {
     getData();
   }, []);
+  useEffect(()=>{if(due_amount!=0){setShowDueAmount(true)}} ,[loading])
 
   return (
     <>
@@ -355,9 +356,9 @@ console.log(res)
                           <p className={styles.value}> {data.seat_num}</p>
                         </div>
                         <div className={styles.detailsRow}>
-                          <p className={styles.label}>Date:</p>
+                          <p className={styles.label}>Bill Date:</p>
                           <p className={styles.value}>
-                            {new Date().toDateString()}
+                            {item.updated_at.slice(0,10)}
                           </p>
                         </div>
                         <div className={styles.detailsRow}>
@@ -368,7 +369,7 @@ console.log(res)
                           <p className={styles.label}>Amount :</p>
                           <p className={styles.value}>₹ {item.amount}</p>
                         </div>
-                        {item.due_amount!=0&&<div className={styles.detailsRow}>
+                        {showDueAmount&&<div className={styles.detailsRow}>
                         <p className={styles.label}>Due Amount :</p>
                         <p className={styles.value}>₹ {item.due_amount}</p>
                       </div>}
@@ -411,12 +412,7 @@ console.log(res)
                     >
                       Download Invoice
                     </button>
-                    <button
-                      className={styles.button}
-                      onClick={() => initiateWhatsApp(mobile)}
-                    >
-                      Open Whatsapp
-                    </button>
+                    <Link className={styles.button} style={{textDecoration:"none"}} href={`https://wa.me/${mobile.replace("+", "")}`}>Open Whatsapp</Link>
                   </div>
                 )}
                 {checkData && (

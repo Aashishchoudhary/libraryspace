@@ -69,11 +69,12 @@ function DueAmount({ params: { id } }) {
               >
                 <div key={item.id} className={styles.dataContainer}>
                   <p className={styles.seatNumber}>
-                    {item.name.slice(0, 1).toUpperCase() + item.name.slice(1)}
+                   Name- {item.name.slice(0, 1).toUpperCase() + item.name.slice(1)}
                   </p>
-                  <p className={styles.name}>{item.mobile_number}</p>
-                  <p className={styles.name}>{item.amount}</p>
-                  <p className={styles.name}>{item.end_date}</p>
+                  <p className={styles.name}>Mobile -{item.mobile_number}</p>
+                  
+                  <p className={styles.name}>Due Amount - {item.due_amount}</p>
+                  
                   {new Date(item.end_date) < new Date() && (
                     <p className={styles.expired}>Expired</p>
                   )}

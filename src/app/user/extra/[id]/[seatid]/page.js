@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import Image from "next/image";
 import HashLoader from "react-spinners/HashLoader";
-
+import Link from "next/link";
 const override = {
   display: "block",
   margin: "0 auto",
@@ -98,7 +98,7 @@ function ExtraStudent({ params: { id,seatid } }) {
       res.data[0]["amount"] && setAmount(res.data[0]["amount"]);
       res.data[0]["gender"] && setGender(res.data[0]["gender"]);
       res.data[0]['due_amount']&& set_Due_amount(res.data[0]['due_amount'])
-      res.data[0]['due_amount']!=0&&setShowDueAmount(true)
+      
       res.data[0]['field'] && setPrepare(res.data[0]['field'])
       {
         res.data[0]["adharcard"] && setGetAdhar(res.data[0]["adharcard"]);
@@ -179,6 +179,7 @@ function ExtraStudent({ params: { id,seatid } }) {
     getData();
     fetch_push_back_id();
   }, []);
+  useEffect(()=>{if(due_amount!=0){setShowDueAmount(true)}} ,[loading])
   return (
     <>
       {loading ? (
@@ -218,10 +219,10 @@ function ExtraStudent({ params: { id,seatid } }) {
                     </div>
 
                     <div className={styles.detailsRow}>
-                      <p className={styles.label}>Date:</p>
-                      <p className={styles.value}>
-                        {new Date().toDateString()}
-                      </p>
+                    <p className={styles.label}>Bill Date:</p>
+                          <p className={styles.value}>
+                            {item.updated_at.slice(0,10)}
+                          </p>
                     </div>
                     <div className={styles.detailsRow}>
                       <p className={styles.label}>Due Date:</p>
@@ -231,7 +232,7 @@ function ExtraStudent({ params: { id,seatid } }) {
                       <p className={styles.label}>Amount :</p>
                       <p className={styles.value}>₹ {item.amount}</p>
                     </div>
-                    {item.due_amount!=0&&<div className={styles.detailsRow}>
+                    {showDueAmount&&<div className={styles.detailsRow}>
                         <p className={styles.label}>Due Amount :</p>
                         <p className={styles.value}>₹ {item.due_amount}</p>
                       </div>}
@@ -270,12 +271,7 @@ function ExtraStudent({ params: { id,seatid } }) {
               <button className={styles.button} onClick={() => getImage()}>
                 Download Invoice
               </button>
-              <button
-                className={styles.button}
-                onClick={() => initiateWhatsApp(mobile)}
-              >
-                Open Whatsapp
-              </button>
+              <Link className={styles.button} style={{textDecoration:"none"}} href={`https://wa.me/${mobile.replace("+", "")}`}>Open Whatsapp</Link>
             </div>
             {getPhoto&&<button
               className={styles.button}

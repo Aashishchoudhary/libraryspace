@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useScreenshot } from "use-react-screenshot";
 import { useCookies } from "react-cookie";
 import HashLoader from "react-spinners/HashLoader";
-
+import Link from "next/link";
 const override  = {
   display: "block",
   margin: "0 auto",
@@ -136,7 +136,6 @@ function Editreservation({ params: { id, seatid } }) {
       res.data[0]["amount"] && setAmount(res.data[0]["amount"]);
       res.data[0]["gender"] && setGender(res.data[0]["gender"]);
       res.data[0]['due_amount']&& set_Due_amount(res.data[0]['due_amount'])
-      res.data[0]['due_amount']!=0&&setShowDueAmount(true)
       res.data[0]['field'] && setPrepare(res.data[0]['field'])
       {
         res.data[0]["adharcard"] &&
@@ -235,9 +234,7 @@ function Editreservation({ params: { id, seatid } }) {
     }
   };
   // whatsapp url
-  const initiateWhatsApp = (num) => {
-    router.push(`https://wa.me/${num.replace("+", "")}`);
-  };
+ 
 
   const fetch_vaccent_seat = async () => {
     const response = await axios.get(`${url}/vaccent-seats/${id}/`, {
@@ -275,7 +272,7 @@ function Editreservation({ params: { id, seatid } }) {
     fetchData();
    
   }, []);
- 
+  useEffect(()=>{if(due_amount!=0){setShowDueAmount(true)}} ,[loading])
   return (
     <>
       {loading?<HashLoader
@@ -341,10 +338,10 @@ function Editreservation({ params: { id, seatid } }) {
                         <p className={styles.value}> {data.seat_num}</p>
                       </div>
                       <div className={styles.detailsRow}>
-                        <p className={styles.label}>Date:</p>
-                        <p className={styles.value}>
-                          {new Date().toDateString()}
-                        </p>
+                      <p className={styles.label}>Bill Date:</p>
+                          <p className={styles.value}>
+                            {item.updated_at.slice(0,10)}
+                          </p>
                       </div>
                       <div className={styles.detailsRow}>
                         <p className={styles.label}>Due Date:</p>
@@ -354,7 +351,7 @@ function Editreservation({ params: { id, seatid } }) {
                         <p className={styles.label}>Paid Amount :</p>
                         <p className={styles.value}>₹ {item.amount}</p>
                       </div>
-                      {item.due_amount!=0&&<div className={styles.detailsRow}>
+                      {showDueAmount&&<div className={styles.detailsRow}>
                         <p className={styles.label}>Due Amount :</p>
                         <p className={styles.value}>₹ {item.due_amount}</p>
                       </div>}
@@ -393,12 +390,7 @@ function Editreservation({ params: { id, seatid } }) {
                   <button className={styles.button} onClick={() => getImage()}>
                     Download Invoice
                   </button>
-                  <button
-                    className={styles.button}
-                    onClick={() => initiateWhatsApp(mobile)}
-                  >
-                    Open Whatsapp
-                  </button>
+                  <Link className={styles.button} style={{textDecoration:"none"}} href={`https://wa.me/${mobile.replace("+", "")}`}>Open Whatsapp</Link>
                 </div>
               )}
                {checkData && 

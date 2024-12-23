@@ -64,7 +64,7 @@ function Ending({ params: { id } }) {
                 <Link
                   style={{ textDecoration: "none" }}
                   key={index}
-                  href={`/user/view-seat/${id}/${item.id}/`}
+                  href={`/user/view-bday-amount-expire-seat/${id}/${item.id}/`}
                   className={styles.container}
                 >
                   <div key={item.id} className={styles.dataContainer}>

@@ -64,7 +64,7 @@ function DueAmount({ params: { id } }) {
               <Link
                 style={{ textDecoration: "none" }}
                 key={index}
-                href={`/user/view-seat/${id}/${item.id}/?push_back_id=${id}`}
+                href={`/user/view-bday-amount-expire-seat/${id}/${item.id}/?push_back_id=${id}`}
                 className={styles.container}
               >
                 <div key={item.id} className={styles.dataContainer}>
